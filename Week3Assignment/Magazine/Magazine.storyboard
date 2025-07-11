@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Lc9-CP-2yb">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="2nf-6h-zpI">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Lc9-CP-2yb" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="f7x-FT-1K5">
+                        <rect key="frame" x="0.0" y="118" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="dkr-Ll-s7V" kind="relationship" relationship="rootViewController" id="hEV-eD-PSd"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Iyv-gG-orJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="130.53435114503816" y="-28.169014084507044"/>
+        </scene>
+        <!--SeSAC TRAVEL-->
+        <scene sceneID="wFf-PZ-UfY">
+            <objects>
+                <tableViewController id="dkr-Ll-s7V" customClass="MagazineTableViewController" customModule="Week3Assignment" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="YMP-cS-H0S">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="magazineCell" rowHeight="500" id="JWX-m6-hLN" customClass="MagazineTableViewCell" customModule="Week3Assignment" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="50" width="393" height="500"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="JWX-m6-hLN" id="6aX-Zr-gwu">
+                                    <rect key="frame" x="0.0" y="0.0" width="393" height="500"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AXk-T9-qe7">
+                                            <rect key="frame" x="24.666666666666657" y="18" width="344" height="344"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="AXk-T9-qe7" secondAttribute="height" multiplier="1:1" id="zL8-o9-4cc"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lal-g8-3gQ">
+                                            <rect key="frame" x="24.666666666666657" y="374" width="344" height="60"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="60" id="NWZ-T8-W0M"/>
+                                            </constraints>
+                                            <string key="text">2024 NEWS
+해외여행, 이렇게 달라졌다!</string>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="알고 준비하는 2024 새 여행" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUk-bl-tLA">
+                                            <rect key="frame" x="24.666666666666657" y="440" width="344" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="b8R-q8-1lD"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                            <color key="textColor" systemColor="systemGrayColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="88년 88월 88일" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HUf-l4-KDB">
+                                            <rect key="frame" x="251.33333333333334" y="467" width="117.33333333333334" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="117.33" id="aud-9Q-V5d"/>
+                                                <constraint firstAttribute="height" constant="21" id="vaJ-iI-GHX"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                            <color key="textColor" systemColor="systemGrayColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="AXk-T9-qe7" firstAttribute="top" secondItem="6aX-Zr-gwu" secondAttribute="top" constant="18" id="3zz-Wu-nwO"/>
+                                        <constraint firstItem="HUf-l4-KDB" firstAttribute="top" secondItem="QUk-bl-tLA" secondAttribute="bottom" constant="6" id="7Ag-qR-97G"/>
+                                        <constraint firstItem="QUk-bl-tLA" firstAttribute="trailing" secondItem="Lal-g8-3gQ" secondAttribute="trailing" id="82U-m5-hee"/>
+                                        <constraint firstItem="QUk-bl-tLA" firstAttribute="top" secondItem="Lal-g8-3gQ" secondAttribute="bottom" constant="6" id="Ccq-Ew-fzL"/>
+                                        <constraint firstAttribute="bottom" secondItem="HUf-l4-KDB" secondAttribute="bottom" constant="12" id="JxO-rF-XLO"/>
+                                        <constraint firstItem="HUf-l4-KDB" firstAttribute="trailing" secondItem="QUk-bl-tLA" secondAttribute="trailing" id="Sqy-XT-j1r"/>
+                                        <constraint firstItem="AXk-T9-qe7" firstAttribute="centerX" secondItem="6aX-Zr-gwu" secondAttribute="centerX" id="Ujo-Q4-kHE"/>
+                                        <constraint firstItem="Lal-g8-3gQ" firstAttribute="leading" secondItem="AXk-T9-qe7" secondAttribute="leading" id="ZAz-0L-ui2"/>
+                                        <constraint firstItem="QUk-bl-tLA" firstAttribute="leading" secondItem="Lal-g8-3gQ" secondAttribute="leading" id="iBQ-Ii-DGj"/>
+                                        <constraint firstItem="Lal-g8-3gQ" firstAttribute="trailing" secondItem="AXk-T9-qe7" secondAttribute="trailing" id="tgO-ct-e4l"/>
+                                        <constraint firstItem="Lal-g8-3gQ" firstAttribute="top" secondItem="AXk-T9-qe7" secondAttribute="bottom" constant="12" id="vJR-h1-G0x"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="dkr-Ll-s7V" id="XNG-32-3ff"/>
+                            <outlet property="delegate" destination="dkr-Ll-s7V" id="OZi-y4-4QO"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="SeSAC TRAVEL" id="0JW-Qj-uDd"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QJo-kd-cKk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="896.94656488549617" y="-29.577464788732396"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
