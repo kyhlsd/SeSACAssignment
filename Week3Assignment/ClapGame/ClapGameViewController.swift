@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Toast
 
 class ClapGameViewController: UIViewController {
 
@@ -30,10 +31,12 @@ class ClapGameViewController: UIViewController {
         } catch {
             switch error {
             case ValidateIntError.empty:
-            case ValidateIntError.nonNumeric:
+                view.makeToast("입력창이 비었습니다.")
             case ValidateIntError.nonNatural:
+                view.makeToast("자연수만 입력 가능합니다.")
             default:
-                break
+                view.makeToast("알 수 없는 에러가 발생했습니다.")
+                print(error.localizedDescription)
             }
             return
         }
@@ -41,7 +44,7 @@ class ClapGameViewController: UIViewController {
         let result = getClapCountsAndString(number)
         
         numbersLabel.text = result.1
-        resultLabel.text = "숫자 \(trimmedText))까지 총 박수는\n\(result.0)번 입니다."
+        resultLabel.text = "숫자 \(trimmedText)까지 총 박수는\n\(result.0)번 입니다."
     }
     
     private func getValidatedInt(from text: String) throws -> Int {
@@ -50,10 +53,7 @@ class ClapGameViewController: UIViewController {
         if trimmedText.isEmpty {
             throw ValidateIntError.empty
         }
-        guard let number = Int(trimmedText) else {
-            throw ValidateIntError.nonNumeric
-        }
-        if number <= 0 {
+        guard let number = Int(trimmedText), number > 0 else {
             throw ValidateIntError.nonNatural
         }
         
@@ -85,6 +85,5 @@ class ClapGameViewController: UIViewController {
 
 enum ValidateIntError: Error {
     case empty
-    case nonNumeric
     case nonNatural
 }
