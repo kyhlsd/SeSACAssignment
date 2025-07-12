@@ -19,6 +19,7 @@ class MagazineTableViewCell: UITableViewCell {
         super.awakeFromNib()
         
         magazineImageView.layer.cornerRadius = 12
+        magazineImageView.kf.indicatorType = .activity
     }
 
     func configure(with magazine: Magazine) {
@@ -27,7 +28,6 @@ class MagazineTableViewCell: UITableViewCell {
         magazineDateLabel.text = getConvertedString(from: magazine.date)
 
         let url = URL(string: magazine.photoImage)
-        magazineImageView.kf.indicatorType = .activity
         magazineImageView.kf.setImage(with: url)
     }
 }

@@ -9,15 +9,19 @@ import UIKit
 
 class AdTableViewCell: UITableViewCell {
 
+    
+    @IBOutlet var adContainerView: UIView!
+    @IBOutlet var adLabel: UILabel!
+    
+    @IBOutlet var adTitleLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        adContainerView.layer.cornerRadius = 12
+        adLabel.layer.cornerRadius = 4
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    func configure(with travel: Travel) {
+        adTitleLabel.text = travel.title
     }
-
 }

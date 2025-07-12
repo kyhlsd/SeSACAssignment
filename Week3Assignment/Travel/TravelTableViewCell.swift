@@ -6,18 +6,60 @@
 //
 
 import UIKit
+import Kingfisher
 
 class TravelTableViewCell: UITableViewCell {
-
+    
+    @IBOutlet var travelImageView: UIImageView!
+    @IBOutlet var travelTitleLabel: UILabel!
+    @IBOutlet var travelDescriptionLabel: UILabel!
+    @IBOutlet var countLabel: UILabel!
+    @IBOutlet var starStackView: UIStackView!
+    @IBOutlet var heartButton: UIButton!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        travelImageView.layer.cornerRadius = 12
+        travelImageView.kf.indicatorType = .activity
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    func configure(with travel: Travel) {
+        travelTitleLabel.text = travel.title
+        travelDescriptionLabel.text = travel.description
+        if let save = travel.save {
+            countLabel.text = "(8,888) · 저장 \(getDemicalIntString(from: save))"
+        }
+        
+        if let travelImage = travel.travelImage {
+            let url = URL(string: travelImage)
+            travelImageView.kf.setImage(with: url)
+        }
+        
+        if let like = travel.like {
+            let heartImage = like ? "heart" : "heart.fill"
+            heartButton.setImage(UIImage(systemName: heartImage), for: .normal)
+        }
+        
+        if let grade = travel.grade {
+            for (i, star) in starStackView.subviews.enumerated() {
+                let starString = i < Int(grade) ? "star.fill" : "star"
+                let tintColor = i < Int(grade) ? UIColor.systemYellow : UIColor.systemGray4
+                if let starImage = star as? UIImageView {
+                    starImage.image = UIImage(systemName: starString)
+                    starImage.tintColor = tintColor
+                }
+            }
+        }
     }
+}
 
+func getDemicalIntString(from number: Int) -> String {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .decimal
+    if let result = formatter.string(for: number) {
+        return result
+    } else {
+        return "잘못된 형식입니다."
+    }
 }
