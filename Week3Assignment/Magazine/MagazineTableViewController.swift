@@ -27,7 +27,6 @@ class MagazineTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        // 이미지뷰 제외 높이 156 보장
         return 500
     }
 }

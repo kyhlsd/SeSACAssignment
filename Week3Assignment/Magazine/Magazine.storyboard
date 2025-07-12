@@ -42,13 +42,13 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AXk-T9-qe7">
-                                            <rect key="frame" x="24.666666666666657" y="18" width="344" height="344"/>
+                                            <rect key="frame" x="24" y="18" width="345" height="345"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="AXk-T9-qe7" secondAttribute="height" multiplier="1:1" id="zL8-o9-4cc"/>
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lal-g8-3gQ">
-                                            <rect key="frame" x="24.666666666666657" y="374" width="344" height="60"/>
+                                            <rect key="frame" x="24" y="375" width="345" height="60"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="60" id="NWZ-T8-W0M"/>
                                             </constraints>
@@ -59,7 +59,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="알고 준비하는 2024 새 여행" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUk-bl-tLA">
-                                            <rect key="frame" x="24.666666666666657" y="440" width="344" height="21"/>
+                                            <rect key="frame" x="24" y="441" width="345" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="b8R-q8-1lD"/>
                                             </constraints>
@@ -68,7 +68,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="88년 88월 88일" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HUf-l4-KDB">
-                                            <rect key="frame" x="251.33333333333334" y="467" width="117.33333333333334" height="21"/>
+                                            <rect key="frame" x="251.66666666666666" y="468" width="117.33333333333334" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="117.33" id="aud-9Q-V5d"/>
                                                 <constraint firstAttribute="height" constant="21" id="vaJ-iI-GHX"/>
@@ -83,9 +83,9 @@
                                         <constraint firstItem="HUf-l4-KDB" firstAttribute="top" secondItem="QUk-bl-tLA" secondAttribute="bottom" constant="6" id="7Ag-qR-97G"/>
                                         <constraint firstItem="QUk-bl-tLA" firstAttribute="trailing" secondItem="Lal-g8-3gQ" secondAttribute="trailing" id="82U-m5-hee"/>
                                         <constraint firstItem="QUk-bl-tLA" firstAttribute="top" secondItem="Lal-g8-3gQ" secondAttribute="bottom" constant="6" id="Ccq-Ew-fzL"/>
-                                        <constraint firstAttribute="bottom" secondItem="HUf-l4-KDB" secondAttribute="bottom" constant="12" id="JxO-rF-XLO"/>
+                                        <constraint firstAttribute="trailing" secondItem="AXk-T9-qe7" secondAttribute="trailing" constant="24" id="ReT-Ln-cVx"/>
                                         <constraint firstItem="HUf-l4-KDB" firstAttribute="trailing" secondItem="QUk-bl-tLA" secondAttribute="trailing" id="Sqy-XT-j1r"/>
-                                        <constraint firstItem="AXk-T9-qe7" firstAttribute="centerX" secondItem="6aX-Zr-gwu" secondAttribute="centerX" id="Ujo-Q4-kHE"/>
+                                        <constraint firstItem="AXk-T9-qe7" firstAttribute="leading" secondItem="6aX-Zr-gwu" secondAttribute="leading" constant="24" id="W5F-Uf-oxO"/>
                                         <constraint firstItem="Lal-g8-3gQ" firstAttribute="leading" secondItem="AXk-T9-qe7" secondAttribute="leading" id="ZAz-0L-ui2"/>
                                         <constraint firstItem="QUk-bl-tLA" firstAttribute="leading" secondItem="Lal-g8-3gQ" secondAttribute="leading" id="iBQ-Ii-DGj"/>
                                         <constraint firstItem="Lal-g8-3gQ" firstAttribute="trailing" secondItem="AXk-T9-qe7" secondAttribute="trailing" id="tgO-ct-e4l"/>
