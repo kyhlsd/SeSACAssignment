@@ -10,6 +10,7 @@ import UIKit
 class TravelTableViewController: UITableViewController {
     
     var list = TravelInfo().travel
+    var isOddAd = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +32,8 @@ class TravelTableViewController: UITableViewController {
         if list[indexPath.row].ad {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "adCell", for: indexPath) as? AdTableViewCell else { return UITableViewCell() }
             cell.configure(with: list[indexPath.row])
+            cell.setContainerColor(isOddAd)
+            isOddAd.toggle()
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "travelCell", for: indexPath) as? TravelTableViewCell else { return UITableViewCell() }
