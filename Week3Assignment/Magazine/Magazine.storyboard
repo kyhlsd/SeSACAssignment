@@ -7,11 +7,13 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller-->
+        <!--Magazine-->
         <scene sceneID="2nf-6h-zpI">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Lc9-CP-2yb" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Magazine" image="magazine" catalog="system" id="hGd-Aq-tG1"/>
                     <toolbarItems/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="f7x-FT-1K5">
                         <rect key="frame" x="0.0" y="118" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -113,6 +115,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="magazine" catalog="system" width="110" height="128"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

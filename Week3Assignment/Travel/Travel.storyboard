@@ -186,11 +186,13 @@
             </objects>
             <point key="canvasLocation" x="1185.4961832061069" y="-161.26760563380282"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Travel-->
         <scene sceneID="twf-XE-xIJ">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Y90-nU-oBn" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Travel" image="mountain.2" catalog="system" id="aCb-LB-nV6"/>
                     <toolbarItems/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="4lb-0N-Idu">
                         <rect key="frame" x="0.0" y="118" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -207,6 +209,7 @@
     </scenes>
     <resources>
         <image name="heart" catalog="system" width="128" height="107"/>
+        <image name="mountain.2" catalog="system" width="128" height="66"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
