@@ -9,17 +9,20 @@ import UIKit
 
 class MagazineTableViewController: UITableViewController {
 
+    let list = MagazineInfo().magazine
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return list.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "magazineCell", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "magazineCell", for: indexPath) as? MagazineTableViewCell else { return UITableViewCell() }
+        cell.configure(with: list[indexPath.row])
         return cell
     }
     

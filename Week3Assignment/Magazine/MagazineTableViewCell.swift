@@ -6,18 +6,41 @@
 //
 
 import UIKit
+import Kingfisher
 
 class MagazineTableViewCell: UITableViewCell {
-
+    
+    @IBOutlet var magazineImageView: UIImageView!
+    @IBOutlet var magazineTitleLabel: UILabel!
+    @IBOutlet var magazineSubtitleLabel: UILabel!
+    @IBOutlet var magazineDateLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        magazineImageView.layer.cornerRadius = 12
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+    func configure(with magazine: Magazine) {
+        magazineTitleLabel.text = magazine.title
+        magazineSubtitleLabel.text = magazine.subtitle
+        magazineDateLabel.text = getConvertedString(from: magazine.date)
 
-        // Configure the view for the selected state
+        let url = URL(string: magazine.photoImage)
+        magazineImageView.kf.indicatorType = .activity
+        magazineImageView.kf.setImage(with: url)
     }
-
 }
+
+// "yyMMdd" -> "yy년 MM월 dd일" 변환
+func getConvertedString(from dateString: String) -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyMMdd"
+    if let date = formatter.date(from: dateString) {
+        formatter.dateFormat = "yy년 MM월 dd일"
+        return formatter.string(from: date)
+    } else {
+        return "잘못된 날짜 형식입니다."
+    }
+}
+

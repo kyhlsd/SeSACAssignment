@@ -41,7 +41,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="393" height="500"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AXk-T9-qe7">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AXk-T9-qe7">
                                             <rect key="frame" x="24.666666666666657" y="18" width="344" height="344"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="AXk-T9-qe7" secondAttribute="height" multiplier="1:1" id="zL8-o9-4cc"/>
@@ -92,6 +92,12 @@
                                         <constraint firstItem="Lal-g8-3gQ" firstAttribute="top" secondItem="AXk-T9-qe7" secondAttribute="bottom" constant="12" id="vJR-h1-G0x"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="magazineDateLabel" destination="HUf-l4-KDB" id="h3c-Dv-9qj"/>
+                                    <outlet property="magazineImageView" destination="AXk-T9-qe7" id="gNq-Br-6hA"/>
+                                    <outlet property="magazineSubtitleLabel" destination="QUk-bl-tLA" id="yJU-fv-I3H"/>
+                                    <outlet property="magazineTitleLabel" destination="Lal-g8-3gQ" id="kmU-bt-shC"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
