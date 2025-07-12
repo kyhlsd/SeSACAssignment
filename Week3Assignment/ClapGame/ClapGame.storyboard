@@ -27,21 +27,22 @@
                                     <action selector="inputTextFieldDidEndOnExit:" destination="Y6W-OH-hqX" eventType="editingDidEndOnExit" id="fFJ-LM-7QN"/>
                                 </connections>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wzh-Oh-vGD">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1, 2, 👏, 4, 5, 👏, ... , 최대 숫자" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wzh-Oh-vGD">
                                 <rect key="frame" x="24" y="210" width="345" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="aX5-FN-nVv"/>
                                 </constraints>
-                                <string key="text">1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7 ,1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="숫자 99까지 총 박수는 45번 입니다." textAlignment="center" lineBreakMode="middleTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ymv-9e-IcD">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="middleTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ymv-9e-IcD">
                                 <rect key="frame" x="24" y="334" width="345" height="80"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="gm6-7B-JLh"/>
                                 </constraints>
+                                <string key="text">최대 숫자까지 총 박수는
+n번입니다.</string>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="28"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
