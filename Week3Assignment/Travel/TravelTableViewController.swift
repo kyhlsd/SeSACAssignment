@@ -8,13 +8,21 @@
 import UIKit
 
 class TravelTableViewController: UITableViewController {
-
-    let list = TravelInfo().travel
+    
+    var list = TravelInfo().travel
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
 
+    @IBAction func heartButtonTapped(_ sender: UIButton) {
+        if let like = list[sender.tag].like {
+            list[sender.tag].like?.toggle()
+            let heartImage = like ? "heart" : "heart.fill"
+            sender.setImage(UIImage(systemName: heartImage), for: .normal)
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         list.count
     }
@@ -27,6 +35,7 @@ class TravelTableViewController: UITableViewController {
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "travelCell", for: indexPath) as? TravelTableViewCell else { return UITableViewCell() }
             cell.configure(with: list[indexPath.row])
+            cell.heartButton.tag = indexPath.row
             return cell
         }
     }

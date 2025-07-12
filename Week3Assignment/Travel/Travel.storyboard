@@ -87,6 +87,9 @@
                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <state key="normal" title="Button"/>
                                             <buttonConfiguration key="configuration" style="plain" image="heart" catalog="system"/>
+                                            <connections>
+                                                <action selector="heartButtonTapped:" destination="PCw-mF-LGX" eventType="touchUpInside" id="P2d-R7-cL3"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                     <constraints>

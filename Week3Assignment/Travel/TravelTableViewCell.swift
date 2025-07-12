@@ -37,7 +37,7 @@ class TravelTableViewCell: UITableViewCell {
         }
         
         if let like = travel.like {
-            let heartImage = like ? "heart" : "heart.fill"
+            let heartImage = like ? "heart.fill" : "heart"
             heartButton.setImage(UIImage(systemName: heartImage), for: .normal)
         }
         
