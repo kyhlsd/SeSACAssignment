@@ -12,9 +12,21 @@ struct Travel {
     let description: String?
     let travelImage: String?
     let grade: Float?
+    let gradeCount: Int?
     let save: Int?
     var like: Bool?
     let ad: Bool
+    
+    init(title: String, description: String?, travelImage: String?, grade: Float?, gradeCount: Int? = Int.random(in: 1...9999), save: Int?, like: Bool? = nil, ad: Bool) {
+        self.title = title
+        self.description = description
+        self.travelImage = travelImage
+        self.grade = grade
+        self.gradeCount = gradeCount
+        self.save = save
+        self.like = like
+        self.ad = ad
+    }
 }
 
 struct TravelInfo {
@@ -51,6 +63,7 @@ struct TravelInfo {
                description: nil,
                travelImage: nil,
                grade: nil,
+               gradeCount: nil,
                save: nil,
                like: nil,
                ad: true),
@@ -79,6 +92,7 @@ struct TravelInfo {
                description: nil,
                travelImage: nil,
                grade: nil,
+               gradeCount: nil,
                save: nil,
                like: nil,
                ad: true),
@@ -114,6 +128,7 @@ struct TravelInfo {
                description: nil,
                travelImage: nil,
                grade: nil,
+               gradeCount: nil,
                save: nil,
                like: nil,
                ad: true),

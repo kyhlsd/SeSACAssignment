@@ -27,8 +27,8 @@ class TravelTableViewCell: UITableViewCell {
     func configure(with travel: Travel) {
         travelTitleLabel.text = travel.title
         travelDescriptionLabel.text = travel.description
-        if let save = travel.save {
-            countLabel.text = "(8,888) · 저장 \(getDemicalIntString(from: save))"
+        if let save = travel.save, let gradeCount = travel.gradeCount {
+            countLabel.text = "\(getDemicalIntString(from: gradeCount)) · 저장 \(getDemicalIntString(from: save))"
         }
         
         if let travelImage = travel.travelImage {
