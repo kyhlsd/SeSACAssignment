@@ -21,11 +21,8 @@ class AdTableViewCell: UITableViewCell {
         adLabel.clipsToBounds = true
     }
 
-    func configure(with travel: Travel) {
+    func configure(with travel: Travel, isOddAd: Bool) {
         adTitleLabel.text = travel.title
-    }
-    
-    func setContainerColor(_ isOddAd: Bool) {
         adContainerView.backgroundColor = isOddAd ? .systemPink : .systemGreen
     }
 }

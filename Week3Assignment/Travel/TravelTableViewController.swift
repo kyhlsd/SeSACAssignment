@@ -10,7 +10,7 @@ import UIKit
 class TravelTableViewController: UITableViewController {
     
     var list = TravelInfo().travel
-    var isOddAd = true
+    var isOdd = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,12 +40,12 @@ class TravelTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if list[indexPath.row].ad {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "AdTableViewCell", for: indexPath) as? AdTableViewCell else { return UITableViewCell() }
-            cell.configure(with: list[indexPath.row])
-            cell.setContainerColor(isOddAd)
-            isOddAd.toggle()
+            
+            cell.configure(with: list[indexPath.row], isOddAd: isOddTag(cell))
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "TravelTableViewCell", for: indexPath) as? TravelTableViewCell else { return UITableViewCell() }
+            
             cell.configure(with: list[indexPath.row])
             cell.heartButton.tag = indexPath.row
             return cell
@@ -57,6 +57,23 @@ class TravelTableViewController: UITableViewController {
             return 88
         } else {
             return UITableView.automaticDimension
+        }
+    }
+    
+    // 번갈아 광고 색상 다르게 표기, 재사용 시에도 유지되게 하기 위함
+    private func isOddTag(_ cell: AdTableViewCell) -> Bool {
+        switch cell.tag {
+        case 0:
+            cell.tag = isOdd ? 1 : 2
+            isOdd.toggle()
+            return !isOdd
+        case 1:
+            return true
+        case 2:
+            return false
+        default:
+            print("Wrong Tag")
+            return false
         }
     }
 }
