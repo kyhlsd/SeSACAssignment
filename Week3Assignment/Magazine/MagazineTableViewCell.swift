@@ -25,22 +25,12 @@ class MagazineTableViewCell: UITableViewCell {
     func configure(with magazine: Magazine) {
         magazineTitleLabel.text = magazine.title
         magazineSubtitleLabel.text = magazine.subtitle
-        magazineDateLabel.text = getConvertedString(from: magazine.date)
 
+        let date = DateStringFormatter.yyMMddFormatter.date(from: magazine.date)
+        magazineDateLabel.text = DateStringFormatter.koreanFormatter.string(for: date)
+        
         let url = URL(string: magazine.photoImage)
         magazineImageView.kf.setImage(with: url)
-    }
-}
-
-// "yyMMdd" -> "yy년 MM월 dd일" 변환
-func getConvertedString(from dateString: String) -> String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "yyMMdd"
-    if let date = formatter.date(from: dateString) {
-        formatter.dateFormat = "yy년 MM월 dd일"
-        return formatter.string(from: date)
-    } else {
-        return "잘못된 날짜 형식입니다."
     }
 }
 

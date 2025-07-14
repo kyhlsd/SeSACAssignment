@@ -27,8 +27,10 @@ class TravelTableViewCell: UITableViewCell {
     func configure(with travel: Travel) {
         travelTitleLabel.text = travel.title
         travelDescriptionLabel.text = travel.description
-        if let save = travel.save, let gradeCount = travel.gradeCount {
-            countLabel.text = "\(getDemicalIntString(from: gradeCount)) · 저장 \(getDemicalIntString(from: save))"
+        
+        if let save = IntToDemicalStringFormatter.formatter.string(for: travel.save),
+           let gradeCount = IntToDemicalStringFormatter.formatter.string(for: travel.gradeCount) {
+            countLabel.text = "\(gradeCount) · 저장 \(save)"
         }
         
         if let travelImage = travel.travelImage {
@@ -51,15 +53,5 @@ class TravelTableViewCell: UITableViewCell {
                 }
             }
         }
-    }
-}
-
-func getDemicalIntString(from number: Int) -> String {
-    let formatter = NumberFormatter()
-    formatter.numberStyle = .decimal
-    if let result = formatter.string(for: number) {
-        return result
-    } else {
-        return "잘못된 형식입니다."
     }
 }

@@ -13,7 +13,8 @@ class MagazineTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        tableView.rowHeight = 500
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -24,9 +25,5 @@ class MagazineTableViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "magazineCell", for: indexPath) as? MagazineTableViewCell else { return UITableViewCell() }
         cell.configure(with: list[indexPath.row])
         return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 500
     }
 }
