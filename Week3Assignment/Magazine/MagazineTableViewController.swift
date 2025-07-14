@@ -14,15 +14,21 @@ class MagazineTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.rowHeight = 500
+        registerCell()
+        tableView.rowHeight = UITableView.automaticDimension
     }
 
+    private func registerCell() {
+        let xib = UINib(nibName: "MagazineTableViewCell", bundle: nil)
+        tableView.register(xib, forCellReuseIdentifier: "MagazineTableViewCell")
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return list.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "magazineCell", for: indexPath) as? MagazineTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MagazineTableViewCell", for: indexPath) as? MagazineTableViewCell else { return UITableViewCell() }
         cell.configure(with: list[indexPath.row])
         return cell
     }

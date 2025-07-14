@@ -14,6 +14,15 @@ class TravelTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        registerCells()
+    }
+    
+    private func registerCells() {
+        let travelCellXib = UINib(nibName: "TravelTableViewCell", bundle: nil)
+        let adCellXib = UINib(nibName: "AdTableViewCell", bundle: nil)
+        tableView.register(travelCellXib, forCellReuseIdentifier: "TravelTableViewCell")
+        tableView.register(adCellXib, forCellReuseIdentifier: "AdTableViewCell")
     }
 
     @IBAction func heartButtonTapped(_ sender: UIButton) {
@@ -30,13 +39,13 @@ class TravelTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if list[indexPath.row].ad {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "adCell", for: indexPath) as? AdTableViewCell else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "AdTableViewCell", for: indexPath) as? AdTableViewCell else { return UITableViewCell() }
             cell.configure(with: list[indexPath.row])
             cell.setContainerColor(isOddAd)
             isOddAd.toggle()
             return cell
         } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "travelCell", for: indexPath) as? TravelTableViewCell else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "TravelTableViewCell", for: indexPath) as? TravelTableViewCell else { return UITableViewCell() }
             cell.configure(with: list[indexPath.row])
             cell.heartButton.tag = indexPath.row
             return cell
@@ -47,7 +56,7 @@ class TravelTableViewController: UITableViewController {
         if list[indexPath.row].ad {
             return 88
         } else {
-            return 132
+            return UITableView.automaticDimension
         }
     }
 }
