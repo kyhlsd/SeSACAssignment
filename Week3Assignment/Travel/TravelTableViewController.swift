@@ -9,8 +9,8 @@ import UIKit
 
 class TravelTableViewController: UITableViewController, TravelViewControllerDelegate {
     
-    var list = TravelInfo().travel
-    var isOdd = true
+    private var list = TravelInfo().travel
+    private var isOdd = true
     var selectedTravel: Travel?
     
     override func viewDidLoad() {

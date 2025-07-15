@@ -11,7 +11,7 @@ class CityTableViewController: UITableViewController {
 
     @IBOutlet var citySegmentedControl: UISegmentedControl!
     
-    let list = CityInfo().city
+    private let list = CityInfo().city
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,16 +26,30 @@ class CityTableViewController: UITableViewController {
     }
     
     @IBAction func citySegmentedControlValueChanged(_ sender: UISegmentedControl) {
-        print(sender.selectedSegmentIndex)
+        tableView.reloadData()
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        list.count
+        getSelectedList().count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(for: indexPath, cellType: CityTableViewCell.self)
-        cell.configure(with: list[indexPath.row])
+        cell.configure(with: getSelectedList()[indexPath.row])
         return cell
+    }
+    
+    private func getSelectedList() -> [City] {
+        switch citySegmentedControl.selectedSegmentIndex {
+        case 0:
+            return list
+        case 1:
+            return list.filter { $0.domesticTravel }
+        case 2:
+            return list.filter { !$0.domesticTravel }
+        default:
+            return []
+        }
     }
 }

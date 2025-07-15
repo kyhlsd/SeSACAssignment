@@ -9,7 +9,7 @@ import UIKit
 
 class MagazineTableViewController: UITableViewController {
 
-    let list = MagazineInfo().magazine
+    private let list = MagazineInfo().magazine
     
     override func viewDidLoad() {
         super.viewDidLoad()
