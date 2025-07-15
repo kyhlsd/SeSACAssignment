@@ -41,7 +41,6 @@ class TravelTableViewController: UITableViewController, TravelViewControllerDele
             
             cell.configure(with: list[indexPath.row])
             
-            cell.heartButton.removeTarget(nil, action: nil, for: .allEvents)
             cell.heartButton.addAction(UIAction { [weak self] _ in
                 if let like = self?.list[indexPath.row].like {
                     self?.list[indexPath.row].like?.toggle()
@@ -62,19 +61,32 @@ class TravelTableViewController: UITableViewController, TravelViewControllerDele
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedTravel = list[indexPath.row]
-        let storyboard = UIStoryboard(name: "Travel", bundle: nil)
         
         if list[indexPath.row].ad {
-            let viewController = storyboard.instantiateViewController(viewControllerType: AdDetailViewController.self)
-            viewController.delegate = self
-            let navigationController = UINavigationController(rootViewController: viewController)
-            navigationController.modalPresentationStyle = .fullScreen
-            present(navigationController, animated: true)
+            presentAdDetailViewController()
         } else {
-            let viewController = storyboard.instantiateViewController(viewControllerType: TravelDetailViewController.self)
-            viewController.delegate = self
-            navigationController?.pushViewController(viewController, animated: true)
+            pushTravelDetailViewController()
         }
+    }
+    
+    private func presentAdDetailViewController() {
+        let storyboard = UIStoryboard(name: "Travel", bundle: nil)
+        let viewController = storyboard.instantiateViewController(viewControllerType: AdDetailViewController.self)
+        viewController.delegate = self
+        
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.modalPresentationStyle = .fullScreen
+        navigationController.view.tintColor = .black
+        
+        present(navigationController, animated: true)
+    }
+    
+    private func pushTravelDetailViewController() {
+        let storyboard = UIStoryboard(name: "Travel", bundle: nil)
+        let viewController = storyboard.instantiateViewController(viewControllerType: TravelDetailViewController.self)
+        viewController.delegate = self
+        
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     // 번갈아 광고 색상 다르게 표기, 재사용 시에도 유지되게 하기 위함

@@ -23,6 +23,12 @@ class TravelTableViewCell: UITableViewCell, Identifying {
         travelImageView.layer.cornerRadius = 12
         travelImageView.kf.indicatorType = .activity
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        heartButton.removeTarget(nil, action: nil, for: .allEvents)
+    }
 
     func configure(with travel: Travel) {
         travelTitleLabel.text = travel.title
