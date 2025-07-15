@@ -9,7 +9,8 @@ import UIKit
 import Kingfisher
 
 class CityTableViewCell: UITableViewCell, Identifying {
-
+    
+    @IBOutlet var cityShadowView: UIView!
     @IBOutlet var cityContainerView: UIView!
     @IBOutlet var cityNameLabel: UILabel!
     @IBOutlet var cityImageView: UIImageView!
@@ -19,6 +20,9 @@ class CityTableViewCell: UITableViewCell, Identifying {
         super.awakeFromNib()
         
         cityImageView.kf.indicatorType = .activity
+        
+        cityContainerView.setCornerRadius(corners: [.layerMinXMinYCorner, .layerMaxXMaxYCorner], cornerRadius: 12)
+        cityShadowView.setRightBottomShadow()
     }
     
     func configure(with city: City) {
@@ -29,5 +33,4 @@ class CityTableViewCell: UITableViewCell, Identifying {
         
         cityExplainLabel.text = "  " + city.cityExplain
     }
-    
 }

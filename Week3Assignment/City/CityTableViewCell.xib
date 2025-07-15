@@ -17,52 +17,64 @@
                 <rect key="frame" x="0.0" y="0.0" width="354" height="140"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="27M-n3-jSg">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9PA-oI-XyK">
                         <rect key="frame" x="24" y="12" width="306" height="116"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1iH-SC-M88">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="27M-n3-jSg">
                                 <rect key="frame" x="0.0" y="0.0" width="306" height="116"/>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="방콕 | BangKok" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4MG-sk-sK1">
-                                <rect key="frame" x="8" y="8" width="290" height="22"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1iH-SC-M88">
+                                        <rect key="frame" x="0.0" y="0.0" width="306" height="116"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="방콕 | BangKok" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4MG-sk-sK1">
+                                        <rect key="frame" x="8" y="8" width="290" height="22"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="22" id="MXE-Xf-Kdo"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  방콕, 파타야, 후아현, 코사멧, 코사무이" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IxQ-tk-OUq">
+                                        <rect key="frame" x="0.0" y="92" width="306" height="24"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.5534457781456954" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="24" id="jvc-MA-bld"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="22" id="MXE-Xf-Kdo"/>
+                                    <constraint firstItem="IxQ-tk-OUq" firstAttribute="bottom" secondItem="1iH-SC-M88" secondAttribute="bottom" id="1re-KT-xx8"/>
+                                    <constraint firstItem="4MG-sk-sK1" firstAttribute="trailing" secondItem="1iH-SC-M88" secondAttribute="trailing" constant="-8" id="GnS-EJ-nSI"/>
+                                    <constraint firstItem="IxQ-tk-OUq" firstAttribute="leading" secondItem="1iH-SC-M88" secondAttribute="leading" id="LO1-s2-ShI"/>
+                                    <constraint firstItem="1iH-SC-M88" firstAttribute="leading" secondItem="27M-n3-jSg" secondAttribute="leading" id="nqL-lg-oz7"/>
+                                    <constraint firstAttribute="bottom" secondItem="1iH-SC-M88" secondAttribute="bottom" id="q4V-gm-F5O"/>
+                                    <constraint firstItem="4MG-sk-sK1" firstAttribute="leading" secondItem="1iH-SC-M88" secondAttribute="leading" constant="8" id="ram-yN-vct"/>
+                                    <constraint firstItem="1iH-SC-M88" firstAttribute="top" secondItem="27M-n3-jSg" secondAttribute="top" id="uXE-Tn-tDu"/>
+                                    <constraint firstAttribute="trailing" secondItem="1iH-SC-M88" secondAttribute="trailing" id="wZX-3Y-3sA"/>
+                                    <constraint firstItem="1iH-SC-M88" firstAttribute="trailing" secondItem="IxQ-tk-OUq" secondAttribute="trailing" id="ySb-Yw-eCW"/>
+                                    <constraint firstItem="4MG-sk-sK1" firstAttribute="top" secondItem="1iH-SC-M88" secondAttribute="top" constant="8" id="zRz-Hc-NW2"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  방콕, 파타야, 후아현, 코사멧, 코사무이" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IxQ-tk-OUq">
-                                <rect key="frame" x="0.0" y="92" width="306" height="24"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.5534457781456954" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="24" id="jvc-MA-bld"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="IxQ-tk-OUq" firstAttribute="bottom" secondItem="1iH-SC-M88" secondAttribute="bottom" id="1re-KT-xx8"/>
-                            <constraint firstItem="4MG-sk-sK1" firstAttribute="trailing" secondItem="1iH-SC-M88" secondAttribute="trailing" constant="-8" id="GnS-EJ-nSI"/>
-                            <constraint firstItem="IxQ-tk-OUq" firstAttribute="leading" secondItem="1iH-SC-M88" secondAttribute="leading" id="LO1-s2-ShI"/>
-                            <constraint firstItem="1iH-SC-M88" firstAttribute="leading" secondItem="27M-n3-jSg" secondAttribute="leading" id="nqL-lg-oz7"/>
-                            <constraint firstAttribute="bottom" secondItem="1iH-SC-M88" secondAttribute="bottom" id="q4V-gm-F5O"/>
-                            <constraint firstItem="4MG-sk-sK1" firstAttribute="leading" secondItem="1iH-SC-M88" secondAttribute="leading" constant="8" id="ram-yN-vct"/>
-                            <constraint firstItem="1iH-SC-M88" firstAttribute="top" secondItem="27M-n3-jSg" secondAttribute="top" id="uXE-Tn-tDu"/>
-                            <constraint firstAttribute="trailing" secondItem="1iH-SC-M88" secondAttribute="trailing" id="wZX-3Y-3sA"/>
-                            <constraint firstItem="1iH-SC-M88" firstAttribute="trailing" secondItem="IxQ-tk-OUq" secondAttribute="trailing" id="ySb-Yw-eCW"/>
-                            <constraint firstItem="4MG-sk-sK1" firstAttribute="top" secondItem="1iH-SC-M88" secondAttribute="top" constant="8" id="zRz-Hc-NW2"/>
+                            <constraint firstItem="27M-n3-jSg" firstAttribute="leading" secondItem="9PA-oI-XyK" secondAttribute="leading" id="0gn-d0-DwK"/>
+                            <constraint firstAttribute="bottom" secondItem="27M-n3-jSg" secondAttribute="bottom" id="TYs-0X-bKk"/>
+                            <constraint firstItem="27M-n3-jSg" firstAttribute="top" secondItem="9PA-oI-XyK" secondAttribute="top" id="V4K-HM-hGG"/>
+                            <constraint firstAttribute="trailing" secondItem="27M-n3-jSg" secondAttribute="trailing" id="iQc-KZ-3sy"/>
                         </constraints>
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="27M-n3-jSg" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="G1Z-8o-20A"/>
-                    <constraint firstAttribute="bottom" secondItem="27M-n3-jSg" secondAttribute="bottom" constant="12" id="KLe-Ng-PeA"/>
-                    <constraint firstItem="27M-n3-jSg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="24" id="V56-0i-ufX"/>
-                    <constraint firstAttribute="trailing" secondItem="27M-n3-jSg" secondAttribute="trailing" constant="24" id="i1D-Qs-Mq3"/>
+                    <constraint firstAttribute="trailing" secondItem="9PA-oI-XyK" secondAttribute="trailing" constant="24" id="9gU-51-0GK"/>
+                    <constraint firstItem="9PA-oI-XyK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="S0k-lB-QnK"/>
+                    <constraint firstAttribute="bottom" secondItem="9PA-oI-XyK" secondAttribute="bottom" constant="12" id="XsU-yp-Ejf"/>
+                    <constraint firstItem="9PA-oI-XyK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="24" id="sAN-t2-Pot"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -71,6 +83,7 @@
                 <outlet property="cityExplainLabel" destination="IxQ-tk-OUq" id="XzK-r4-DUQ"/>
                 <outlet property="cityImageView" destination="1iH-SC-M88" id="cP8-vh-0ct"/>
                 <outlet property="cityNameLabel" destination="4MG-sk-sK1" id="kOc-qh-dso"/>
+                <outlet property="cityShadowView" destination="9PA-oI-XyK" id="yXR-rs-Izf"/>
             </connections>
             <point key="canvasLocation" x="155.72519083969465" y="25.35211267605634"/>
         </tableViewCell>

@@ -35,12 +35,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <view key="tableFooterView" contentMode="scaleToFill" id="NtR-p3-cia">
-                            <rect key="frame" x="0.0" y="0.0" width="393" height="77"/>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="NtR-p3-cia">
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="58"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Vg1-Ln-G5P">
-                                    <rect key="frame" x="24" y="24" width="345" height="30"/>
+                                    <rect key="frame" x="24" y="12" width="345" height="35"/>
                                     <segments>
                                         <segment title="모두"/>
                                         <segment title="국내"/>
@@ -55,8 +55,8 @@
                             <constraints>
                                 <constraint firstItem="Vg1-Ln-G5P" firstAttribute="leading" secondItem="NtR-p3-cia" secondAttribute="leading" constant="24" id="Ab0-Uf-4mE"/>
                                 <constraint firstAttribute="trailing" secondItem="Vg1-Ln-G5P" secondAttribute="trailing" constant="24" id="ebN-I2-8QS"/>
-                                <constraint firstAttribute="bottom" secondItem="Vg1-Ln-G5P" secondAttribute="bottom" constant="24" id="j1N-DO-eL7"/>
-                                <constraint firstItem="Vg1-Ln-G5P" firstAttribute="top" secondItem="NtR-p3-cia" secondAttribute="top" constant="24" id="qLJ-nq-fuD"/>
+                                <constraint firstAttribute="bottom" secondItem="Vg1-Ln-G5P" secondAttribute="bottom" constant="12" id="j1N-DO-eL7"/>
+                                <constraint firstItem="Vg1-Ln-G5P" firstAttribute="top" secondItem="NtR-p3-cia" secondAttribute="top" constant="12" id="qLJ-nq-fuD"/>
                             </constraints>
                         </view>
                         <connections>
