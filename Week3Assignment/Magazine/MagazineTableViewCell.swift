@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class MagazineTableViewCell: UITableViewCell, ReuseIdentifying {
+class MagazineTableViewCell: UITableViewCell, Identifying {
     
     @IBOutlet var magazineImageView: UIImageView!
     @IBOutlet var magazineTitleLabel: UILabel!

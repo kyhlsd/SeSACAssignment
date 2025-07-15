@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AdTableViewCell: UITableViewCell, ReuseIdentifying {
+class AdTableViewCell: UITableViewCell, Identifying {
     
     @IBOutlet var adContainerView: UIView!
     @IBOutlet var adLabel: UILabel!

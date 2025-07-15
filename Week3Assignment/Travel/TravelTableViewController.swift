@@ -7,10 +7,11 @@
 
 import UIKit
 
-class TravelTableViewController: UITableViewController {
+class TravelTableViewController: UITableViewController, TravelViewControllerDelegate {
     
     var list = TravelInfo().travel
     var isOdd = true
+    var selectedTravel: Travel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,10 +20,10 @@ class TravelTableViewController: UITableViewController {
     }
     
     private func registerCells() {
-        let travelCellXib = UINib(nibName: TravelTableViewCell.reuseIdentifier, bundle: nil)
-        let adCellXib = UINib(nibName: AdTableViewCell.reuseIdentifier, bundle: nil)
-        tableView.register(travelCellXib, forCellReuseIdentifier: TravelTableViewCell.reuseIdentifier)
-        tableView.register(adCellXib, forCellReuseIdentifier: AdTableViewCell.reuseIdentifier)
+        let travelCellXib = UINib(nibName: TravelTableViewCell.identifier, bundle: nil)
+        let adCellXib = UINib(nibName: AdTableViewCell.identifier, bundle: nil)
+        tableView.register(travelCellXib, forCellReuseIdentifier: TravelTableViewCell.identifier)
+        tableView.register(adCellXib, forCellReuseIdentifier: AdTableViewCell.identifier)
     }
 
     @IBAction func heartButtonTapped(_ sender: UIButton) {
@@ -57,6 +58,18 @@ class TravelTableViewController: UITableViewController {
             return 88
         } else {
             return UITableView.automaticDimension
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let storyboard = UIStoryboard(name: "Travel", bundle: nil)
+        if list[indexPath.row].ad {
+            
+        } else {
+            let viewController = storyboard.instantiateViewController(viewControllerType: TravelDetailViewController.self)
+            selectedTravel = list[indexPath.row]
+            viewController.delegate = self
+            navigationController?.pushViewController(viewController, animated: true)
         }
     }
     
