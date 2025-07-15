@@ -12,6 +12,22 @@ struct City {
     let cityExplain: String
     let cityImage: String
     let domesticTravel: Bool
+    
+    static func matches(target: City, keyword: String) -> Bool {
+        if target.cityName.localizedCaseInsensitiveContains(keyword) {
+            return true
+        }
+        
+        if target.cityEnglishName.localizedStandardContains(keyword) {
+            return true
+        }
+        
+        if target.cityExplain.localizedStandardContains(keyword) {
+            return true
+        }
+        
+        return false
+    }
 }
 
 struct CityInfo {

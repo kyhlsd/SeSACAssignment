@@ -36,11 +36,24 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="NtR-p3-cia">
-                            <rect key="frame" x="0.0" y="0.0" width="393" height="58"/>
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="92"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
+                                <searchBar contentMode="redraw" placeholder="검색어를 입력하세요." translatesAutoresizingMaskIntoConstraints="NO" id="3I0-ft-nym">
+                                    <rect key="frame" x="24" y="8" width="345" height="32"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="32" id="yDA-Vt-M1m"/>
+                                    </constraints>
+                                    <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                    <connections>
+                                        <outlet property="delegate" destination="dIe-ee-CcQ" id="qdE-y0-tkh"/>
+                                    </connections>
+                                </searchBar>
                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Vg1-Ln-G5P">
-                                    <rect key="frame" x="24" y="12" width="345" height="35"/>
+                                    <rect key="frame" x="24" y="48" width="345" height="33"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="32" id="WOC-at-Nhv"/>
+                                    </constraints>
                                     <segments>
                                         <segment title="모두"/>
                                         <segment title="국내"/>
@@ -54,9 +67,12 @@
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
                                 <constraint firstItem="Vg1-Ln-G5P" firstAttribute="leading" secondItem="NtR-p3-cia" secondAttribute="leading" constant="24" id="Ab0-Uf-4mE"/>
+                                <constraint firstAttribute="trailing" secondItem="3I0-ft-nym" secondAttribute="trailing" constant="24" id="DAN-Ka-OmA"/>
+                                <constraint firstItem="3I0-ft-nym" firstAttribute="top" secondItem="NtR-p3-cia" secondAttribute="top" constant="8" id="IlA-6u-l8Q"/>
                                 <constraint firstAttribute="trailing" secondItem="Vg1-Ln-G5P" secondAttribute="trailing" constant="24" id="ebN-I2-8QS"/>
+                                <constraint firstItem="3I0-ft-nym" firstAttribute="leading" secondItem="NtR-p3-cia" secondAttribute="leading" constant="24" id="fA0-eU-ugU"/>
                                 <constraint firstAttribute="bottom" secondItem="Vg1-Ln-G5P" secondAttribute="bottom" constant="12" id="j1N-DO-eL7"/>
-                                <constraint firstItem="Vg1-Ln-G5P" firstAttribute="top" secondItem="NtR-p3-cia" secondAttribute="top" constant="12" id="qLJ-nq-fuD"/>
+                                <constraint firstItem="Vg1-Ln-G5P" firstAttribute="top" secondItem="3I0-ft-nym" secondAttribute="bottom" constant="8" id="mwP-ur-2w7"/>
                             </constraints>
                         </view>
                         <connections>
@@ -66,6 +82,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="인기 도시" id="fiS-cg-ush"/>
                     <connections>
+                        <outlet property="citySearchBar" destination="3I0-ft-nym" id="FBz-Gq-PMC"/>
                         <outlet property="citySegmentedControl" destination="Vg1-Ln-G5P" id="XVv-KL-aJs"/>
                     </connections>
                 </tableViewController>
