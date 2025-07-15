@@ -1,0 +1,33 @@
+//
+//  CityTableViewCell.swift
+//  Week3Assignment
+//
+//  Created by 김영훈 on 7/15/25.
+//
+
+import UIKit
+import Kingfisher
+
+class CityTableViewCell: UITableViewCell, Identifying {
+
+    @IBOutlet var cityContainerView: UIView!
+    @IBOutlet var cityNameLabel: UILabel!
+    @IBOutlet var cityImageView: UIImageView!
+    @IBOutlet var cityExplainLabel: UILabel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        cityImageView.kf.indicatorType = .activity
+    }
+    
+    func configure(with city: City) {
+        cityNameLabel.text = "\(city.cityName) | \(city.cityEnglishName)"
+        
+        let url = URL(string: city.cityImage)
+        cityImageView.kf.setImage(with: url)
+        
+        cityExplainLabel.text = "  " + city.cityExplain
+    }
+    
+}

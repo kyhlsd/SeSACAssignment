@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="GNh-vx-gXd">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--City-->
+        <scene sceneID="9na-Co-20x">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="GNh-vx-gXd" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="City" image="globe.asia.australia" catalog="system" id="ABv-2p-yqc"/>
+                    <toolbarItems/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="goG-XF-FEq">
+                        <rect key="frame" x="0.0" y="118" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="dIe-ee-CcQ" kind="relationship" relationship="rootViewController" id="kG0-bt-TDn"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QGS-bo-lEe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="130.53435114503816" y="-28.169014084507044"/>
+        </scene>
+        <!--인기 도시-->
+        <scene sceneID="Igf-DT-JAU">
+            <objects>
+                <tableViewController id="dIe-ee-CcQ" customClass="CityTableViewController" customModule="Week3Assignment" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="d3a-ic-hxK">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="NtR-p3-cia">
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="77"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Vg1-Ln-G5P">
+                                    <rect key="frame" x="24" y="24" width="345" height="30"/>
+                                    <segments>
+                                        <segment title="모두"/>
+                                        <segment title="국내"/>
+                                        <segment title="해외"/>
+                                    </segments>
+                                    <connections>
+                                        <action selector="citySegmentedControlValueChanged:" destination="dIe-ee-CcQ" eventType="valueChanged" id="bb3-V6-jds"/>
+                                    </connections>
+                                </segmentedControl>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="Vg1-Ln-G5P" firstAttribute="leading" secondItem="NtR-p3-cia" secondAttribute="leading" constant="24" id="Ab0-Uf-4mE"/>
+                                <constraint firstAttribute="trailing" secondItem="Vg1-Ln-G5P" secondAttribute="trailing" constant="24" id="ebN-I2-8QS"/>
+                                <constraint firstAttribute="bottom" secondItem="Vg1-Ln-G5P" secondAttribute="bottom" constant="24" id="j1N-DO-eL7"/>
+                                <constraint firstItem="Vg1-Ln-G5P" firstAttribute="top" secondItem="NtR-p3-cia" secondAttribute="top" constant="24" id="qLJ-nq-fuD"/>
+                            </constraints>
+                        </view>
+                        <connections>
+                            <outlet property="dataSource" destination="dIe-ee-CcQ" id="FT6-en-Loj"/>
+                            <outlet property="delegate" destination="dIe-ee-CcQ" id="mnX-R5-9gt"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="인기 도시" id="fiS-cg-ush"/>
+                    <connections>
+                        <outlet property="citySegmentedControl" destination="Vg1-Ln-G5P" id="XVv-KL-aJs"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PmX-zg-b4U" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="942.74809160305335" y="-28.169014084507044"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="globe.asia.australia" catalog="system" width="128" height="123"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
