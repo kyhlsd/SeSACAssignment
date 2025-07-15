@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class TravelTableViewCell: UITableViewCell {
+class TravelTableViewCell: UITableViewCell, ReuseIdentifying {
     
     @IBOutlet var travelImageView: UIImageView!
     @IBOutlet var travelTitleLabel: UILabel!

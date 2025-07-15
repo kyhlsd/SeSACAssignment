@@ -19,8 +19,8 @@ class MagazineTableViewController: UITableViewController {
     }
 
     private func registerCell() {
-        let xib = UINib(nibName: "MagazineTableViewCell", bundle: nil)
-        tableView.register(xib, forCellReuseIdentifier: "MagazineTableViewCell")
+        let xib = UINib(nibName: MagazineTableViewCell.reuseIdentifier, bundle: nil)
+        tableView.register(xib, forCellReuseIdentifier: MagazineTableViewCell.reuseIdentifier)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -28,7 +28,7 @@ class MagazineTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MagazineTableViewCell", for: indexPath) as? MagazineTableViewCell else { return UITableViewCell() }
+        let cell = tableView.dequeueReusableCell(for: indexPath, cellType: MagazineTableViewCell.self)
         
         cell.configure(with: list[indexPath.row])
         return cell

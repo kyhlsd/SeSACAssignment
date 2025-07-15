@@ -19,10 +19,10 @@ class TravelTableViewController: UITableViewController {
     }
     
     private func registerCells() {
-        let travelCellXib = UINib(nibName: "TravelTableViewCell", bundle: nil)
-        let adCellXib = UINib(nibName: "AdTableViewCell", bundle: nil)
-        tableView.register(travelCellXib, forCellReuseIdentifier: "TravelTableViewCell")
-        tableView.register(adCellXib, forCellReuseIdentifier: "AdTableViewCell")
+        let travelCellXib = UINib(nibName: TravelTableViewCell.reuseIdentifier, bundle: nil)
+        let adCellXib = UINib(nibName: AdTableViewCell.reuseIdentifier, bundle: nil)
+        tableView.register(travelCellXib, forCellReuseIdentifier: TravelTableViewCell.reuseIdentifier)
+        tableView.register(adCellXib, forCellReuseIdentifier: AdTableViewCell.reuseIdentifier)
     }
 
     @IBAction func heartButtonTapped(_ sender: UIButton) {
@@ -39,12 +39,12 @@ class TravelTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if list[indexPath.row].ad {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "AdTableViewCell", for: indexPath) as? AdTableViewCell else { return UITableViewCell() }
+            let cell = tableView.dequeueReusableCell(for: indexPath, cellType: AdTableViewCell.self)
             
             cell.configure(with: list[indexPath.row], isOddAd: isOddTag(cell))
             return cell
         } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "TravelTableViewCell", for: indexPath) as? TravelTableViewCell else { return UITableViewCell() }
+            let cell = tableView.dequeueReusableCell(for: indexPath, cellType: TravelTableViewCell.self)
             
             cell.configure(with: list[indexPath.row])
             cell.heartButton.tag = indexPath.row
