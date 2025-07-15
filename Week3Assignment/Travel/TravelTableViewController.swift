@@ -25,14 +25,6 @@ class TravelTableViewController: UITableViewController, TravelViewControllerDele
         tableView.register(travelCellXib, forCellReuseIdentifier: TravelTableViewCell.identifier)
         tableView.register(adCellXib, forCellReuseIdentifier: AdTableViewCell.identifier)
     }
-
-    @IBAction func heartButtonTapped(_ sender: UIButton) {
-        if let like = list[sender.tag].like {
-            list[sender.tag].like?.toggle()
-            let heartImage = like ? "heart" : "heart.fill"
-            sender.setImage(UIImage(systemName: heartImage), for: .normal)
-        }
-    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         list.count
@@ -48,7 +40,14 @@ class TravelTableViewController: UITableViewController, TravelViewControllerDele
             let cell = tableView.dequeueReusableCell(for: indexPath, cellType: TravelTableViewCell.self)
             
             cell.configure(with: list[indexPath.row])
-            cell.heartButton.tag = indexPath.row
+            
+            cell.heartButton.removeTarget(nil, action: nil, for: .allEvents)
+            cell.heartButton.addAction(UIAction { [weak self] _ in
+                if let like = self?.list[indexPath.row].like {
+                    self?.list[indexPath.row].like?.toggle()
+                    cell.configureHeartButton(!like)
+                }
+            }, for: .touchUpInside)
             return cell
         }
     }

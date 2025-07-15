@@ -39,18 +39,26 @@ class TravelTableViewCell: UITableViewCell, Identifying {
         }
         
         if let like = travel.like {
-            let heartImage = like ? "heart.fill" : "heart"
-            heartButton.setImage(UIImage(systemName: heartImage), for: .normal)
+            configureHeartButton(like)
         }
         
         if let grade = travel.grade {
-            for (i, star) in starStackView.subviews.enumerated() {
-                let starString = i < Int(grade) ? "star.fill" : "star"
-                let tintColor = i < Int(grade) ? UIColor.systemYellow : UIColor.systemGray4
-                if let starImage = star as? UIImageView {
-                    starImage.image = UIImage(systemName: starString)
-                    starImage.tintColor = tintColor
-                }
+            configureStarStackView(grade)
+        }
+    }
+    
+    func configureHeartButton(_ like: Bool) {
+        let heartImage = like ? "heart.fill" : "heart"
+        heartButton.setImage(UIImage(systemName: heartImage), for: .normal)
+    }
+    
+    private func configureStarStackView(_ grade: Float) {
+        for (i, star) in starStackView.subviews.enumerated() {
+            let starString = i < Int(grade) ? "star.fill" : "star"
+            let tintColor = i < Int(grade) ? UIColor.systemYellow : UIColor.systemGray4
+            if let starImage = star as? UIImageView {
+                starImage.image = UIImage(systemName: starString)
+                starImage.tintColor = tintColor
             }
         }
     }
