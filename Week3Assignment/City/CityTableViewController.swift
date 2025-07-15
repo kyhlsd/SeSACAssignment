@@ -12,10 +12,10 @@ class CityTableViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet var citySegmentedControl: UISegmentedControl!
     @IBOutlet var citySearchBar: UISearchBar!
     
+    // list - segmentedControl - searchBar 순으로 filter
     private let list = CityInfo().city
     private var selectedList = [City]()
     private var searchedList = [City]()
-    private var resultList = [City]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,32 +35,11 @@ class CityTableViewController: UITableViewController, UISearchBarDelegate {
         tableView.register(xib, forCellReuseIdentifier: CityTableViewCell.identifier)
     }
     
-    private func updateResultList() {
-        
-    }
-    
-    // MARK: SearchBar
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        updateSearchedList(searchText)
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        view.endEditing(true)
-    }
-    
-    private func updateSearchedList(_ searchText: String) {
-        let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-        if trimmed.isEmpty {
-            searchedList = list
-        } else {
-            searchedList = list.filter { City.matches(target: $0, keyword: trimmed) }
-        }
-    }
-    
     // MARK: SegmentedControl
     @IBAction func citySegmentedControlValueChanged(_ sender: UISegmentedControl) {
         view.endEditing(true)
         updateSelectedList()
+        updateSearchedList(citySearchBar.text)
         tableView.reloadData()
     }
     
@@ -77,19 +56,43 @@ class CityTableViewController: UITableViewController, UISearchBarDelegate {
         }
     }
     
+    // MARK: SearchBar
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        updateSearchedList(searchText)
+        tableView.reloadData()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        view.endEditing(true)
+    }
+    
+    private func updateSearchedList(_ searchText: String?) {
+        guard let searchText = searchText else {
+            searchedList = selectedList
+            return
+        }
+        
+        let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            searchedList = selectedList
+        } else {
+            searchedList = selectedList.filter { City.matches(target: $0, keyword: trimmed) }
+        }
+    }
+    
     // MARK: TableView
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        resultList.count
+        searchedList.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(for: indexPath, cellType: CityTableViewCell.self)
-        cell.configure(with: resultList[indexPath.row])
+        cell.configure(with: searchedList[indexPath.row])
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         view.endEditing(true)
-        print(resultList[indexPath.row])
+        print(searchedList[indexPath.row])
     }
 }
