@@ -61,12 +61,17 @@ class TravelTableViewController: UITableViewController, TravelViewControllerDele
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedTravel = list[indexPath.row]
         let storyboard = UIStoryboard(name: "Travel", bundle: nil)
+        
         if list[indexPath.row].ad {
-            
+            let viewController = storyboard.instantiateViewController(viewControllerType: AdDetailViewController.self)
+            viewController.delegate = self
+            let navigationController = UINavigationController(rootViewController: viewController)
+            navigationController.modalPresentationStyle = .fullScreen
+            present(navigationController, animated: true)
         } else {
             let viewController = storyboard.instantiateViewController(viewControllerType: TravelDetailViewController.self)
-            selectedTravel = list[indexPath.row]
             viewController.delegate = self
             navigationController?.pushViewController(viewController, animated: true)
         }

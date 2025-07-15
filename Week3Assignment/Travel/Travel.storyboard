@@ -101,6 +101,48 @@
             </objects>
             <point key="canvasLocation" x="2161" y="-161"/>
         </scene>
+        <!--광고 화면-->
+        <scene sceneID="UVJ-Nu-0yT">
+            <objects>
+                <viewController storyboardIdentifier="AdDetailViewController" id="9SG-M5-aXw" customClass="AdDetailViewController" customModule="Week3Assignment" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="7nA-O3-cWS">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IWe-Cb-hth">
+                                <rect key="frame" x="24" y="399" width="345" height="104"/>
+                                <string key="text">도쿄 여행 예약은?
+수업이 있는데
+가실 생각은 아니시죠?</string>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="29"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Xac-je-8Ys"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="IWe-Cb-hth" firstAttribute="centerY" secondItem="Xac-je-8Ys" secondAttribute="centerY" id="DON-AI-9Wf"/>
+                            <constraint firstItem="IWe-Cb-hth" firstAttribute="leading" secondItem="Xac-je-8Ys" secondAttribute="leading" constant="24" id="Hht-cl-90x"/>
+                            <constraint firstItem="Xac-je-8Ys" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="IWe-Cb-hth" secondAttribute="bottom" constant="24" id="nYH-8i-tIr"/>
+                            <constraint firstItem="Xac-je-8Ys" firstAttribute="trailing" secondItem="IWe-Cb-hth" secondAttribute="trailing" constant="24" id="vuE-BZ-Ssj"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="광고 화면" id="K6x-sF-q3m">
+                        <barButtonItem key="leftBarButtonItem" image="xmark" catalog="system" id="Irp-sf-euY">
+                            <connections>
+                                <action selector="exitBarButtonItemTapped:" destination="9SG-M5-aXw" id="grv-nI-akv"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="adTitleLabel" destination="IWe-Cb-hth" id="57L-qf-hIY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="o7M-bc-ahU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3013" y="-161"/>
+        </scene>
         <!--Travel-->
         <scene sceneID="twf-XE-xIJ">
             <objects>
@@ -124,6 +166,7 @@
     </scenes>
     <resources>
         <image name="mountain.2" catalog="system" width="128" height="66"/>
+        <image name="xmark" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
