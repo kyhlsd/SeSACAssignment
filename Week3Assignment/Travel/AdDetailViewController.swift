@@ -10,19 +10,19 @@ import UIKit
 class AdDetailViewController: UIViewController, Identifying {
 
     @IBOutlet var adTitleLabel: UILabel!
-
-    weak var delegate: TravelViewControllerDelegate?
+    
+    var selectedAd: Travel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let travel = delegate?.selectedTravel {
-            configure(with: travel)
+        if let selectedAd = selectedAd {
+            configure(with: selectedAd)
         }
     }
 
-    func configure(with travel: Travel) {
-        adTitleLabel.text = travel.title
+    func configure(with ad: Travel) {
+        adTitleLabel.text = ad.title
     }
     
     @IBAction func exitBarButtonItemTapped(_ sender: UIBarButtonItem) {

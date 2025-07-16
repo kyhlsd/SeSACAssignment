@@ -8,10 +8,6 @@
 import UIKit
 import Kingfisher
 
-protocol TravelViewControllerDelegate: AnyObject {
-    var selectedTravel: Travel? { get set }
-}
-
 class TravelDetailViewController: UIViewController, Identifying {
 
     @IBOutlet var travelImageView: UIImageView!
@@ -19,7 +15,7 @@ class TravelDetailViewController: UIViewController, Identifying {
     @IBOutlet var travelDescriptionLabel: UILabel!
     @IBOutlet var exitButton: UIButton!
     
-    weak var delegate: TravelViewControllerDelegate?
+    var travel: Travel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +25,7 @@ class TravelDetailViewController: UIViewController, Identifying {
         
         travelImageView.kf.indicatorType = .activity
         
-        if let travel = delegate?.selectedTravel {
+        if let travel = travel {
             configure(with: travel)
         }
     }

@@ -7,11 +7,10 @@
 
 import UIKit
 
-class TravelTableViewController: UITableViewController, TravelViewControllerDelegate {
+class TravelTableViewController: UITableViewController {
     
     private var list = TravelInfo().travel
     private var isOdd = true
-    var selectedTravel: Travel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,19 +59,19 @@ class TravelTableViewController: UITableViewController, TravelViewControllerDele
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedTravel = list[indexPath.row]
+        let selected = list[indexPath.row]
         
         if list[indexPath.row].ad {
-            presentAdDetailViewController()
+            presentAdDetailViewController(selected)
         } else {
-            pushTravelDetailViewController()
+            pushTravelDetailViewController(selected)
         }
     }
     
-    private func presentAdDetailViewController() {
+    private func presentAdDetailViewController(_ selectedAd: Travel) {
         let storyboard = UIStoryboard(name: "Travel", bundle: nil)
         let viewController = storyboard.instantiateViewController(viewControllerType: AdDetailViewController.self)
-        viewController.delegate = self
+        viewController.selectedAd = selectedAd
         
         let navigationController = UINavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .fullScreen
@@ -81,10 +80,10 @@ class TravelTableViewController: UITableViewController, TravelViewControllerDele
         present(navigationController, animated: true)
     }
     
-    private func pushTravelDetailViewController() {
+    private func pushTravelDetailViewController(_ selectedTravel: Travel) {
         let storyboard = UIStoryboard(name: "Travel", bundle: nil)
         let viewController = storyboard.instantiateViewController(viewControllerType: TravelDetailViewController.self)
-        viewController.delegate = self
+        viewController.travel = selectedTravel
         
         navigationController?.pushViewController(viewController, animated: true)
     }
