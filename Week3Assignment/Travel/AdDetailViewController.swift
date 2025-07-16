@@ -30,10 +30,10 @@ class AdDetailViewController: UIViewController, Identifying {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        configure(with: ad)
+        configure()
     }
 
-    private func configure(with ad: Travel) {
+    private func configure() {
         adTitleLabel.text = ad.title
     }
     

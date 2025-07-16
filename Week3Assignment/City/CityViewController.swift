@@ -108,7 +108,12 @@ extension CityViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(#function)
-        print(searchedList[indexPath.row])
+        let selected = searchedList[indexPath.row]
+        
+        let storyboard = UIStoryboard(name: "City", bundle: nil)
+        let viewController = storyboard.instantiateViewController(identifier: CityDetailViewController.identifier) { coder -> CityDetailViewController in
+                .init(coder: coder, city: selected) ?? .init(city: selected)
+        }
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }

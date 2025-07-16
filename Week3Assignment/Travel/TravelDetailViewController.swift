@@ -34,15 +34,12 @@ class TravelDetailViewController: UIViewController, Identifying {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        travelImageView.layer.cornerRadius = 12
-        exitButton.layer.cornerRadius = exitButton.frame.height / 2
-        
-        travelImageView.kf.indicatorType = .activity
-        
-        configure(with: travel)
+        configure()
     }
 
-    private func configure(with travel: Travel) {
+    private func configure() {
+        travelImageView.layer.cornerRadius = 12
+        travelImageView.kf.indicatorType = .activity
         if let image = travel.travelImage {
             let url = URL(string: image)
             travelImageView.kf.setImage(with: url)
@@ -50,6 +47,8 @@ class TravelDetailViewController: UIViewController, Identifying {
         
         travelTitleLabel.text = travel.title
         travelDescriptionLabel.text = travel.description
+        
+        exitButton.layer.cornerRadius = exitButton.frame.height / 2
     }
     
     @IBAction func exitButtonTapped(_ sender: UIButton) {
