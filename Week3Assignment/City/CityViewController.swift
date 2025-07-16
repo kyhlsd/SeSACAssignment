@@ -7,10 +7,12 @@
 
 import UIKit
 
-class CityTableViewController: UITableViewController, UISearchBarDelegate {
+class CityViewController: UIViewController {
 
     @IBOutlet var citySegmentedControl: UISegmentedControl!
     @IBOutlet var citySearchBar: UISearchBar!
+    @IBOutlet var cityTableView: UITableView!
+    @IBOutlet var tapGestureRecognizer: UITapGestureRecognizer!
     
     // list - segmentedControl - searchBar 순으로 filter
     private let list = CityInfo().city
@@ -20,27 +22,32 @@ class CityTableViewController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.rowHeight = 140
-        registerCell()
+        updateSelectedList()
+        updateSearchedList("")
+        
+        configureTableView()
         
         citySearchBar.delegate = self
         citySearchBar.backgroundImage = UIImage()
         
-        updateSelectedList()
-        updateSearchedList("")
+        tapGestureRecognizer.cancelsTouchesInView = false
     }
     
-    private func registerCell() {
+    private func configureTableView() {
+        cityTableView.delegate = self
+        cityTableView.dataSource = self
+        cityTableView.rowHeight = 140
+        
         let xib = UINib(nibName: CityTableViewCell.identifier, bundle: nil)
-        tableView.register(xib, forCellReuseIdentifier: CityTableViewCell.identifier)
+        cityTableView.register(xib, forCellReuseIdentifier: CityTableViewCell.identifier)
     }
     
     // MARK: SegmentedControl
     @IBAction func citySegmentedControlValueChanged(_ sender: UISegmentedControl) {
-        view.endEditing(true)
+        
         updateSelectedList()
         updateSearchedList(citySearchBar.text)
-        tableView.reloadData()
+        cityTableView.reloadData()
     }
     
     private func updateSelectedList() {
@@ -56,10 +63,17 @@ class CityTableViewController: UITableViewController, UISearchBarDelegate {
         }
     }
     
-    // MARK: SearchBar
+    @IBAction func dismissKeyboard(_ sender: UIGestureRecognizer) {
+        view.endEditing(true)
+    }
+}
+
+// MARK: SearchBar
+extension CityViewController: UISearchBarDelegate {
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         updateSearchedList(searchText)
-        tableView.reloadData()
+        cityTableView.reloadData()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -79,20 +93,22 @@ class CityTableViewController: UITableViewController, UISearchBarDelegate {
             searchedList = selectedList.filter { $0.matches(keyword: trimmed) }
         }
     }
-    
-    // MARK: TableView
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+}
+
+// MARK: TableView
+extension CityViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         searchedList.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(for: indexPath, cellType: CityTableViewCell.self)
         cell.configure(with: searchedList[indexPath.row])
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        view.endEditing(true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(#function)
         print(searchedList[indexPath.row])
     }
 }

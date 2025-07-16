@@ -18,16 +18,16 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9PA-oI-XyK">
-                        <rect key="frame" x="24" y="12" width="306" height="116"/>
+                        <rect key="frame" x="0.0" y="12" width="342" height="116"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="27M-n3-jSg">
-                                <rect key="frame" x="0.0" y="0.0" width="306" height="116"/>
+                                <rect key="frame" x="0.0" y="0.0" width="342" height="116"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1iH-SC-M88">
-                                        <rect key="frame" x="0.0" y="0.0" width="306" height="116"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="342" height="116"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="방콕 | BangKok" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4MG-sk-sK1">
-                                        <rect key="frame" x="8" y="8" width="290" height="22"/>
+                                        <rect key="frame" x="8" y="8" width="326" height="22"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="22" id="MXE-Xf-Kdo"/>
                                         </constraints>
@@ -36,7 +36,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  방콕, 파타야, 후아현, 코사멧, 코사무이" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IxQ-tk-OUq">
-                                        <rect key="frame" x="0.0" y="92" width="306" height="24"/>
+                                        <rect key="frame" x="0.0" y="92" width="342" height="24"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.5534457781456954" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="24" id="jvc-MA-bld"/>
@@ -71,10 +71,10 @@
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="9PA-oI-XyK" secondAttribute="trailing" constant="24" id="9gU-51-0GK"/>
+                    <constraint firstAttribute="trailing" secondItem="9PA-oI-XyK" secondAttribute="trailing" constant="12" id="9gU-51-0GK"/>
                     <constraint firstItem="9PA-oI-XyK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="S0k-lB-QnK"/>
                     <constraint firstAttribute="bottom" secondItem="9PA-oI-XyK" secondAttribute="bottom" constant="12" id="XsU-yp-Ejf"/>
-                    <constraint firstItem="9PA-oI-XyK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="24" id="sAN-t2-Pot"/>
+                    <constraint firstItem="9PA-oI-XyK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="sAN-t2-Pot"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
