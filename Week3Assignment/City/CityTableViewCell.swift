@@ -22,7 +22,7 @@ class CityTableViewCell: UITableViewCell, Identifying {
         cityImageView.kf.indicatorType = .activity
         
         cityContainerView.setCornerRadius(corners: [.layerMinXMinYCorner, .layerMaxXMaxYCorner], cornerRadius: 12)
-        cityShadowView.setRightBottomShadow()
+        cityShadowView.layer.setRightBottomShadow()
     }
     
     func configure(with city: City) {
