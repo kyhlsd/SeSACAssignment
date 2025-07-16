@@ -76,7 +76,7 @@ class CityTableViewController: UITableViewController, UISearchBarDelegate {
         if trimmed.isEmpty {
             searchedList = selectedList
         } else {
-            searchedList = selectedList.filter { City.matches(target: $0, keyword: trimmed) }
+            searchedList = selectedList.filter { $0.matches(keyword: trimmed) }
         }
     }
     

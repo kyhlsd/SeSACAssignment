@@ -13,16 +13,16 @@ struct City {
     let cityImage: String
     let domesticTravel: Bool
     
-    static func matches(target: City, keyword: String) -> Bool {
-        if target.cityName.localizedCaseInsensitiveContains(keyword) {
+    func matches(keyword: String) -> Bool {
+        if cityName.localizedCaseInsensitiveContains(keyword) {
             return true
         }
         
-        if target.cityEnglishName.localizedStandardContains(keyword) {
+        if cityEnglishName.localizedStandardContains(keyword) {
             return true
         }
         
-        if target.cityExplain.localizedStandardContains(keyword) {
+        if cityExplain.localizedStandardContains(keyword) {
             return true
         }
         
