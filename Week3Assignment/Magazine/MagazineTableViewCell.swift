@@ -30,7 +30,11 @@ class MagazineTableViewCell: UITableViewCell, Identifying {
         magazineDateLabel.text = DateStringFormatter.koreanFormatter.string(for: date)
         
         let url = URL(string: magazine.photoImage)
-        magazineImageView.kf.setImage(with: url)
+        magazineImageView.kf.setImage(with: url, options: [
+            .processor(DownsamplingImageProcessor(size: CGSize(width: 300, height: 300))),
+            .scaleFactor(UIScreen.main.scale),
+            .cacheOriginalImage
+        ])
     }
 }
 

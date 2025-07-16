@@ -42,7 +42,11 @@ class TravelDetailViewController: UIViewController, Identifying {
         travelImageView.kf.indicatorType = .activity
         if let image = travel.travelImage {
             let url = URL(string: image)
-            travelImageView.kf.setImage(with: url)
+            travelImageView.kf.setImage(with: url, options: [
+                .processor(DownsamplingImageProcessor(size: CGSize(width: 300, height: 300))),
+                .scaleFactor(UIScreen.main.scale),
+                .cacheOriginalImage
+            ])
         }
         
         travelTitleLabel.text = travel.title

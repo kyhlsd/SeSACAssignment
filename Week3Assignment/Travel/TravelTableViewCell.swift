@@ -41,7 +41,11 @@ class TravelTableViewCell: UITableViewCell, Identifying {
         
         if let travelImage = travel.travelImage {
             let url = URL(string: travelImage)
-            travelImageView.kf.setImage(with: url)
+            travelImageView.kf.setImage(with: url, options: [
+                .processor(DownsamplingImageProcessor(size: CGSize(width: 80, height: 100))),
+                .scaleFactor(UIScreen.main.scale),
+                .cacheOriginalImage
+            ])
         }
         
         if let like = travel.like {

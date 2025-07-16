@@ -41,7 +41,11 @@ class CityDetailViewController: UIViewController, Identifying {
         cityImageView.kf.indicatorType = .activity
         cityImageView.layer.cornerRadius = 12
         let url = URL(string: city.cityImage)
-        cityImageView.kf.setImage(with: url)
+        cityImageView.kf.setImage(with: url, options: [
+            .processor(DownsamplingImageProcessor(size: CGSize(width: 300, height: 300))),
+            .scaleFactor(UIScreen.main.scale),
+            .cacheOriginalImage
+        ])
         
         cityNameLabel.text = "\(city.cityName) | \(city.cityEnglishName)"
         cityExplainLabel.text = city.cityExplain

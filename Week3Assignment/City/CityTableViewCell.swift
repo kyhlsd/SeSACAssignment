@@ -29,7 +29,11 @@ class CityTableViewCell: UITableViewCell, Identifying {
         cityNameLabel.text = "\(city.cityName) | \(city.cityEnglishName)"
         
         let url = URL(string: city.cityImage)
-        cityImageView.kf.setImage(with: url)
+        cityImageView.kf.setImage(with: url, options: [
+            .processor(DownsamplingImageProcessor(size: CGSize(width: 300, height: 100))),
+            .scaleFactor(UIScreen.main.scale),
+            .cacheOriginalImage
+        ])
         
         cityExplainLabel.text = "  " + city.cityExplain
     }
