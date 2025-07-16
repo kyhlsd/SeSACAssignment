@@ -11,17 +11,29 @@ class AdDetailViewController: UIViewController, Identifying {
 
     @IBOutlet var adTitleLabel: UILabel!
     
-    var selectedAd: Travel?
+    init(ad: Travel) {
+        self.ad = ad
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    init?(coder: NSCoder, ad: Travel) {
+        self.ad = ad
+        super.init(coder: coder)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private let ad: Travel
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let selectedAd = selectedAd {
-            configure(with: selectedAd)
-        }
+        configure(with: ad)
     }
 
-    func configure(with ad: Travel) {
+    private func configure(with ad: Travel) {
         adTitleLabel.text = ad.title
     }
     

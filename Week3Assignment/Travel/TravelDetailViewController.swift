@@ -15,7 +15,21 @@ class TravelDetailViewController: UIViewController, Identifying {
     @IBOutlet var travelDescriptionLabel: UILabel!
     @IBOutlet var exitButton: UIButton!
     
-    var travel: Travel?
+    init(travel: Travel) {
+        self.travel = travel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    init?(coder: NSCoder, travel: Travel) {
+        self.travel = travel
+        super.init(coder: coder)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private let travel: Travel
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,12 +39,10 @@ class TravelDetailViewController: UIViewController, Identifying {
         
         travelImageView.kf.indicatorType = .activity
         
-        if let travel = travel {
-            configure(with: travel)
-        }
+        configure(with: travel)
     }
 
-    func configure(with travel: Travel) {
+    private func configure(with travel: Travel) {
         if let image = travel.travelImage {
             let url = URL(string: image)
             travelImageView.kf.setImage(with: url)

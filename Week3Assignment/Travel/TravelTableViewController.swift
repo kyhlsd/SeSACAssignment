@@ -70,8 +70,9 @@ class TravelTableViewController: UITableViewController {
     
     private func presentAdDetailViewController(_ selectedAd: Travel) {
         let storyboard = UIStoryboard(name: "Travel", bundle: nil)
-        let viewController = storyboard.instantiateViewController(viewControllerType: AdDetailViewController.self)
-        viewController.selectedAd = selectedAd
+        let viewController = storyboard.instantiateViewController(identifier: AdDetailViewController.identifier) { coder -> AdDetailViewController in
+                .init(coder: coder, ad: selectedAd) ?? .init(ad: selectedAd)
+        }
         
         let navigationController = UINavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .fullScreen
@@ -82,8 +83,10 @@ class TravelTableViewController: UITableViewController {
     
     private func pushTravelDetailViewController(_ selectedTravel: Travel) {
         let storyboard = UIStoryboard(name: "Travel", bundle: nil)
-        let viewController = storyboard.instantiateViewController(viewControllerType: TravelDetailViewController.self)
-        viewController.travel = selectedTravel
+        let viewController = storyboard.instantiateViewController(identifier: TravelDetailViewController.identifier) {
+            coder -> TravelDetailViewController in
+                .init(coder: coder, travel: selectedTravel) ?? .init(travel: selectedTravel)
+        }
         
         navigationController?.pushViewController(viewController, animated: true)
     }
