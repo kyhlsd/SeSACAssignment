@@ -72,8 +72,10 @@ class CityViewController: UIViewController {
 extension CityViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        updateSearchedList(searchText)
-        cityTableView.reloadData()
+        Debounce<String>.input(searchText, comparedAgainst: self.citySearchBar.text ?? "", timeInterval: 0.5) { [weak self] _ in
+            self?.updateSearchedList(searchText)
+            self?.cityTableView.reloadData()
+        }
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
