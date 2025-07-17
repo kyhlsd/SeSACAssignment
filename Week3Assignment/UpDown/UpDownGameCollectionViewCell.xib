@@ -16,23 +16,25 @@
                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tPM-Yf-aIA">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yRZ-gz-I2C">
                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <state key="normal" title="Button"/>
-                        <buttonConfiguration key="configuration" style="plain" title="1">
-                            <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </buttonConfiguration>
-                    </button>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="tPM-Yf-aIA" secondAttribute="bottom" id="3r6-8e-KG7"/>
-                <constraint firstItem="tPM-Yf-aIA" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="enK-Bb-BUO"/>
-                <constraint firstItem="tPM-Yf-aIA" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="qj5-u7-UhF"/>
-                <constraint firstAttribute="trailing" secondItem="tPM-Yf-aIA" secondAttribute="trailing" id="y9i-ak-sP1"/>
+                <constraint firstItem="yRZ-gz-I2C" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="Bcc-C0-yU1"/>
+                <constraint firstAttribute="bottom" secondItem="yRZ-gz-I2C" secondAttribute="bottom" id="CnW-S0-wk1"/>
+                <constraint firstItem="yRZ-gz-I2C" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="S6G-fN-u5b"/>
+                <constraint firstAttribute="trailing" secondItem="yRZ-gz-I2C" secondAttribute="trailing" id="xMI-y2-8Yi"/>
             </constraints>
+            <connections>
+                <outlet property="numberLabel" destination="yRZ-gz-I2C" id="VbA-hb-42h"/>
+            </connections>
             <point key="canvasLocation" x="131" y="-12"/>
         </collectionViewCell>
     </objects>

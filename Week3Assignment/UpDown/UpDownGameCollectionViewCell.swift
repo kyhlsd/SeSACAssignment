@@ -7,11 +7,23 @@
 
 import UIKit
 
-class UpDownGameCollectionViewCell: UICollectionViewCell {
+class UpDownGameCollectionViewCell: UICollectionViewCell, Identifying {
 
+    @IBOutlet var numberLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+       
+        numberLabel.clipsToBounds = true
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        layer.cornerRadius = frame.height / 2
     }
 
+    func configure(_ number: Int) {
+        numberLabel.text = "\(number)"
+    }
 }

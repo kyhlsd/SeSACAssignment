@@ -36,6 +36,7 @@ class UpDownHomeViewController: UIViewController {
             
             view.endEditing(true)
             numberTextField.text = ""
+            warningLabel.text = ""
             
             presentUpDownGameViewController(number: number)
         } catch UpDownNumberError.empty {
@@ -60,7 +61,7 @@ class UpDownHomeViewController: UIViewController {
             throw UpDownNumberError.nonNatural
         }
         
-        if number < 1, number > 1000 {
+        if number < 1 || number > 1000 {
             throw UpDownNumberError.outOfRange
         }
         
@@ -70,7 +71,7 @@ class UpDownHomeViewController: UIViewController {
     private func presentUpDownGameViewController(number: Int) {
         let storyboard = UIStoryboard(name: "UpDown", bundle: nil)
         let viewController = storyboard.instantiateViewController(identifier: UpDownGameViewController.identifier) { coder -> UpDownGameViewController in
-            return .init(coder: coder, targetNumber: Int.random(in: 1...number)) ?? .init(targetNumber: Int.random(in: 1...number))
+            return .init(coder: coder, maxNumber: number) ?? .init(maxNumber: number)
         }
         navigationController?.pushViewController(viewController, animated: true)
     }
