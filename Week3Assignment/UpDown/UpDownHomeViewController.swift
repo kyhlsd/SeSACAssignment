@@ -33,6 +33,10 @@ class UpDownHomeViewController: UIViewController {
     @IBAction func startButtonTapped(_ sender: UIButton) {
         do {
             let number = try getValidNumber()
+            
+            view.endEditing(true)
+            numberTextField.text = ""
+            
             presentUpDownGameViewController(number: number)
         } catch UpDownNumberError.empty {
             warningLabel.text = "입력창이 비었습니다."

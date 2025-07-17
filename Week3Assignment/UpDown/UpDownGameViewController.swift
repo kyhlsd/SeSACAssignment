@@ -31,4 +31,8 @@ class UpDownGameViewController: UIViewController, Identifying {
         print(targetNumber)
     }
 
+    
+    @IBAction func popViewController(_ sender: UIButton) {
+        navigationController?.popViewController(animated: true)
+    }
 }

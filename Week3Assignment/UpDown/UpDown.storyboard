@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -135,7 +136,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="시도 횟수 : 0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wbY-6g-VAf">
-                                <rect key="frame" x="40" y="206.66666666666666" width="313" height="38"/>
+                                <rect key="frame" x="40" y="194.66666666666666" width="313" height="38"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="38" id="mSX-IB-evN"/>
                                 </constraints>
@@ -168,20 +169,37 @@
                                 </collectionViewFlowLayout>
                                 <cells/>
                             </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ksC-cn-52J">
+                                <rect key="frame" x="8" y="150.33333333333334" width="36" height="36"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="36" id="Jkt-fx-oRW"/>
+                                    <constraint firstAttribute="height" constant="36" id="ndg-9A-xtQ"/>
+                                </constraints>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain">
+                                    <imageReference key="image" image="chevron.left" catalog="system" symbolScale="large"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="popViewController:" destination="Evh-cs-sRo" eventType="touchUpInside" id="3xt-UA-uqk"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="mgk-lE-YA3"/>
                         <color key="backgroundColor" red="0.75686274509999996" green="0.85490196080000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="ksC-cn-52J" firstAttribute="leading" secondItem="mgk-lE-YA3" secondAttribute="leading" constant="8" id="1uJ-uv-FjZ"/>
                             <constraint firstItem="mgk-lE-YA3" firstAttribute="bottom" secondItem="D1n-Bp-uvH" secondAttribute="bottom" constant="20" id="2hN-42-U2k"/>
                             <constraint firstItem="mgk-lE-YA3" firstAttribute="trailing" secondItem="D1n-Bp-uvH" secondAttribute="trailing" constant="40" id="31l-OP-T4H"/>
                             <constraint firstItem="wbY-6g-VAf" firstAttribute="leading" secondItem="mgk-lE-YA3" secondAttribute="leading" constant="40" id="33f-JY-uOd"/>
                             <constraint firstItem="mgk-lE-YA3" firstAttribute="trailing" secondItem="aTT-sd-udB" secondAttribute="trailing" id="6Gy-4s-Jvq"/>
                             <constraint firstItem="D1n-Bp-uvH" firstAttribute="leading" secondItem="mgk-lE-YA3" secondAttribute="leading" constant="40" id="NCV-jc-InN"/>
                             <constraint firstItem="WSk-ZQ-Ewp" firstAttribute="top" secondItem="mgk-lE-YA3" secondAttribute="top" constant="24" id="Ogn-wT-5CZ"/>
-                            <constraint firstItem="wbY-6g-VAf" firstAttribute="top" secondItem="WSk-ZQ-Ewp" secondAttribute="bottom" constant="12" id="UWS-ue-9QM"/>
+                            <constraint firstItem="wbY-6g-VAf" firstAttribute="top" secondItem="WSk-ZQ-Ewp" secondAttribute="bottom" id="UWS-ue-9QM"/>
                             <constraint firstItem="mgk-lE-YA3" firstAttribute="trailing" secondItem="wbY-6g-VAf" secondAttribute="trailing" constant="40" id="VQZ-Vp-feo"/>
                             <constraint firstItem="WSk-ZQ-Ewp" firstAttribute="centerX" secondItem="mgk-lE-YA3" secondAttribute="centerX" id="c2q-zb-lDE"/>
                             <constraint firstItem="aTT-sd-udB" firstAttribute="leading" secondItem="mgk-lE-YA3" secondAttribute="leading" id="dJC-yg-lLP"/>
+                            <constraint firstItem="ksC-cn-52J" firstAttribute="centerY" secondItem="WSk-ZQ-Ewp" secondAttribute="centerY" id="h3G-ec-SX1"/>
                             <constraint firstItem="aTT-sd-udB" firstAttribute="centerY" secondItem="mgk-lE-YA3" secondAttribute="centerY" id="i3Y-sD-juq"/>
                         </constraints>
                     </view>
@@ -213,6 +231,7 @@
     </scenes>
     <resources>
         <image name="arrow.up.and.down" catalog="system" width="98" height="128"/>
+        <image name="chevron.left" catalog="system" width="97" height="128"/>
         <image name="emotion1" width="327" height="360"/>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
