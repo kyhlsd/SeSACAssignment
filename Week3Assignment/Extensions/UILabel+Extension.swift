@@ -9,14 +9,19 @@ import UIKit
 
 extension UILabel {
     func setAttributedTextlWithKeyword(text: String, keyword: String, pointColor: UIColor) {
-        let testRanges = text.ranges(of: keyword)
-        for range in testRanges {
-            print("range", range)
-        }
-        let range = (text as NSString).range(of: keyword, options: .caseInsensitive)
-        print("NSRange", range)
         let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttribute(.foregroundColor, value: pointColor, range: range)
+        var nsText = text as NSString
+        
+        while true {
+            let range = nsText.range(of: keyword, options: .caseInsensitive)
+            if range.length == 0 {
+                break
+            }
+            
+            nsText = nsText.replacingCharacters(in: range, with: String(repeating: " ", count: range.length)) as NSString
+            attributedString.addAttribute(.foregroundColor, value: pointColor, range: range)
+        }
+        
         attributedText = attributedString
     }
 }
