@@ -28,7 +28,7 @@ class CityCollectionViewCell: UICollectionViewCell, Identifying {
 
     func configure(with city: City, searchText: String) {
         cityNameLabel.setAttributedTextlWithKeyword(text: "\(city.cityName) | \(city.cityEnglishName)", keyword: searchText, pointColor: .systemRed)
-        cityExplainLabel.setAttributedTextlWithKeyword(text: "  " + city.cityExplain, keyword: searchText, pointColor: .systemRed)
+        cityExplainLabel.setAttributedTextlWithKeyword(text: city.cityExplain, keyword: searchText, pointColor: .systemRed)
         
         let url = URL(string: city.cityImage)
         cityImageView.kf.setImage(with: url, options: [

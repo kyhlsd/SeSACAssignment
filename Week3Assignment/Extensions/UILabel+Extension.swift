@@ -9,7 +9,12 @@ import UIKit
 
 extension UILabel {
     func setAttributedTextlWithKeyword(text: String, keyword: String, pointColor: UIColor) {
+        let testRanges = text.ranges(of: keyword)
+        for range in testRanges {
+            print("range", range)
+        }
         let range = (text as NSString).range(of: keyword, options: .caseInsensitive)
+        print("NSRange", range)
         let attributedString = NSMutableAttributedString(string: text)
         attributedString.addAttribute(.foregroundColor, value: pointColor, range: range)
         attributedText = attributedString
