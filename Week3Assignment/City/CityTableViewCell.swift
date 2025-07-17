@@ -25,8 +25,9 @@ class CityTableViewCell: UITableViewCell, Identifying {
         cityShadowView.layer.setRightBottomShadow()
     }
     
-    func configure(with city: City) {
-        cityNameLabel.text = "\(city.cityName) | \(city.cityEnglishName)"
+    func configure(with city: City, searchText: String) {
+        cityNameLabel.setAttributedTextlWithKeyword(text: "\(city.cityName) | \(city.cityEnglishName)", keyword: searchText, pointColor: .systemRed)
+        cityExplainLabel.setAttributedTextlWithKeyword(text: "  " + city.cityExplain, keyword: searchText, pointColor: .systemRed)
         
         let url = URL(string: city.cityImage)
         cityImageView.kf.setImage(with: url, options: [
@@ -34,7 +35,5 @@ class CityTableViewCell: UITableViewCell, Identifying {
             .scaleFactor(UIScreen.main.scale),
             .cacheOriginalImage
         ])
-        
-        cityExplainLabel.text = "  " + city.cityExplain
     }
 }

@@ -105,7 +105,8 @@ extension CityViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(for: indexPath, cellType: CityTableViewCell.self)
-        cell.configure(with: searchedList[indexPath.row])
+        let trimmed = citySearchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        cell.configure(with: searchedList[indexPath.row], searchText: trimmed)
         return cell
     }
     
