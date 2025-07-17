@@ -11,7 +11,7 @@ class CityViewController: UIViewController {
 
     @IBOutlet var citySegmentedControl: UISegmentedControl!
     @IBOutlet var citySearchBar: UISearchBar!
-    @IBOutlet var cityTableView: UITableView!
+    @IBOutlet var cityCollectionView: UICollectionView!
     @IBOutlet var tapGestureRecognizer: UITapGestureRecognizer!
     
     // list - segmentedControl - searchBar 순으로 filter
@@ -34,12 +34,22 @@ class CityViewController: UIViewController {
     }
     
     private func configureTableView() {
-        cityTableView.delegate = self
-        cityTableView.dataSource = self
-        cityTableView.rowHeight = 140
+        cityCollectionView.delegate = self
+        cityCollectionView.dataSource = self
+
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 24
+        layout.minimumInteritemSpacing = 24
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        let deviceWidth = Double(view.bounds.width)
+        let countsInRow: Double = 2
+        let cellWidth = (deviceWidth - (24 * 2) - (24 * (countsInRow - 1))) / countsInRow
+        layout.itemSize = CGSize(width: cellWidth, height: cellWidth + 74) // + 66 이상 보장
+        cityCollectionView.collectionViewLayout = layout
         
-        let xib = UINib(nibName: CityTableViewCell.identifier, bundle: nil)
-        cityTableView.register(xib, forCellReuseIdentifier: CityTableViewCell.identifier)
+        let xib = UINib(nibName: CityCollectionViewCell.identifier, bundle: nil)
+        cityCollectionView.register(xib, forCellWithReuseIdentifier: CityCollectionViewCell.identifier)
     }
     
     // MARK: SegmentedControl
@@ -47,7 +57,7 @@ class CityViewController: UIViewController {
         
         updateSelectedList()
         updateSearchedList(citySearchBar.text)
-        cityTableView.reloadData()
+        cityCollectionView.reloadData()
     }
     
     private func updateSelectedList() {
@@ -74,7 +84,7 @@ extension CityViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         Debounce<String>.input(searchText, comparedAgainst: self.citySearchBar.text ?? "", timeInterval: 0.5) { [weak self] _ in
             self?.updateSearchedList(searchText)
-            self?.cityTableView.reloadData()
+            self?.cityCollectionView.reloadData()
         }
     }
     
@@ -97,21 +107,22 @@ extension CityViewController: UISearchBarDelegate {
     }
 }
 
-// MARK: TableView
-extension CityViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+// MARK: CollectionView
+extension CityViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         searchedList.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(for: indexPath, cellType: CityTableViewCell.self)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeReusableCell(for: indexPath, cellType: CityCollectionViewCell.self)
         let trimmed = citySearchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         cell.configure(with: searchedList[indexPath.row], searchText: trimmed)
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selected = searchedList[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selected = searchedList[indexPath.item]
         
         let storyboard = UIStoryboard(name: "City", bundle: nil)
         let viewController = storyboard.instantiateViewController(identifier: CityDetailViewController.identifier) { coder -> CityDetailViewController in

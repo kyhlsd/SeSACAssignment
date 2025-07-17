@@ -58,24 +58,31 @@
                                     <action selector="citySegmentedControlValueChanged:" destination="o93-Iz-q78" eventType="valueChanged" id="JG8-Hl-ejN"/>
                                 </connections>
                             </segmentedControl>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="bnp-dD-PXk">
-                                <rect key="frame" x="24" y="262" width="357" height="449"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="PTb-fu-Csq">
+                                <rect key="frame" x="24" y="262" width="345" height="449"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </tableView>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="MaO-ky-r6D">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="E3j-qa-9wX"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="bnp-dD-PXk" firstAttribute="top" secondItem="Vg1-Ln-G5P" secondAttribute="bottom" constant="12" id="5Wt-ge-5v0"/>
-                            <constraint firstItem="E3j-qa-9wX" firstAttribute="trailing" secondItem="bnp-dD-PXk" secondAttribute="trailing" constant="12" id="A4f-XQ-aZK"/>
+                            <constraint firstItem="E3j-qa-9wX" firstAttribute="trailing" secondItem="PTb-fu-Csq" secondAttribute="trailing" constant="24" id="8YV-Wc-JJd"/>
                             <constraint firstItem="3I0-ft-nym" firstAttribute="top" secondItem="E3j-qa-9wX" secondAttribute="top" constant="12" id="Eaf-K0-1FQ"/>
                             <constraint firstAttribute="trailing" secondItem="3I0-ft-nym" secondAttribute="trailing" constant="18" id="LzW-aR-9oF"/>
                             <constraint firstAttribute="trailing" secondItem="Vg1-Ln-G5P" secondAttribute="trailing" constant="24" id="NQR-h0-khy"/>
-                            <constraint firstItem="bnp-dD-PXk" firstAttribute="leading" secondItem="E3j-qa-9wX" secondAttribute="leading" constant="24" id="OES-vI-sft"/>
                             <constraint firstItem="Vg1-Ln-G5P" firstAttribute="top" secondItem="3I0-ft-nym" secondAttribute="bottom" constant="12" id="RQo-Bn-MdH"/>
+                            <constraint firstItem="PTb-fu-Csq" firstAttribute="top" secondItem="Vg1-Ln-G5P" secondAttribute="bottom" constant="12" id="RaJ-Bn-D3M"/>
                             <constraint firstItem="3I0-ft-nym" firstAttribute="leading" secondItem="Clq-a4-8g0" secondAttribute="leading" constant="18" id="THa-ZB-BW9"/>
-                            <constraint firstItem="E3j-qa-9wX" firstAttribute="bottom" secondItem="bnp-dD-PXk" secondAttribute="bottom" constant="24" id="WWP-AV-x7M"/>
+                            <constraint firstItem="E3j-qa-9wX" firstAttribute="bottom" secondItem="PTb-fu-Csq" secondAttribute="bottom" constant="24" id="U1C-d4-daV"/>
+                            <constraint firstItem="PTb-fu-Csq" firstAttribute="leading" secondItem="E3j-qa-9wX" secondAttribute="leading" constant="24" id="m6a-Ur-NUl"/>
                             <constraint firstItem="Vg1-Ln-G5P" firstAttribute="leading" secondItem="Clq-a4-8g0" secondAttribute="leading" constant="24" id="zh7-jF-hXA"/>
                         </constraints>
                         <connections>
@@ -84,9 +91,9 @@
                     </view>
                     <navigationItem key="navigationItem" title="인기 도시" id="ssi-8r-zDI"/>
                     <connections>
+                        <outlet property="cityCollectionView" destination="PTb-fu-Csq" id="x4Z-ci-Ea5"/>
                         <outlet property="citySearchBar" destination="3I0-ft-nym" id="iIl-2f-oaI"/>
                         <outlet property="citySegmentedControl" destination="Vg1-Ln-G5P" id="lsg-nA-cMX"/>
-                        <outlet property="cityTableView" destination="bnp-dD-PXk" id="Hxf-Kr-PTY"/>
                         <outlet property="tapGestureRecognizer" destination="0AQ-Pf-S9e" id="zEU-gc-nqe"/>
                     </connections>
                 </viewController>
@@ -110,6 +117,7 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fve-XK-NXy">
                                 <rect key="frame" x="24" y="143" width="345" height="345"/>
                                 <constraints>
+                                    <constraint firstAttribute="width" secondItem="Fve-XK-NXy" secondAttribute="height" multiplier="1:1" id="bfr-ZN-meW"/>
                                     <constraint firstAttribute="width" secondItem="Fve-XK-NXy" secondAttribute="height" multiplier="1:1" id="yZ5-Wz-hge"/>
                                 </constraints>
                             </imageView>
@@ -153,7 +161,6 @@
                             <constraint firstItem="VQl-Nz-WUu" firstAttribute="trailing" secondItem="Fve-XK-NXy" secondAttribute="trailing" id="TKx-K3-GkC"/>
                             <constraint firstItem="ZqC-IL-K7v" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="xig-Dp-QCt" secondAttribute="bottom" constant="24" id="TXO-YH-Tjn"/>
                             <constraint firstItem="Fve-XK-NXy" firstAttribute="top" secondItem="ZqC-IL-K7v" secondAttribute="top" constant="24" id="bHq-1e-J1X"/>
-                            <constraint firstItem="Fve-XK-NXy" firstAttribute="width" secondItem="Fve-XK-NXy" secondAttribute="height" multiplier="1:1" id="bfr-ZN-meW"/>
                             <constraint firstItem="Fve-XK-NXy" firstAttribute="leading" secondItem="ZqC-IL-K7v" secondAttribute="leading" constant="24" id="e3X-Si-Cd3"/>
                             <constraint firstItem="VQl-Nz-WUu" firstAttribute="leading" secondItem="Fve-XK-NXy" secondAttribute="leading" id="hTV-qO-xi8"/>
                             <constraint firstItem="9KH-XT-JT5" firstAttribute="top" secondItem="VQl-Nz-WUu" secondAttribute="bottom" constant="8" id="qdM-g7-FwW"/>

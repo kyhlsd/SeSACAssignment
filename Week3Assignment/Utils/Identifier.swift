@@ -29,6 +29,18 @@ extension UITableView {
     }
 }
 
+extension UICollectionView {
+    final func dequeReusableCell<T: Identifying>(for indexPath: IndexPath, cellType: T.Type = T.self) -> T {
+        let bareCell = self.dequeueReusableCell(withReuseIdentifier: cellType.identifier, for: indexPath)
+        guard let cell = bareCell as? T else {
+            fatalError(
+                "Failed to dequeue a cell with identifier \(cellType.identifier) matching type \(cellType.self)"
+            )
+        }
+        return cell
+    }
+}
+
 extension UIStoryboard {
     final func instantiateViewController<T: Identifying>(viewControllerType: T.Type = T.self) -> T {
         let bareViewController = self.instantiateViewController(withIdentifier: viewControllerType.identifier)
