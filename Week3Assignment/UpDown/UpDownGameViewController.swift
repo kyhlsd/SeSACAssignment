@@ -24,16 +24,19 @@ class UpDownGameViewController: UIViewController, Identifying {
     }
     private let targetNumber: Int
     private var count = 0
+    private var numberList: [Int]
     
     init(maxNumber: Int) {
         self.maxNumber = maxNumber
         self.targetNumber = Int.random(in: 1...maxNumber)
+        self.numberList = [Int](1...maxNumber)
         super.init(nibName: nil, bundle: nil)
     }
     
     init?(coder: NSCoder, maxNumber: Int) {
         self.maxNumber = maxNumber
         self.targetNumber = Int.random(in: 1...maxNumber)
+        self.numberList = [Int](1...maxNumber)
         super.init(coder: coder)
     }
     
@@ -99,12 +102,24 @@ class UpDownGameViewController: UIViewController, Identifying {
             resultLabel.text = "GOOD!"
         } else if selectedNumber < targetNumber {
             resultLabel.text = "UP"
+            updateNumberList(selectedNumber, removeUp: false)
         } else {
             resultLabel.text = "DOWN"
+            updateNumberList(selectedNumber, removeUp: true)
         }
         
         count += 1
         countLabel.text = "시도 횟수 : \(count)"
+    }
+    
+    private func updateNumberList(_ selectedNumber: Int, removeUp: Bool) {
+        if removeUp {
+            numberList = numberList.filter { $0 < selectedNumber }
+        } else {
+            numberList = numberList.filter { $0 > selectedNumber }
+        }
+        numberCollectionView.reloadData()
+        self.selectedNumber = nil
     }
     
     @IBAction func popViewController(_ sender: UIButton) {
@@ -114,13 +129,14 @@ class UpDownGameViewController: UIViewController, Identifying {
 
 extension UpDownGameViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return maxNumber
+        return numberList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeReusableCell(for: indexPath, cellType: UpDownGameCollectionViewCell.self)
-        let isSelected = (selectedNumber == indexPath.item + 1)
-        cell.configure(indexPath.item + 1, isSelected: isSelected)
+        let number = numberList[indexPath.item]
+        let isSelected = (selectedNumber == number)
+        cell.configure(number, isSelected: isSelected)
         return cell
     }
     
@@ -128,15 +144,15 @@ extension UpDownGameViewController: UICollectionViewDelegate, UICollectionViewDa
         var shouldReloadIndexes = [IndexPath]()
         
         if let number = selectedNumber {
-            if number == indexPath.item + 1 {
+            if number == numberList[indexPath.item] {
                 selectedNumber = nil
-            } else {
-                let prevIndex = IndexPath(item: number - 1, section: 0)
+            } else if let index = numberList.firstIndex(of: number) {
+                let prevIndex = IndexPath(item: index, section: 0)
                 shouldReloadIndexes.append(prevIndex)
-                selectedNumber = indexPath.item + 1
+                selectedNumber = numberList[indexPath.item]
             }
         } else {
-            selectedNumber = indexPath.item + 1
+            selectedNumber = numberList[indexPath.item]
         }
         
         shouldReloadIndexes.append(indexPath)
