@@ -55,10 +55,6 @@ class UpDownGameViewController: UIViewController, Identifying {
         let collectionViewHeight = Double(numberCollectionView.bounds.height)
         let cellCountInCol = Double(Int((collectionViewHeight + 4) / (cellWidth + 4)))
         let verticalEdge = (collectionViewHeight - (cellWidth * cellCountInCol) - (4 * (cellCountInCol - 1))) / 2
-        print(cellWidth)
-        print(collectionViewHeight)
-        print(cellCountInCol)
-        print(verticalEdge)
         
         layout.sectionInset = UIEdgeInsets(top: verticalEdge, left: 4, bottom: verticalEdge, right: 4)
         layout.itemSize = CGSize(width: cellWidth, height: cellWidth)

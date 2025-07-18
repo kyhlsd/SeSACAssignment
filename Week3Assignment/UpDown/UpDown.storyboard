@@ -51,7 +51,7 @@
                                     <action selector="startButtonTapped:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="VcW-X6-gwM"/>
                                 </connections>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="emotion1" translatesAutoresizingMaskIntoConstraints="NO" id="jYz-lS-anB">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="emotion1" translatesAutoresizingMaskIntoConstraints="NO" id="jYz-lS-anB">
                                 <rect key="frame" x="40" y="292" width="313" height="279"/>
                             </imageView>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="최대 숫자를 입력하세요." textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VqL-BH-iTU">
@@ -156,8 +156,11 @@
                                 </buttonConfiguration>
                             </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="aTT-sd-udB">
-                                <rect key="frame" x="0.0" y="294" width="393" height="366"/>
+                                <rect key="frame" x="0.0" y="306" width="393" height="330"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="330" id="bDZ-W4-KNq"/>
+                                </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="nO7-O6-SCH">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -190,10 +193,9 @@
                             <constraint firstItem="mgk-lE-YA3" firstAttribute="trailing" secondItem="D1n-Bp-uvH" secondAttribute="trailing" constant="40" id="31l-OP-T4H"/>
                             <constraint firstItem="wbY-6g-VAf" firstAttribute="leading" secondItem="mgk-lE-YA3" secondAttribute="leading" constant="40" id="33f-JY-uOd"/>
                             <constraint firstItem="mgk-lE-YA3" firstAttribute="trailing" secondItem="aTT-sd-udB" secondAttribute="trailing" id="6Gy-4s-Jvq"/>
-                            <constraint firstItem="aTT-sd-udB" firstAttribute="top" secondItem="wbY-6g-VAf" secondAttribute="bottom" constant="60" id="Ghj-2Y-jbf"/>
+                            <constraint firstItem="aTT-sd-udB" firstAttribute="centerY" secondItem="mgk-lE-YA3" secondAttribute="centerY" constant="20" id="H4Z-3V-QP7"/>
                             <constraint firstItem="D1n-Bp-uvH" firstAttribute="leading" secondItem="mgk-lE-YA3" secondAttribute="leading" constant="40" id="NCV-jc-InN"/>
                             <constraint firstItem="WSk-ZQ-Ewp" firstAttribute="top" secondItem="mgk-lE-YA3" secondAttribute="top" constant="24" id="Ogn-wT-5CZ"/>
-                            <constraint firstItem="D1n-Bp-uvH" firstAttribute="top" secondItem="aTT-sd-udB" secondAttribute="bottom" constant="60" id="PgS-61-H8T"/>
                             <constraint firstItem="wbY-6g-VAf" firstAttribute="top" secondItem="WSk-ZQ-Ewp" secondAttribute="bottom" id="UWS-ue-9QM"/>
                             <constraint firstItem="mgk-lE-YA3" firstAttribute="trailing" secondItem="wbY-6g-VAf" secondAttribute="trailing" constant="40" id="VQZ-Vp-feo"/>
                             <constraint firstItem="WSk-ZQ-Ewp" firstAttribute="centerX" secondItem="mgk-lE-YA3" secondAttribute="centerX" id="c2q-zb-lDE"/>

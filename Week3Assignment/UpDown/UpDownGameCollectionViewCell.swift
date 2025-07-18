@@ -13,7 +13,7 @@ class UpDownGameCollectionViewCell: UICollectionViewCell, Identifying {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-       
+        
         numberLabel.clipsToBounds = true
     }
     
