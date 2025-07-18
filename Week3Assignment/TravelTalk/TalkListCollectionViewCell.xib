@@ -4,20 +4,78 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="TalkListCollectionViewCell" id="gTV-IL-0wX" customClass="TalkListCollectionViewCell" customModule="Week3Assignment" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+            <rect key="frame" x="0.0" y="0.0" width="323" height="90"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                <rect key="frame" x="0.0" y="0.0" width="323" height="90"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="S3V-3l-UtK">
+                        <rect key="frame" x="0.0" y="0.0" width="90" height="90"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="S3V-3l-UtK" secondAttribute="height" multiplier="1:1" id="yxC-95-Oxu"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hue" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uSy-S4-pGg">
+                        <rect key="frame" x="98" y="0.0" width="169" height="45"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="왜요? 요즘 코딩이 대세인데" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vfv-YC-i4h">
+                        <rect key="frame" x="98" y="45" width="225" height="45"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="88.88.88" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qxy-mI-wzE">
+                        <rect key="frame" x="279" y="0.0" width="44" height="45"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="44" id="gbZ-kN-cVA"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                        <color key="textColor" systemColor="systemGrayColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
-            <point key="canvasLocation" x="131" y="-12"/>
+            <constraints>
+                <constraint firstItem="Qxy-mI-wzE" firstAttribute="leading" secondItem="uSy-S4-pGg" secondAttribute="trailing" constant="12" id="1Bf-SG-QMs"/>
+                <constraint firstItem="S3V-3l-UtK" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="5u4-J9-q2p"/>
+                <constraint firstAttribute="centerY" secondItem="uSy-S4-pGg" secondAttribute="bottom" id="9jw-kx-8L7"/>
+                <constraint firstItem="S3V-3l-UtK" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="Hj7-gc-ml4"/>
+                <constraint firstItem="uSy-S4-pGg" firstAttribute="leading" secondItem="S3V-3l-UtK" secondAttribute="trailing" constant="8" id="NBG-fl-EBv"/>
+                <constraint firstItem="Qxy-mI-wzE" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="RSg-Wf-qdb"/>
+                <constraint firstItem="Vfv-YC-i4h" firstAttribute="top" secondItem="Qxy-mI-wzE" secondAttribute="bottom" id="RdI-dJ-BhE"/>
+                <constraint firstItem="Vfv-YC-i4h" firstAttribute="leading" secondItem="uSy-S4-pGg" secondAttribute="leading" id="Z44-DR-3cD"/>
+                <constraint firstItem="uSy-S4-pGg" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="aGd-fQ-k5d"/>
+                <constraint firstAttribute="bottom" secondItem="S3V-3l-UtK" secondAttribute="bottom" id="eh2-hR-4YJ"/>
+                <constraint firstAttribute="trailing" secondItem="Vfv-YC-i4h" secondAttribute="trailing" id="iOD-55-vlh"/>
+                <constraint firstAttribute="trailing" secondItem="Qxy-mI-wzE" secondAttribute="trailing" id="jfY-0y-efZ"/>
+                <constraint firstAttribute="bottom" secondItem="Vfv-YC-i4h" secondAttribute="bottom" id="nRa-6m-dQU"/>
+                <constraint firstItem="Vfv-YC-i4h" firstAttribute="top" secondItem="uSy-S4-pGg" secondAttribute="bottom" id="vP6-K7-QaK"/>
+            </constraints>
+            <size key="customSize" width="323" height="90"/>
+            <connections>
+                <outlet property="ProfileImageView" destination="S3V-3l-UtK" id="DyZ-Y0-IR2"/>
+                <outlet property="dateLabel" destination="Qxy-mI-wzE" id="9jb-Ds-rQy"/>
+                <outlet property="messageLabel" destination="Vfv-YC-i4h" id="HI5-ap-0MT"/>
+                <outlet property="nameLabel" destination="uSy-S4-pGg" id="gjg-Bj-VOq"/>
+            </connections>
+            <point key="canvasLocation" x="8.3969465648854964" y="-24.647887323943664"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <systemColor name="systemGrayColor">
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>

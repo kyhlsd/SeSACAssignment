@@ -15,12 +15,57 @@
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <searchBar contentMode="redraw" placeholder="친구 이름을 검색해보세요" translatesAutoresizingMaskIntoConstraints="NO" id="yol-f1-yOu">
+                                <rect key="frame" x="12" y="174" width="369" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="nid-Og-NcT"/>
+                                </constraints>
+                                <textInputTraits key="textInputTraits" returnKeyType="search"/>
+                                <connections>
+                                    <outlet property="delegate" destination="Y6W-OH-hqX" id="9ns-zX-DYr"/>
+                                </connections>
+                            </searchBar>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="dxX-46-FRk">
+                                <rect key="frame" x="12" y="230" width="369" height="505"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="jaa-pk-Tjk">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="dxX-46-FRk" firstAttribute="top" secondItem="yol-f1-yOu" secondAttribute="bottom" constant="12" id="3F3-T6-DSY"/>
+                            <constraint firstItem="yol-f1-yOu" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="12" id="79S-x1-uQW"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="dxX-46-FRk" secondAttribute="trailing" constant="12" id="Cti-I3-yS9"/>
+                            <constraint firstItem="dxX-46-FRk" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="12" id="HW0-T5-TGN"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="yol-f1-yOu" secondAttribute="trailing" constant="12" id="bkH-Pl-Hhf"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="dxX-46-FRk" secondAttribute="bottom" id="dKz-hM-x0S"/>
+                            <constraint firstItem="yol-f1-yOu" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="12" id="gUn-nh-1nO"/>
+                        </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="99S-nV-EQz" appends="YES" id="8pC-0y-Peh"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="TRAVEL TALK" id="hub-3h-SE0"/>
+                    <connections>
+                        <outlet property="talkListCollectionView" destination="dxX-46-FRk" id="Wgj-la-O9h"/>
+                        <outlet property="talkListSearchBar" destination="yol-f1-yOu" id="k7W-TE-RZC"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="99S-nV-EQz">
+                    <connections>
+                        <action selector="dismissKeyboard:" destination="Y6W-OH-hqX" id="ovR-0n-ogC"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1057.2519083969464" y="-28.169014084507044"/>
         </scene>
