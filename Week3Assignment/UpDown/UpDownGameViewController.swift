@@ -16,15 +16,24 @@ class UpDownGameViewController: UIViewController, Identifying {
     @IBOutlet var showResultButton: UIButton!
     
     private let maxNumber: Int
-    private var selectedNumber: Int?
+    private var selectedNumber: Int? {
+        didSet {
+            let state = (selectedNumber == nil)
+            updateShowResultButton(state)
+        }
+    }
+    private let targetNumber: Int
+    private var count = 0
     
     init(maxNumber: Int) {
         self.maxNumber = maxNumber
+        self.targetNumber = Int.random(in: 1...maxNumber)
         super.init(nibName: nil, bundle: nil)
     }
     
     init?(coder: NSCoder, maxNumber: Int) {
         self.maxNumber = maxNumber
+        self.targetNumber = Int.random(in: 1...maxNumber)
         super.init(coder: coder)
     }
     
@@ -36,6 +45,7 @@ class UpDownGameViewController: UIViewController, Identifying {
         super.viewDidLoad()
         
         configureCollectionView()
+        configureShowResultButton()
     }
 
     private func configureCollectionView() {
@@ -64,11 +74,37 @@ class UpDownGameViewController: UIViewController, Identifying {
         numberCollectionView.collectionViewLayout = layout
     }
     
+    private func configureShowResultButton() {
+        showResultButton.setTitleColor(.white, for: .disabled)
+        showResultButton.isEnabled = true
+    }
+    
+    private func updateShowResultButton(_ isSelectedNil: Bool) {
+        if isSelectedNil {
+            showResultButton.isEnabled = false
+            showResultButton.backgroundColor = .gray
+        } else {
+            showResultButton.isEnabled = true
+            showResultButton.backgroundColor = .black
+        }
+    }
+    
     
     @IBAction func showResultButtonTapped(_ sender: UIButton) {
-        if let number = selectedNumber {
-            print(number)
+        guard let selectedNumber = selectedNumber else {
+            return
         }
+        
+        if selectedNumber == targetNumber {
+            resultLabel.text = "GOOD!"
+        } else if selectedNumber < targetNumber {
+            resultLabel.text = "UP"
+        } else {
+            resultLabel.text = "DOWN"
+        }
+        
+        count += 1
+        countLabel.text = "시도 횟수 : \(count)"
     }
     
     @IBAction func popViewController(_ sender: UIButton) {
@@ -83,15 +119,27 @@ extension UpDownGameViewController: UICollectionViewDelegate, UICollectionViewDa
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeReusableCell(for: indexPath, cellType: UpDownGameCollectionViewCell.self)
-        cell.configure(indexPath.item + 1)
+        let isSelected = (selectedNumber == indexPath.item + 1)
+        cell.configure(indexPath.item + 1, isSelected: isSelected)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if selectedNumber == nil {
-            selectedNumber = indexPath.item + 1
+        var shouldReloadIndexes = [IndexPath]()
+        
+        if let number = selectedNumber {
+            if number == indexPath.item + 1 {
+                selectedNumber = nil
+            } else {
+                let prevIndex = IndexPath(item: number - 1, section: 0)
+                shouldReloadIndexes.append(prevIndex)
+                selectedNumber = indexPath.item + 1
+            }
         } else {
-            selectedNumber = nil
+            selectedNumber = indexPath.item + 1
         }
+        
+        shouldReloadIndexes.append(indexPath)
+        collectionView.reloadItems(at: shouldReloadIndexes)
     }
 }

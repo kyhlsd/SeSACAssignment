@@ -21,7 +21,6 @@ class CityCollectionViewCell: UICollectionViewCell, Identifying {
     }
     
     override func draw(_ rect: CGRect) {
-        super.draw(rect)
         cityImageView.layer.cornerRadius = cityImageView.frame.height / 2
     }
 

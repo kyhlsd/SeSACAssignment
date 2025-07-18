@@ -14,25 +14,21 @@ class UpDownGameCollectionViewCell: UICollectionViewCell, Identifying {
     override func awakeFromNib() {
         super.awakeFromNib()
         numberLabel.clipsToBounds = true
-        print(#function, frame.height)
-        print(#function, numberLabel.frame.height)
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        print(#function, frame.height)
-        print(#function, numberLabel.frame.height)
     }
     
     override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        
         numberLabel.layer.cornerRadius = numberLabel.frame.height / 2
-        print(#function, frame.height)
-        print(#function, numberLabel.frame.height)
     }
     
-    func configure(_ number: Int) {
+    func configure(_ number: Int, isSelected: Bool) {
         numberLabel.text = "\(number)"
+        
+        if isSelected {
+            numberLabel.backgroundColor = .black
+            numberLabel.textColor = .white
+        } else {
+            numberLabel.backgroundColor = .white
+            numberLabel.textColor = .black
+        }
     }
 }
