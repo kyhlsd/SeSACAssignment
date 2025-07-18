@@ -20,9 +20,8 @@ class CityCollectionViewCell: UICollectionViewCell, Identifying {
         cityImageView.kf.indicatorType = .activity
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
         cityImageView.layer.cornerRadius = cityImageView.frame.height / 2
     }
 

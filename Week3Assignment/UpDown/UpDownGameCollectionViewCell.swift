@@ -13,16 +13,25 @@ class UpDownGameCollectionViewCell: UICollectionViewCell, Identifying {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
         numberLabel.clipsToBounds = true
+        print(#function, frame.height)
+        print(#function, numberLabel.frame.height)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        layer.cornerRadius = frame.height / 2
+        print(#function, frame.height)
+        print(#function, numberLabel.frame.height)
     }
-
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        
+        numberLabel.layer.cornerRadius = numberLabel.frame.height / 2
+        print(#function, frame.height)
+        print(#function, numberLabel.frame.height)
+    }
+    
     func configure(_ number: Int) {
         numberLabel.text = "\(number)"
     }

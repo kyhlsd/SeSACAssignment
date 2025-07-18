@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Toast
 
 class UpDownGameViewController: UIViewController, Identifying {
 
@@ -15,6 +16,7 @@ class UpDownGameViewController: UIViewController, Identifying {
     @IBOutlet var showResultButton: UIButton!
     
     private let maxNumber: Int
+    private var selectedNumber: Int?
     
     init(maxNumber: Int) {
         self.maxNumber = maxNumber
@@ -62,6 +64,13 @@ class UpDownGameViewController: UIViewController, Identifying {
         numberCollectionView.collectionViewLayout = layout
     }
     
+    
+    @IBAction func showResultButtonTapped(_ sender: UIButton) {
+        if let number = selectedNumber {
+            print(number)
+        }
+    }
+    
     @IBAction func popViewController(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
@@ -79,6 +88,10 @@ extension UpDownGameViewController: UICollectionViewDelegate, UICollectionViewDa
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath.item + 1)
+        if selectedNumber == nil {
+            selectedNumber = indexPath.item + 1
+        } else {
+            selectedNumber = nil
+        }
     }
 }
