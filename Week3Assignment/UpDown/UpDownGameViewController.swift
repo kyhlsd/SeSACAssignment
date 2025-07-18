@@ -25,6 +25,7 @@ class UpDownGameViewController: UIViewController, Identifying {
     private let targetNumber: Int
     private var count = 0
     private var numberList: [Int]
+    private var complete = false
     
     init(maxNumber: Int) {
         self.maxNumber = maxNumber
@@ -92,14 +93,20 @@ class UpDownGameViewController: UIViewController, Identifying {
         }
     }
     
-    
     @IBAction func showResultButtonTapped(_ sender: UIButton) {
         guard let selectedNumber = selectedNumber else {
             return
         }
         
+        if complete {
+            navigationController?.popViewController(animated: true)
+            return
+        }
+        
         if selectedNumber == targetNumber {
             resultLabel.text = "GOOD!"
+            complete = true
+            showResultButton.setTitle("다시하기", for: .normal)
         } else if selectedNumber < targetNumber {
             resultLabel.text = "UP"
             updateNumberList(selectedNumber, removeUp: false)
@@ -141,6 +148,8 @@ extension UpDownGameViewController: UICollectionViewDelegate, UICollectionViewDa
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if complete { return }
+        
         var shouldReloadIndexes = [IndexPath]()
         
         if let number = selectedNumber {
