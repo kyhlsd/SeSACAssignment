@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" placeholder="친구 이름을 검색해보세요" translatesAutoresizingMaskIntoConstraints="NO" id="yol-f1-yOu">
-                                <rect key="frame" x="12" y="174" width="369" height="44"/>
+                                <rect key="frame" x="12" y="162" width="369" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="nid-Og-NcT"/>
                                 </constraints>
@@ -27,7 +27,7 @@
                                 </connections>
                             </searchBar>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="dxX-46-FRk">
-                                <rect key="frame" x="12" y="230" width="369" height="505"/>
+                                <rect key="frame" x="0.0" y="214" width="393" height="521"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="jaa-pk-Tjk">
                                     <size key="itemSize" width="128" height="128"/>
@@ -42,13 +42,13 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="dxX-46-FRk" firstAttribute="top" secondItem="yol-f1-yOu" secondAttribute="bottom" constant="12" id="3F3-T6-DSY"/>
+                            <constraint firstItem="dxX-46-FRk" firstAttribute="top" secondItem="yol-f1-yOu" secondAttribute="bottom" constant="8" id="3F3-T6-DSY"/>
                             <constraint firstItem="yol-f1-yOu" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="12" id="79S-x1-uQW"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="dxX-46-FRk" secondAttribute="trailing" constant="12" id="Cti-I3-yS9"/>
-                            <constraint firstItem="dxX-46-FRk" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="12" id="HW0-T5-TGN"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="dxX-46-FRk" secondAttribute="trailing" id="Cti-I3-yS9"/>
+                            <constraint firstItem="dxX-46-FRk" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="HW0-T5-TGN"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="yol-f1-yOu" secondAttribute="trailing" constant="12" id="bkH-Pl-Hhf"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="dxX-46-FRk" secondAttribute="bottom" id="dKz-hM-x0S"/>
-                            <constraint firstItem="yol-f1-yOu" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="12" id="gUn-nh-1nO"/>
+                            <constraint firstItem="yol-f1-yOu" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="gUn-nh-1nO"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="99S-nV-EQz" appends="YES" id="8pC-0y-Peh"/>

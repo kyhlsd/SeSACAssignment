@@ -26,5 +26,15 @@ enum DateStringFormatter {
         formatter.dateFormat = "yy년 MM월 dd일"
         return formatter
     }()
+    static let yyyyMMddHHmmDashFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return formatter
+    }
+    static let yyMMddDotFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yy.MM.dd"
+        return formatter
+    }
 }
 

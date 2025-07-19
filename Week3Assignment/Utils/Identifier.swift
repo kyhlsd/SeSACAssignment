@@ -30,7 +30,7 @@ extension UITableView {
 }
 
 extension UICollectionView {
-    final func dequeReusableCell<T: Identifying>(for indexPath: IndexPath, cellType: T.Type = T.self) -> T {
+    final func dequeueReusableCell<T: Identifying>(for indexPath: IndexPath, cellType: T.Type = T.self) -> T {
         let bareCell = self.dequeueReusableCell(withReuseIdentifier: cellType.identifier, for: indexPath)
         guard let cell = bareCell as? T else {
             fatalError(

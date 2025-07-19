@@ -115,7 +115,7 @@ extension CityViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeReusableCell(for: indexPath, cellType: CityCollectionViewCell.self)
+        let cell = collectionView.dequeueReusableCell(for: indexPath, cellType: CityCollectionViewCell.self)
         let trimmed = citySearchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         cell.configure(with: searchedList[indexPath.row], searchText: trimmed)
         return cell

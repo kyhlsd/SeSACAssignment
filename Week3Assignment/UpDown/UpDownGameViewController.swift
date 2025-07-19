@@ -140,7 +140,7 @@ extension UpDownGameViewController: UICollectionViewDelegate, UICollectionViewDa
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeReusableCell(for: indexPath, cellType: UpDownGameCollectionViewCell.self)
+        let cell = collectionView.dequeueReusableCell(for: indexPath, cellType: UpDownGameCollectionViewCell.self)
         let number = numberList[indexPath.item]
         let isSelected = (selectedNumber == number)
         cell.configure(number, isSelected: isSelected)

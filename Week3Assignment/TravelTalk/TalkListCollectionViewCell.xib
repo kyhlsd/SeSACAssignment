@@ -65,10 +65,10 @@
             </constraints>
             <size key="customSize" width="323" height="90"/>
             <connections>
-                <outlet property="ProfileImageView" destination="S3V-3l-UtK" id="DyZ-Y0-IR2"/>
                 <outlet property="dateLabel" destination="Qxy-mI-wzE" id="9jb-Ds-rQy"/>
                 <outlet property="messageLabel" destination="Vfv-YC-i4h" id="HI5-ap-0MT"/>
                 <outlet property="nameLabel" destination="uSy-S4-pGg" id="gjg-Bj-VOq"/>
+                <outlet property="profileImageView" destination="S3V-3l-UtK" id="DyZ-Y0-IR2"/>
             </connections>
             <point key="canvasLocation" x="8.3969465648854964" y="-24.647887323943664"/>
         </collectionViewCell>
