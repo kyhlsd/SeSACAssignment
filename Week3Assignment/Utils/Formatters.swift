@@ -38,7 +38,7 @@ enum DateStringFormatter {
     }
     static let koreanTimeFormatter = {
         let formatter = DateFormatter()
-//        formatter.locale
+        formatter.locale = Locale(identifier: "ko_KR")
         formatter.dateFormat = "HH:mm a"
         return formatter
     }
