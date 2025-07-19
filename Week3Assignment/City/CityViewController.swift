@@ -14,6 +14,8 @@ class CityViewController: UIViewController {
     @IBOutlet var cityCollectionView: UICollectionView!
     @IBOutlet var tapGestureRecognizer: UITapGestureRecognizer!
     
+    private let debounce = Debounce<String>()
+    
     // list - segmentedControl - searchBar 순으로 filter
     private let list = CityInfo().city
     private var selectedList = [City]()
@@ -82,7 +84,7 @@ class CityViewController: UIViewController {
 extension CityViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        Debounce<String>.input(searchText, comparedAgainst: self.citySearchBar.text ?? "", timeInterval: 0.5) { [weak self] _ in
+        debounce.input(searchText, comparedAgainst: self.citySearchBar.text ?? "", timeInterval: 0.5) { [weak self] _ in
             self?.updateSearchedList(searchText)
             self?.cityCollectionView.reloadData()
         }

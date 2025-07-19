@@ -8,8 +8,8 @@
 import Foundation
 import Dispatch
 
-enum Debounce<T: Equatable> {
-    static func input(_ input: T, comparedAgainst current: @escaping @autoclosure () -> (T), timeInterval: TimeInterval, perform: @escaping (T) -> ()) {
+class Debounce<T: Equatable> {
+    func input(_ input: T, comparedAgainst current: @escaping @autoclosure () -> (T), timeInterval: TimeInterval, perform: @escaping (T) -> ()) {
         DispatchQueue.main.asyncAfter(deadline: .now() + timeInterval) {
             if input == current() { perform(input) }
         }

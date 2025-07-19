@@ -58,6 +58,7 @@
                     <connections>
                         <outlet property="talkListCollectionView" destination="dxX-46-FRk" id="Wgj-la-O9h"/>
                         <outlet property="talkListSearchBar" destination="yol-f1-yOu" id="k7W-TE-RZC"/>
+                        <outlet property="tapGestureRecognizer" destination="99S-nV-EQz" id="kfz-fD-DyR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

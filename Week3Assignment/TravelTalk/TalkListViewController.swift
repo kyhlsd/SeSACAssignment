@@ -11,14 +11,22 @@ class TalkListViewController: UIViewController {
 
     @IBOutlet var talkListSearchBar: UISearchBar!
     @IBOutlet var talkListCollectionView: UICollectionView!
+    @IBOutlet var tapGestureRecognizer: UITapGestureRecognizer!
     
-    let talkList = ChatList.list
+    private let debounce = Debounce<String>()
+    
+    private let totalList = ChatList.list
+    private var searchedList = [ChatRoom]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureCollectionView()
         configureSearchBar()
+        
+        updateSearchedList("")
+        
+        tapGestureRecognizer.cancelsTouchesInView = false
     }
     
     override func viewDidLayoutSubviews() {
@@ -34,7 +42,7 @@ class TalkListViewController: UIViewController {
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 12
+        layout.minimumLineSpacing = 24
         layout.sectionInset = UIEdgeInsets(top: 12, left: 24, bottom: 12, right: 24)
         
         let deviceWidth = Double(view.bounds.width)
@@ -46,6 +54,7 @@ class TalkListViewController: UIViewController {
     
     private func configureSearchBar() {
         talkListSearchBar.backgroundImage = UIImage()
+        talkListSearchBar.delegate = self
     }
     
     @IBAction func dismissKeyboard(_ sender: UITapGestureRecognizer) {
@@ -54,14 +63,43 @@ class TalkListViewController: UIViewController {
     
 }
 
+// MARK: CollectionView
 extension TalkListViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return talkList.count
+        return searchedList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(for: indexPath, cellType: TalkListCollectionViewCell.self)
-        cell.configure(with: talkList[indexPath.item])
+        cell.configure(with: searchedList[indexPath.item])
         return cell
+    }
+}
+
+// MARK: SearchBar
+extension TalkListViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        debounce.input(searchText, comparedAgainst: self.talkListSearchBar.text ?? "", timeInterval: 0.5) { [weak self] _ in
+            self?.updateSearchedList(searchText)
+            self?.talkListCollectionView.reloadData()
+        }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        view.endEditing(true)
+    }
+    
+    private func updateSearchedList(_ searchText: String?) {
+        guard let searchText = searchText else {
+            searchedList = totalList
+            return
+        }
+        
+        let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            searchedList = totalList
+        } else {
+            searchedList = totalList.filter { $0.matches(keyword: trimmed) }
+        }
     }
 }
