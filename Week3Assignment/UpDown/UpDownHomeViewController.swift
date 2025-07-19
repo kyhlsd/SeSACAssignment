@@ -22,7 +22,11 @@ class UpDownHomeViewController: UIViewController {
         super.viewDidLoad()
         
         navigationController?.navigationBar.isHidden = true
-        
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        navigationController?.navigationBar.isHidden = false
     }
     
     override func viewDidLayoutSubviews() {

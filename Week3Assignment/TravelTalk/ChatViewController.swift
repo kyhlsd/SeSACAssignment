@@ -18,7 +18,8 @@ class ChatViewController: UIViewController, Identifying {
     
     private var textViewMaxHeight: CGFloat = 0
     
-    let chatRoom = ChatList.list[0]
+    let chatRoom = ChatList.list[1]
+    let me = ChatList.me
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +29,11 @@ class ChatViewController: UIViewController, Identifying {
         
         setTextViewMaxHeight()
         configureTableView()
+        configureNavigationItemTitle()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        chatTableView.layer.addBorder([.top], color: .lightGray, width: 0.5)
     }
     
     private func configureTableView() {
@@ -35,8 +41,14 @@ class ChatViewController: UIViewController, Identifying {
         chatTableView.dataSource = self
         chatTableView.rowHeight = UITableView.automaticDimension
         chatTableView.separatorStyle = .none
-        let xib = UINib(nibName: ReceivedMessageCell.identifier, bundle: nil)
-        chatTableView.register(xib, forCellReuseIdentifier: ReceivedMessageCell.identifier)
+        let recievedCellXib = UINib(nibName: ReceivedMessageTableViewCell.identifier, bundle: nil)
+        chatTableView.register(recievedCellXib, forCellReuseIdentifier: ReceivedMessageTableViewCell.identifier)
+        let sendCellXib = UINib(nibName: SendMessageTableViewCell.identifier, bundle: nil)
+        chatTableView.register(sendCellXib, forCellReuseIdentifier: SendMessageTableViewCell.identifier)
+    }
+    
+    private func configureNavigationItemTitle() {
+        navigationItem.title = chatRoom.chatroomName
     }
 
     private func setTextViewMaxHeight() {
@@ -66,8 +78,15 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(for: indexPath, cellType: ReceivedMessageCell.self)
-        cell.configureData(with: chatRoom.chatList[indexPath.row])
-        return cell
+        let row = chatRoom.chatList[indexPath.row]
+        if row.user == me {
+            let cell = tableView.dequeueReusableCell(for: indexPath, cellType: SendMessageTableViewCell.self)
+            cell.configureData(with: row)
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(for: indexPath, cellType: ReceivedMessageTableViewCell.self)
+            cell.configureData(with: row)
+            return cell
+        }
     }
 }

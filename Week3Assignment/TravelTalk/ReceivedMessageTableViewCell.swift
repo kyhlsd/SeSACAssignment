@@ -1,5 +1,5 @@
 //
-//  ReceivedMessageCell.swift
+//  ReceivedMessageTableViewCell.swift
 //  Week3Assignment
 //
 //  Created by 김영훈 on 7/18/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ReceivedMessageCell: UITableViewCell, Identifying {
+class ReceivedMessageTableViewCell: UITableViewCell, Identifying {
 
     @IBOutlet var profileImageView: UIImageView!
     @IBOutlet var nameLabel: UILabel!
