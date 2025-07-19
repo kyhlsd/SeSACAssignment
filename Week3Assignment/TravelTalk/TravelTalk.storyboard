@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" placeholder="친구 이름을 검색해보세요" translatesAutoresizingMaskIntoConstraints="NO" id="yol-f1-yOu">
-                                <rect key="frame" x="12" y="162" width="369" height="44"/>
+                                <rect key="frame" x="12" y="118" width="369" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="nid-Og-NcT"/>
                                 </constraints>
@@ -27,7 +27,7 @@
                                 </connections>
                             </searchBar>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="dxX-46-FRk">
-                                <rect key="frame" x="0.0" y="214" width="393" height="521"/>
+                                <rect key="frame" x="0.0" y="170" width="393" height="614"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="jaa-pk-Tjk">
                                     <size key="itemSize" width="128" height="128"/>
@@ -73,18 +73,85 @@
         <!--Den-->
         <scene sceneID="PIJ-WH-3kM">
             <objects>
-                <viewController storyboardIdentifier="TalkRoomViewController" id="Cne-K3-d5c" customClass="TalkRoomViewController" customModule="Week3Assignment" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TalkRoomViewController" id="Cne-K3-d5c" customClass="ChatViewController" customModule="Week3Assignment" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Llq-2p-a72">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="2b7-v7-McB">
+                                <rect key="frame" x="0.0" y="162" width="393" height="514.66666666666663"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VM3-aw-TuN">
+                                <rect key="frame" x="12" y="676.66666666666663" width="369" height="46.333333333333371"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FTf-3f-0W7">
+                                        <rect key="frame" x="330.66666666666669" y="7.9999999999999982" width="30.333333333333314" height="30.333333333333329"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="FTf-3f-0W7" secondAttribute="height" multiplier="1:1" id="QXY-Y8-7DS"/>
+                                            <constraint firstAttribute="height" constant="30.329999999999998" id="UnD-TC-7He"/>
+                                        </constraints>
+                                        <color key="tintColor" systemColor="systemGrayColor"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="paperplane" catalog="system"/>
+                                    </button>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="메세지를 입력하세요" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="GM1-Pg-38v">
+                                        <rect key="frame" x="8" y="7.9999999999999982" width="322.66666666666669" height="30.333333333333329"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30.329999999999998" id="WaK-tg-lHR"/>
+                                        </constraints>
+                                        <color key="textColor" systemColor="systemGrayColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemGray5Color"/>
+                                <constraints>
+                                    <constraint firstItem="GM1-Pg-38v" firstAttribute="top" secondItem="VM3-aw-TuN" secondAttribute="top" constant="8" id="91q-sU-1ro"/>
+                                    <constraint firstAttribute="trailing" secondItem="FTf-3f-0W7" secondAttribute="trailing" constant="8" id="EQ8-R1-nvI"/>
+                                    <constraint firstAttribute="bottom" secondItem="GM1-Pg-38v" secondAttribute="bottom" constant="8" id="WZA-ez-ZYz"/>
+                                    <constraint firstItem="FTf-3f-0W7" firstAttribute="leading" secondItem="GM1-Pg-38v" secondAttribute="trailing" id="cjT-F3-j0e"/>
+                                    <constraint firstItem="FTf-3f-0W7" firstAttribute="top" relation="greaterThanOrEqual" secondItem="VM3-aw-TuN" secondAttribute="top" constant="8" id="h4R-BO-7lN"/>
+                                    <constraint firstAttribute="bottom" secondItem="FTf-3f-0W7" secondAttribute="bottom" constant="8" id="o3g-uO-9t4"/>
+                                    <constraint firstItem="GM1-Pg-38v" firstAttribute="leading" secondItem="VM3-aw-TuN" secondAttribute="leading" constant="8" id="qQy-kT-LTf"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="wzc-cE-Op3"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="VM3-aw-TuN" firstAttribute="leading" secondItem="wzc-cE-Op3" secondAttribute="leading" constant="12" id="8L5-J9-lgF"/>
+                            <constraint firstItem="2b7-v7-McB" firstAttribute="top" secondItem="wzc-cE-Op3" secondAttribute="top" id="EfY-f5-GgN"/>
+                            <constraint firstItem="wzc-cE-Op3" firstAttribute="trailing" secondItem="VM3-aw-TuN" secondAttribute="trailing" constant="12" id="VLz-r6-LiS"/>
+                            <constraint firstItem="VM3-aw-TuN" firstAttribute="top" secondItem="2b7-v7-McB" secondAttribute="bottom" id="XrI-EV-pl9"/>
+                            <constraint firstItem="2b7-v7-McB" firstAttribute="leading" secondItem="wzc-cE-Op3" secondAttribute="leading" id="ZSj-Jp-kJI"/>
+                            <constraint firstItem="wzc-cE-Op3" firstAttribute="trailing" secondItem="2b7-v7-McB" secondAttribute="trailing" id="eWc-CW-Vtl"/>
+                            <constraint firstItem="wzc-cE-Op3" firstAttribute="bottom" secondItem="VM3-aw-TuN" secondAttribute="bottom" constant="12" id="oet-pX-q6s"/>
+                        </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="lkL-Hd-ZEO" appends="YES" id="zeu-pw-0fc"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Den" id="8tY-cd-pVg"/>
+                    <connections>
+                        <outlet property="chatTableView" destination="2b7-v7-McB" id="FlO-wR-cLH"/>
+                        <outlet property="inputButton" destination="FTf-3f-0W7" id="VAy-QZ-l4U"/>
+                        <outlet property="inputContainerView" destination="VM3-aw-TuN" id="IWQ-2l-N07"/>
+                        <outlet property="inputTextView" destination="GM1-Pg-38v" id="QGj-Zb-ZO5"/>
+                        <outlet property="inputTextViewHeightConstraint" destination="WaK-tg-lHR" id="eDk-7j-5pz"/>
+                        <outlet property="tapGestureRecognizer" destination="lkL-Hd-ZEO" id="YpF-5P-47v"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OSW-CX-gyS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="lkL-Hd-ZEO">
+                    <connections>
+                        <action selector="dismissKeyboard:" destination="Cne-K3-d5c" id="arJ-dZ-YXT"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1854" y="-28"/>
+            <point key="canvasLocation" x="1852.6717557251907" y="-28.169014084507044"/>
         </scene>
         <!--Talk-->
         <scene sceneID="5Nb-H7-QV3">
@@ -100,7 +167,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="Y6W-OH-hqX" kind="relationship" relationship="rootViewController" id="FVj-vf-Iny"/>
+                        <segue destination="Cne-K3-d5c" kind="relationship" relationship="rootViewController" id="ma5-jq-I2Q"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="89k-2B-ecN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -110,8 +177,15 @@
     </scenes>
     <resources>
         <image name="bubble" catalog="system" width="128" height="110"/>
+        <image name="paperplane" catalog="system" width="128" height="119"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray5Color">
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
