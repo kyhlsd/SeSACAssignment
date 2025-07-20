@@ -74,6 +74,15 @@ extension TalkListViewController: UICollectionViewDelegate, UICollectionViewData
         cell.configure(with: searchedList[indexPath.item])
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let chatRoom = searchedList[indexPath.item]
+        let storyboard = UIStoryboard(name: "TravelTalk", bundle: nil)
+        let viewController = storyboard.instantiateViewController(identifier: ChatViewController.identifier) { coder -> ChatViewController in
+            return .init(coder: coder, chatRoom: chatRoom) ?? .init(chatRoom: chatRoom)
+        }
+        navigationController?.pushViewController(viewController, animated: true)
+    }
 }
 
 // MARK: SearchBar

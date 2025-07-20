@@ -50,13 +50,6 @@ class UpDownGameViewController: UIViewController, Identifying {
         
         configureCollectionView()
         configureShowResultButton()
-        
-        navigationController?.navigationBar.isHidden = true
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        navigationController?.navigationBar.isHidden = false
     }
 
     private func configureCollectionView() {

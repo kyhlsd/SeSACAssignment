@@ -18,8 +18,22 @@ class ChatViewController: UIViewController, Identifying {
     
     private var textViewMaxHeight: CGFloat = 0
     
-    let chatRoom = ChatList.list[1]
-    let me = ChatList.me
+    private let chatRoom: ChatRoom
+    private let me = ChatList.me
+    
+    init(chatRoom: ChatRoom) {
+        self.chatRoom = chatRoom
+        super.init()
+    }
+    
+    init?(coder: NSCoder, chatRoom: ChatRoom) {
+        self.chatRoom = chatRoom
+        super.init(coder: coder)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

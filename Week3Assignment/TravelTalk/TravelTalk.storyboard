@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" placeholder="친구 이름을 검색해보세요" translatesAutoresizingMaskIntoConstraints="NO" id="yol-f1-yOu">
-                                <rect key="frame" x="12" y="118" width="369" height="44"/>
+                                <rect key="frame" x="12" y="162" width="369" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="nid-Og-NcT"/>
                                 </constraints>
@@ -27,7 +27,7 @@
                                 </connections>
                             </searchBar>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="dxX-46-FRk">
-                                <rect key="frame" x="0.0" y="170" width="393" height="614"/>
+                                <rect key="frame" x="0.0" y="214" width="393" height="521"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="jaa-pk-Tjk">
                                     <size key="itemSize" width="128" height="128"/>
@@ -54,7 +54,9 @@
                             <outletCollection property="gestureRecognizers" destination="99S-nV-EQz" appends="YES" id="8pC-0y-Peh"/>
                         </connections>
                     </view>
-                    <navigationItem key="navigationItem" title="TRAVEL TALK" id="hub-3h-SE0"/>
+                    <navigationItem key="navigationItem" title="TRAVEL TALK" id="hub-3h-SE0">
+                        <barButtonItem key="backBarButtonItem" title=" " id="tYr-ZV-Ebe"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="talkListCollectionView" destination="dxX-46-FRk" id="Wgj-la-O9h"/>
                         <outlet property="talkListSearchBar" destination="yol-f1-yOu" id="k7W-TE-RZC"/>
@@ -73,17 +75,17 @@
         <!--Den-->
         <scene sceneID="PIJ-WH-3kM">
             <objects>
-                <viewController storyboardIdentifier="TalkRoomViewController" id="Cne-K3-d5c" customClass="ChatViewController" customModule="Week3Assignment" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ChatViewController" id="Cne-K3-d5c" customClass="ChatViewController" customModule="Week3Assignment" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Llq-2p-a72">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="2b7-v7-McB">
-                                <rect key="frame" x="0.0" y="162" width="393" height="514.66666666666663"/>
+                                <rect key="frame" x="0.0" y="118" width="393" height="607.66666666666663"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VM3-aw-TuN">
-                                <rect key="frame" x="12" y="676.66666666666663" width="369" height="46.333333333333371"/>
+                                <rect key="frame" x="12" y="725.66666666666663" width="369" height="46.333333333333371"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FTf-3f-0W7">
                                         <rect key="frame" x="330.66666666666669" y="7.9999999999999982" width="30.333333333333314" height="30.333333333333329"/>
@@ -167,7 +169,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="Cne-K3-d5c" kind="relationship" relationship="rootViewController" id="ma5-jq-I2Q"/>
+                        <segue destination="Y6W-OH-hqX" kind="relationship" relationship="rootViewController" id="6Jf-B1-v31"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="89k-2B-ecN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

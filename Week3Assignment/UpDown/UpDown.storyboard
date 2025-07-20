@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="axp-eA-mBp">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Gl2-R7-Abq">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
@@ -116,7 +116,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1982.4427480916029" y="-28.169014084507044"/>
+            <point key="canvasLocation" x="2909.1603053435115" y="-28.169014084507044"/>
         </scene>
         <!--Up Down Game View Controller-->
         <scene sceneID="hyI-uK-Luc">
@@ -217,27 +217,27 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="poe-uR-bxW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2820.6106870229005" y="-28.169014084507044"/>
+            <point key="canvasLocation" x="3747.3282442748091" y="-28.169014084507044"/>
         </scene>
-        <!--Up&Down-->
-        <scene sceneID="qQT-6H-N9u">
+        <!--UpDown-->
+        <scene sceneID="J5F-dG-Abi">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="axp-eA-mBp" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Up&amp;Down" image="arrow.up.and.down" catalog="system" id="0QL-8G-9mx"/>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Gl2-R7-Abq" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="UpDown" image="arrow.up.and.down" catalog="system" id="Jry-wp-9cE"/>
                     <toolbarItems/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="wtX-k2-G5z">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="eZv-gN-kf0">
                         <rect key="frame" x="0.0" y="118" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="Y6W-OH-hqX" kind="relationship" relationship="rootViewController" id="skx-Jp-6af"/>
+                        <segue destination="Y6W-OH-hqX" kind="relationship" relationship="rootViewController" id="BY4-ll-Hgr"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="RkC-fX-qbS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qxd-BT-i6Y" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1055.7251908396945" y="-28.169014084507044"/>
+            <point key="canvasLocation" x="1982.4427480916029" y="-28.169014084507044"/>
         </scene>
     </scenes>
     <resources>
