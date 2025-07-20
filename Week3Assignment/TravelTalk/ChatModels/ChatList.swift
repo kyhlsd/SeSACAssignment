@@ -18,15 +18,7 @@ struct ChatList {
     static let other_friend = User(name: "Other Friend", image: "Other")
     static let simsim = User(name: "심심이", image: "Simsim")
     
-    static func addChatList(chatRoomId: Int, chat: Chat) {
-        for i in 0..<Self.list.count {
-            if Self.list[i].chatroomId == chatRoomId {
-                Self.list[i].chatList.append(chat)
-            }
-        }
-    }
-    
-    static var list: [ChatRoom] = [
+    static let list: [ChatRoom] = [
         ChatRoom(chatroomId: 1,
                  chatroomImage: "Sanlio",
                  chatroomName: "영등포캠퍼스 멘토진방",

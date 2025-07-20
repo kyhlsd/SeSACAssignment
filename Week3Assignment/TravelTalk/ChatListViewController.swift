@@ -81,9 +81,11 @@ extension ChatListViewController: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let chatRoom = searchedList[indexPath.item]
         let storyboard = UIStoryboard(name: "TravelTalk", bundle: nil)
-        let viewController = storyboard.instantiateViewController(viewControllerType: ChatViewController.self)
-        viewController.chatRoom = searchedList[indexPath.item]
+        let viewController = storyboard.instantiateViewController(identifier: ChatViewController.identifier) { coder -> ChatViewController in
+                .init(coder: coder, chatRoom: chatRoom) ?? .init(chatRoom: chatRoom)
+        }
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
