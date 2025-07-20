@@ -15,7 +15,7 @@ class ChatListViewController: UIViewController {
     
     private let debounce = Debounce<String>()
     
-    private let totalList = ChatList.list
+    private var totalList = [ChatRoom]()
     private var searchedList = [ChatRoom]()
     
     override func viewDidLoad() {
@@ -24,9 +24,14 @@ class ChatListViewController: UIViewController {
         configureCollectionView()
         configureSearchBar()
         
-        updateSearchedList("")
-        
         tapGestureRecognizer.cancelsTouchesInView = false
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        totalList = ChatList.list
+        updateSearchedList(chatListSearchBar.text)
+        chatListCollectionView.reloadData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -76,11 +81,9 @@ extension ChatListViewController: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let chatRoom = searchedList[indexPath.item]
         let storyboard = UIStoryboard(name: "TravelTalk", bundle: nil)
-        let viewController = storyboard.instantiateViewController(identifier: ChatViewController.identifier) { coder -> ChatViewController in
-            return .init(coder: coder, chatRoom: chatRoom) ?? .init(chatRoom: chatRoom)
-        }
+        let viewController = storyboard.instantiateViewController(viewControllerType: ChatViewController.self)
+        viewController.chatRoom = searchedList[indexPath.item]
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

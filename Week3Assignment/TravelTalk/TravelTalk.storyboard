@@ -96,6 +96,9 @@
                                         <color key="tintColor" systemColor="systemGrayColor"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="paperplane" catalog="system"/>
+                                        <connections>
+                                            <action selector="sendButtonTapped:" destination="Cne-K3-d5c" eventType="touchUpInside" id="HXI-cL-Byy"/>
+                                        </connections>
                                     </button>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="메세지를 입력하세요." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="GM1-Pg-38v">
                                         <rect key="frame" x="8" y="7.9999999999999982" width="322.66666666666669" height="30.333333333333329"/>
@@ -139,7 +142,6 @@
                     <navigationItem key="navigationItem" title="Den" id="8tY-cd-pVg"/>
                     <connections>
                         <outlet property="chatTableView" destination="2b7-v7-McB" id="FlO-wR-cLH"/>
-                        <outlet property="inputButton" destination="FTf-3f-0W7" id="VAy-QZ-l4U"/>
                         <outlet property="inputConatainverViewBottomConstraint" destination="oet-pX-q6s" id="HYn-uY-bsb"/>
                         <outlet property="inputContainerView" destination="VM3-aw-TuN" id="IWQ-2l-N07"/>
                         <outlet property="inputTextView" destination="GM1-Pg-38v" id="QGj-Zb-ZO5"/>

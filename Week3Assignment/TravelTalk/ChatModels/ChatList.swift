@@ -18,26 +18,19 @@ struct ChatList {
     static let other_friend = User(name: "Other Friend", image: "Other")
     static let simsim = User(name: "심심이", image: "Simsim")
     
-    static let list: [ChatRoom] = [
+    static func addChatList(chatRoomId: Int, chat: Chat) {
+        for i in 0..<Self.list.count {
+            if Self.list[i].chatroomId == chatRoomId {
+                Self.list[i].chatList.append(chat)
+            }
+        }
+    }
+    
+    static var list: [ChatRoom] = [
         ChatRoom(chatroomId: 1,
                  chatroomImage: "Sanlio",
                  chatroomName: "영등포캠퍼스 멘토진방",
                  chatList: [
-                    Chat(user: hue,
-                         date: "2025-07-12 21:30",
-                         message: "열심히 일 하시고 계시는거죠?"),
-                    Chat(user: bran,
-                         date: "2025-07-12 22:32",
-                         message: "3층 가고싶어요..."),
-                    Chat(user: finn,
-                         date: "2025-07-12 22:38",
-                         message: "화이팅!!"),
-                    Chat(user: jack,
-                         date: "2025-07-12 22:38",
-                         message: "으앙"),
-                    Chat(user: den,
-                         date: "2025-07-12 23:42",
-                         message: "열심히 하고 있습니다!!"),
                     Chat(user: hue,
                          date: "2025-07-12 21:30",
                          message: "열심히 일 하시고 계시는거죠?"),
