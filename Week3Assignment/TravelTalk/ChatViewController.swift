@@ -23,6 +23,7 @@ class ChatViewController: UIViewController, Identifying {
     
     private let chatRoom: ChatRoom
     private let me = ChatList.me
+    private var chatLists = [[Chat]]()
     
     init(chatRoom: ChatRoom) {
         self.chatRoom = chatRoom
@@ -46,6 +47,8 @@ class ChatViewController: UIViewController, Identifying {
         configureNavigationItemTitle()
         
         configureNotificationCenter()
+        
+        separatedChatListByDate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -103,10 +106,49 @@ class ChatViewController: UIViewController, Identifying {
             let date = formatter.string(from: Date())
             let chat = Chat(user: me, date: date, message: inputTextView.text)
             
+            guard let recentDateString = chatLists.last?.last?.date, let recentDate = formatter.date(from: recentDateString) else { return }
+            
+            let calendar = Calendar.current
+            if calendar.isDate(Date(), inSameDayAs: recentDate), var last = chatLists.last {
+                last.append(chat)
+            } else {
+                chatLists.append([chat])
+            }
+            
             chatRoom.chatList.append(chat)
             chatTableView.reloadData()
             inputTextView.text = ""
         }
+    }
+    
+    private func separatedChatListByDate() {
+        var recentDate: Date?
+        let formatter = DateStringFormatter.yyyyMMddHHmmDashFormatter()
+        let calendar = Calendar.current
+        
+        var chatLists = [[Chat]]()
+        var count = 0
+        
+        for chat in chatRoom.chatList {
+            guard let date = formatter.date(from: chat.date) else { continue }
+            
+            guard let recent = recentDate else {
+                chatLists.append([chat])
+                recentDate = date
+                count += 1
+                continue
+            }
+            
+            if calendar.isDate(date, inSameDayAs: recent) {
+                chatLists[count - 1].append(chat)
+            } else {
+                chatLists.append([chat])
+                recentDate = date
+                count += 1
+            }
+        }
+        
+        self.chatLists = chatLists
     }
     
     // MARK: Notification Handlers
@@ -171,12 +213,20 @@ extension ChatViewController: UITextViewDelegate {
 // MARK: TableView
 extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return chatLists.count
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return chatLists[section].first?.date
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chatRoom.chatList.count
+        return chatLists[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let row = chatRoom.chatList[indexPath.row]
+        let row = chatLists[indexPath.section][indexPath.row]
         if row.user == me {
             let cell = tableView.dequeueReusableCell(for: indexPath, cellType: SendMessageTableViewCell.self)
             cell.configureData(with: row)
@@ -189,7 +239,9 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     private func scrollToLastRow() {
-        let index = IndexPath(row: chatRoom.chatList.count - 1, section: 0)
-        chatTableView.scrollToRow(at: index, at: .bottom, animated: false)
+        if chatLists.count > 0, chatLists[chatLists.count - 1].count > 0 {
+            let index = IndexPath(row: chatLists[chatLists.count - 1].count - 1, section: chatLists.count - 1)
+            chatTableView.scrollToRow(at: index, at: .bottom, animated: false)
+        }
     }
 }
