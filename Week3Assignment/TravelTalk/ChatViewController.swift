@@ -17,6 +17,7 @@ class ChatViewController: UIViewController, Identifying {
     @IBOutlet var tapGestureRecognizer: UITapGestureRecognizer!
     
     private var textViewMaxHeight: CGFloat = 0
+    private let textViewPlaceholderText = "메세지를\u{00A0}입력하세요."
     
     private let chatRoom: ChatRoom
     private let me = ChatList.me
@@ -38,16 +39,21 @@ class ChatViewController: UIViewController, Identifying {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        inputTextView.delegate = self
-        inputContainerView.layer.cornerRadius = 12
-        
-        setTextViewMaxHeight()
+        configureInputTextView()
         configureTableView()
         configureNavigationItemTitle()
     }
     
     override func viewDidLayoutSubviews() {
         chatTableView.layer.addBorder([.top], color: .lightGray, width: 0.5)
+    }
+    
+    private func configureInputTextView() {
+        inputTextView.delegate = self
+        inputTextView.text = textViewPlaceholderText
+        inputContainerView.layer.cornerRadius = 12
+        
+        setTextViewMaxHeight()
     }
     
     private func configureTableView() {
@@ -77,14 +83,29 @@ class ChatViewController: UIViewController, Identifying {
     }
 }
 
+// MARK: TextView
 extension ChatViewController: UITextViewDelegate {
-    
     func textViewDidChange(_ textView: UITextView) {
         let size = inputTextView.sizeThatFits(CGSize(width: inputTextView.frame.width, height: CGFloat.greatestFiniteMagnitude))
         inputTextViewHeightConstraint.constant = min(size.height, textViewMaxHeight)
     }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == textViewPlaceholderText {
+            textView.text = ""
+            textView.textColor = .black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            textView.text = textViewPlaceholderText
+            textView.textColor = .systemGray
+        }
+    }
 }
 
+// MARK: TableView
 extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
