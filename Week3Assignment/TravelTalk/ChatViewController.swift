@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import IQKeyboardManagerSwift
 
 class ChatViewController: UIViewController, Identifying {
 
@@ -15,9 +16,11 @@ class ChatViewController: UIViewController, Identifying {
     @IBOutlet var inputTextViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet var inputButton: UIButton!
     @IBOutlet var tapGestureRecognizer: UITapGestureRecognizer!
+    @IBOutlet var inputConatainverViewBottomConstraint: NSLayoutConstraint!
     
     private var textViewMaxHeight: CGFloat = 0
     private let textViewPlaceholderText = "메세지를\u{00A0}입력하세요."
+    private var initialBottomConstraintConstant: CGFloat = 0
     
     private let chatRoom: ChatRoom
     private let me = ChatList.me
@@ -42,10 +45,27 @@ class ChatViewController: UIViewController, Identifying {
         configureInputTextView()
         configureTableView()
         configureNavigationItemTitle()
+        
+        configureNotificationCenter()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        IQKeyboardManager.shared.isEnabled = false
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        IQKeyboardManager.shared.isEnabled = true
     }
     
     override func viewDidLayoutSubviews() {
         chatTableView.layer.addBorder([.top], color: .lightGray, width: 0.5)
+        scrollToLastRow()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     private func configureInputTextView() {
@@ -54,6 +74,7 @@ class ChatViewController: UIViewController, Identifying {
         inputContainerView.layer.cornerRadius = 12
         
         setTextViewMaxHeight()
+        initialBottomConstraintConstant = inputConatainverViewBottomConstraint.constant
     }
     
     private func configureTableView() {
@@ -61,6 +82,7 @@ class ChatViewController: UIViewController, Identifying {
         chatTableView.dataSource = self
         chatTableView.rowHeight = UITableView.automaticDimension
         chatTableView.separatorStyle = .none
+        
         let recievedCellXib = UINib(nibName: ReceivedMessageTableViewCell.identifier, bundle: nil)
         chatTableView.register(recievedCellXib, forCellReuseIdentifier: ReceivedMessageTableViewCell.identifier)
         let sendCellXib = UINib(nibName: SendMessageTableViewCell.identifier, bundle: nil)
@@ -71,11 +93,34 @@ class ChatViewController: UIViewController, Identifying {
         navigationItem.title = chatRoom.chatroomName
     }
 
-    private func setTextViewMaxHeight() {
-        let maxLines = 3
-        let attributedText = NSAttributedString(string: String(repeating: "\n", count: maxLines), attributes: [.font: inputTextView.font ?? UIFont.systemFont(ofSize: 12)])
-        let boundingRect = attributedText.boundingRect(with: CGSize(width: 0, height: CGFloat.greatestFiniteMagnitude), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
-        textViewMaxHeight = ceil(boundingRect.height)
+    private func configureNotificationCenter() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    // MARK: Notification Handlers
+    @objc private func handleKeyboardWillShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+              let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
+
+        let keyboardHeight = keyboardFrame.height
+        let tabBarHeight = tabBarController?.tabBar.frame.height ?? 0
+        let safeOffset = keyboardHeight - tabBarHeight
+        
+        
+        updateBottomConstraint(with: safeOffset, animationDuration: animationDuration)
+    }
+
+    @objc private func handleKeyboardWillHide(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
+
+        updateBottomConstraint(animationDuration: animationDuration)
+    }
+    
+    private func updateBottomConstraint(with constant: CGFloat = 0.0, animationDuration: TimeInterval) {
+        inputConatainverViewBottomConstraint.constant = initialBottomConstraintConstant + constant
     }
     
     @IBAction func dismissKeyboard(_ sender: UITapGestureRecognizer) {
@@ -103,6 +148,13 @@ extension ChatViewController: UITextViewDelegate {
             textView.textColor = .systemGray
         }
     }
+    
+    private func setTextViewMaxHeight() {
+        let maxLines = 3
+        let attributedText = NSAttributedString(string: String(repeating: "\n", count: maxLines), attributes: [.font: inputTextView.font ?? UIFont.systemFont(ofSize: 12)])
+        let boundingRect = attributedText.boundingRect(with: CGSize(width: 0, height: CGFloat.greatestFiniteMagnitude), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
+        textViewMaxHeight = ceil(boundingRect.height)
+    }
 }
 
 // MARK: TableView
@@ -123,5 +175,10 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
             cell.configureData(with: row)
             return cell
         }
+    }
+    
+    private func scrollToLastRow() {
+        let index = IndexPath(row: chatRoom.chatList.count - 1, section: 0)
+        chatTableView.scrollToRow(at: index, at: .bottom, animated: false)
     }
 }

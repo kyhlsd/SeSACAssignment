@@ -140,6 +140,7 @@
                     <connections>
                         <outlet property="chatTableView" destination="2b7-v7-McB" id="FlO-wR-cLH"/>
                         <outlet property="inputButton" destination="FTf-3f-0W7" id="VAy-QZ-l4U"/>
+                        <outlet property="inputConatainverViewBottomConstraint" destination="oet-pX-q6s" id="HYn-uY-bsb"/>
                         <outlet property="inputContainerView" destination="VM3-aw-TuN" id="IWQ-2l-N07"/>
                         <outlet property="inputTextView" destination="GM1-Pg-38v" id="QGj-Zb-ZO5"/>
                         <outlet property="inputTextViewHeightConstraint" destination="WaK-tg-lHR" id="eDk-7j-5pz"/>
