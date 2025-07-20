@@ -1,5 +1,5 @@
 //
-//  TalkListViewController.swift
+//  ChatListViewController.swift
 //  Week3Assignment
 //
 //  Created by 김영훈 on 7/18/25.
@@ -7,10 +7,10 @@
 
 import UIKit
 
-class TalkListViewController: UIViewController {
+class ChatListViewController: UIViewController {
 
-    @IBOutlet var talkListSearchBar: UISearchBar!
-    @IBOutlet var talkListCollectionView: UICollectionView!
+    @IBOutlet var chatListSearchBar: UISearchBar!
+    @IBOutlet var chatListCollectionView: UICollectionView!
     @IBOutlet var tapGestureRecognizer: UITapGestureRecognizer!
     
     private let debounce = Debounce<String>()
@@ -30,15 +30,15 @@ class TalkListViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        talkListCollectionView.layer.addBorder([.top], color: .lightGray, width: 0.5)
+        chatListCollectionView.layer.addBorder([.top], color: .lightGray, width: 0.5)
     }
     
     private func configureCollectionView() {
-        let xib = UINib(nibName: TalkListCollectionViewCell.identifier, bundle: nil)
-        talkListCollectionView.register(xib, forCellWithReuseIdentifier: TalkListCollectionViewCell.identifier)
+        let xib = UINib(nibName: ChatListCollectionViewCell.identifier, bundle: nil)
+        chatListCollectionView.register(xib, forCellWithReuseIdentifier: ChatListCollectionViewCell.identifier)
         
-        talkListCollectionView.delegate = self
-        talkListCollectionView.dataSource = self
+        chatListCollectionView.delegate = self
+        chatListCollectionView.dataSource = self
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -49,12 +49,12 @@ class TalkListViewController: UIViewController {
         let cellWidth = deviceWidth - 24 * 2
         layout.itemSize = CGSize(width: cellWidth, height: 48)
         
-        talkListCollectionView.collectionViewLayout = layout
+        chatListCollectionView.collectionViewLayout = layout
     }
     
     private func configureSearchBar() {
-        talkListSearchBar.backgroundImage = UIImage()
-        talkListSearchBar.delegate = self
+        chatListSearchBar.backgroundImage = UIImage()
+        chatListSearchBar.delegate = self
     }
     
     @IBAction func dismissKeyboard(_ sender: UITapGestureRecognizer) {
@@ -64,13 +64,13 @@ class TalkListViewController: UIViewController {
 }
 
 // MARK: CollectionView
-extension TalkListViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension ChatListViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return searchedList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(for: indexPath, cellType: TalkListCollectionViewCell.self)
+        let cell = collectionView.dequeueReusableCell(for: indexPath, cellType: ChatListCollectionViewCell.self)
         cell.configure(with: searchedList[indexPath.item])
         return cell
     }
@@ -86,11 +86,11 @@ extension TalkListViewController: UICollectionViewDelegate, UICollectionViewData
 }
 
 // MARK: SearchBar
-extension TalkListViewController: UISearchBarDelegate {
+extension ChatListViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        debounce.input(searchText, comparedAgainst: self.talkListSearchBar.text ?? "", timeInterval: 0.5) { [weak self] _ in
+        debounce.input(searchText, comparedAgainst: self.chatListSearchBar.text ?? "", timeInterval: 0.5) { [weak self] _ in
             self?.updateSearchedList(searchText)
-            self?.talkListCollectionView.reloadData()
+            self?.chatListCollectionView.reloadData()
         }
     }
     
