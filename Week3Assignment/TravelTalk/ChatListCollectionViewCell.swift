@@ -34,10 +34,8 @@ class ChatListCollectionViewCell: UICollectionViewCell, Identifying {
             return
         }
         
-        let dashFormatter = DateStringFormatter.yyyyMMddHHmmDashFormatter()
-        if let date = dashFormatter.date(from: lastChat.date) {
-            let dotFormatter = DateStringFormatter.yyMMddDotFormatter()
-            dateLabel.text = dotFormatter.string(from: date)
+        if let date = DateStringFormatter.yyyyMMddHHmmDashFormatter.date(from: lastChat.date) {
+            dateLabel.text = DateStringFormatter.yyMMddDotFormatter.string(from: date)
         }
         messageLabel.text = lastChat.message
     }

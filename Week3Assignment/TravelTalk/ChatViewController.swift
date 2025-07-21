@@ -102,7 +102,7 @@ class ChatViewController: UIViewController, Identifying {
     
     @IBAction func sendButtonTapped(_ sender: UIButton) {
         if inputTextView.text != textViewPlaceholderText, !inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            let formatter = DateStringFormatter.yyyyMMddHHmmDashFormatter()
+            let formatter = DateStringFormatter.yyyyMMddHHmmDashFormatter
             let date = formatter.string(from: Date())
             let chat = Chat(user: me, date: date, message: inputTextView.text)
             
@@ -123,14 +123,13 @@ class ChatViewController: UIViewController, Identifying {
     
     private func separatedChatListByDate() {
         var recentDate: Date?
-        let formatter = DateStringFormatter.yyyyMMddHHmmDashFormatter()
         let calendar = Calendar.current
         
         var chatLists = [[Chat]]()
         var count = 0
         
         for chat in chatRoom.chatList {
-            guard let date = formatter.date(from: chat.date) else { continue }
+            guard let date = DateStringFormatter.yyyyMMddHHmmDashFormatter.date(from: chat.date) else { continue }
             
             guard let recent = recentDate else {
                 chatLists.append([chat])
@@ -219,6 +218,20 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return chatLists[section].first?.date
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let firstDate = chatLists[section].first?.date else { return nil }
+        
+        guard let date = DateStringFormatter.yyyyMMddHHmmDashFormatter.date(from: firstDate) else { return nil }
+        
+        let koreanFormatter = DateStringFormatter.koreanFormatter
+        let label = UILabel()
+        label.text = koreanFormatter.string(from: date)
+        label.font = .systemFont(ofSize: 12)
+        label.textColor = .systemGray
+        label.textAlignment = .center
+        return label
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

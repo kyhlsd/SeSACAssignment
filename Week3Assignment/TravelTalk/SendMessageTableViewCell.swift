@@ -28,10 +28,8 @@ class SendMessageTableViewCell: UITableViewCell, Identifying {
     func configureData(with chat: Chat) {
         messageLabel.text = chat.message
         
-        let dashFormatter = DateStringFormatter.yyyyMMddHHmmDashFormatter()
-        if let date = dashFormatter.date(from: chat.date) {
-            let timeFormatter = DateStringFormatter.koreanTimeFormatter()
-            timeLabel.text = timeFormatter.string(from: date)
+        if let date = DateStringFormatter.yyyyMMddHHmmDashFormatter.date(from: chat.date) {
+            timeLabel.text = DateStringFormatter.koreanTimeFormatter.string(from: date)
         } else {
             timeLabel.text = ""
         }
