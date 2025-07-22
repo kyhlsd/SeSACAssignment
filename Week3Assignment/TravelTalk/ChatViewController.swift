@@ -21,22 +21,34 @@ class ChatViewController: UIViewController, Identifying {
     private let textViewPlaceholderText = "메세지를\u{00A0}입력하세요."
     private lazy var initialBottomConstraintConstant: CGFloat = inputConatainverViewBottomConstraint.constant
     
-    private var chatRoom: ChatRoom {
-        didSet {
-            if let index = ChatList.list.firstIndex(of: chatRoom) {
-                ChatList.list[index].chatList = chatRoom.chatList
+    private let chatRoomId: Int
+    private var chatList: [Chat] {
+        get {
+            if let index = ChatList.list.firstIndex(where: { chatRoom in
+                chatRoom.chatroomId == chatRoomId
+            }) {
+                return ChatList.list[index].chatList
+            } else {
+                return []
+            }
+        }
+        set {
+            if let index = ChatList.list.firstIndex(where: { chatRoom in
+                chatRoom.chatroomId == chatRoomId
+            }) {
+                ChatList.list[index].chatList = newValue
             }
         }
     }
     private let me = ChatList.me
     
-    init(chatRoom: ChatRoom) {
-        self.chatRoom = chatRoom
-        super.init(nibName: nil, bundle: nil)
+    init(chatRoomId: Int) {
+        self.chatRoomId = chatRoomId
+        super.init()
     }
     
-    init?(coder: NSCoder, chatRoom: ChatRoom) {
-        self.chatRoom = chatRoom
+    init?(coder: NSCoder, chatRoomId: Int) {
+        self.chatRoomId = chatRoomId
         super.init(coder: coder)
     }
     
@@ -92,7 +104,11 @@ class ChatViewController: UIViewController, Identifying {
     }
     
     private func configureNavigationItemTitle() {
-        navigationItem.title = chatRoom.chatroomName
+        if let index = ChatList.list.firstIndex(where: { chatRoom in
+            chatRoom.chatroomId == chatRoomId
+        }) {
+            navigationItem.title = ChatList.list[index].chatroomName
+        }
     }
 
     private func configureNotificationCenter() {
@@ -105,7 +121,7 @@ class ChatViewController: UIViewController, Identifying {
             let date = DateStringFormatter.yyyyMMddHHmmDashFormatter.string(from: Date())
             let chat = Chat(user: me, date: date, message: inputTextView.text)
             
-            chatRoom.chatList.append(chat)
+            chatList.append(chat)
             chatTableView.reloadData()
             inputTextView.text = ""
         }
@@ -148,11 +164,11 @@ extension ChatViewController: UITextViewDelegate {
 extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chatRoom.chatList.count
+        return chatList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let row = chatRoom.chatList[indexPath.row]
+        let row = chatList[indexPath.row]
        
         if row.user == me { // 내가 보낸 메세지
             if isNewDate(index: indexPath.row) { // 날짜가 바뀌었을 때
@@ -181,8 +197,8 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
         if index == 0 { return true }
         
         let formatter = DateStringFormatter.yyyyMMddHHmmDashFormatter
-        let prevDate = formatter.date(from: chatRoom.chatList[index - 1].date)
-        let nowDate = formatter.date(from: chatRoom.chatList[index].date)
+        let prevDate = formatter.date(from: chatList[index - 1].date)
+        let nowDate = formatter.date(from: chatList[index].date)
         
         guard let prevDate, let nowDate else { return false }
         
@@ -191,8 +207,8 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     private func scrollToLastRow() {
-        if !chatRoom.chatList.isEmpty {
-            let index = IndexPath(row: chatRoom.chatList.count - 1, section: 0)
+        if !chatList.isEmpty {
+            let index = IndexPath(row: chatList.count - 1, section: 0)
             chatTableView.scrollToRow(at: index, at: .bottom, animated: false)
         }
     }
