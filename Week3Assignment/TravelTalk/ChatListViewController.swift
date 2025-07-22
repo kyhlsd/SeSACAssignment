@@ -39,8 +39,7 @@ class ChatListViewController: UIViewController {
     }
     
     private func configureCollectionView() {
-        let xib = UINib(nibName: ChatListCollectionViewCell.identifier, bundle: nil)
-        chatListCollectionView.register(xib, forCellWithReuseIdentifier: ChatListCollectionViewCell.identifier)
+        chatListCollectionView.register(cellType: ChatListCollectionViewCell.self)
         
         chatListCollectionView.delegate = self
         chatListCollectionView.dataSource = self

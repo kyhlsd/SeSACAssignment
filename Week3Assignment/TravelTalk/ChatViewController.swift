@@ -79,14 +79,10 @@ class ChatViewController: UIViewController, Identifying {
         chatTableView.rowHeight = UITableView.automaticDimension
         chatTableView.separatorStyle = .none
         
-        let recievedCellXib = UINib(nibName: ReceivedMessageTableViewCell.identifier, bundle: nil)
-        chatTableView.register(recievedCellXib, forCellReuseIdentifier: ReceivedMessageTableViewCell.identifier)
-        let sendCellXib = UINib(nibName: SendMessageTableViewCell.identifier, bundle: nil)
-        chatTableView.register(sendCellXib, forCellReuseIdentifier: SendMessageTableViewCell.identifier)
-        let newDateRecievedCellXib = UINib(nibName: NewDateReceivedMessageTableViewCell.identifier, bundle: nil)
-        chatTableView.register(newDateRecievedCellXib, forCellReuseIdentifier: NewDateReceivedMessageTableViewCell.identifier)
-        let newDateSendCellXib = UINib(nibName: NewDateSendMessageTableViewCell.identifier, bundle: nil)
-        chatTableView.register(newDateSendCellXib, forCellReuseIdentifier: NewDateSendMessageTableViewCell.identifier)
+        chatTableView.register(cellType: ReceivedMessageTableViewCell.self)
+        chatTableView.register(cellType: SendMessageTableViewCell.self)
+        chatTableView.register(cellType: NewDateReceivedMessageTableViewCell.self)
+        chatTableView.register(cellType: NewDateSendMessageTableViewCell.self)
     }
     
     private func configureNavigationItemTitle() {
