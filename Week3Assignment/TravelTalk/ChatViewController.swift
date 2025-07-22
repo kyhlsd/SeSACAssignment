@@ -22,33 +22,18 @@ class ChatViewController: UIViewController, Identifying {
     private lazy var initialBottomConstraintConstant: CGFloat = inputConatainverViewBottomConstraint.constant
     
     private let chatRoomId: Int
-    private var chatList: [Chat] {
-        get {
-            if let index = ChatList.list.firstIndex(where: { chatRoom in
-                chatRoom.chatroomId == chatRoomId
-            }) {
-                return ChatList.list[index].chatList
-            } else {
-                return []
-            }
-        }
-        set {
-            if let index = ChatList.list.firstIndex(where: { chatRoom in
-                chatRoom.chatroomId == chatRoomId
-            }) {
-                ChatList.list[index].chatList = newValue
-            }
-        }
-    }
+    private var chatListManager: ChatListManager
     private let me = ChatList.me
     
     init(chatRoomId: Int) {
         self.chatRoomId = chatRoomId
+        self.chatListManager = ChatListManager(chatRoomId: chatRoomId)
         super.init()
     }
     
     init?(coder: NSCoder, chatRoomId: Int) {
         self.chatRoomId = chatRoomId
+        self.chatListManager = ChatListManager(chatRoomId: chatRoomId)
         super.init(coder: coder)
     }
     
@@ -121,7 +106,7 @@ class ChatViewController: UIViewController, Identifying {
             let date = DateStringFormatter.yyyyMMddHHmmDashFormatter.string(from: Date())
             let chat = Chat(user: me, date: date, message: inputTextView.text)
             
-            chatList.append(chat)
+            chatListManager.chatList.append(chat)
             chatTableView.reloadData()
             inputTextView.text = ""
         }
@@ -164,11 +149,11 @@ extension ChatViewController: UITextViewDelegate {
 extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chatList.count
+        return chatListManager.chatList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let row = chatList[indexPath.row]
+        let row = chatListManager.chatList[indexPath.row]
        
         if row.user == me { // 내가 보낸 메세지
             if isNewDate(index: indexPath.row) { // 날짜가 바뀌었을 때
@@ -197,8 +182,8 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
         if index == 0 { return true }
         
         let formatter = DateStringFormatter.yyyyMMddHHmmDashFormatter
-        let prevDate = formatter.date(from: chatList[index - 1].date)
-        let nowDate = formatter.date(from: chatList[index].date)
+        let prevDate = formatter.date(from: chatListManager.chatList[index - 1].date)
+        let nowDate = formatter.date(from: chatListManager.chatList[index].date)
         
         guard let prevDate, let nowDate else { return false }
         
@@ -207,8 +192,8 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     private func scrollToLastRow() {
-        if !chatList.isEmpty {
-            let index = IndexPath(row: chatList.count - 1, section: 0)
+        if !chatListManager.chatList.isEmpty {
+            let index = IndexPath(row: chatListManager.chatList.count - 1, section: 0)
             chatTableView.scrollToRow(at: index, at: .bottom, animated: false)
         }
     }
