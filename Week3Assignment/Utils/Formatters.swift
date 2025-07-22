@@ -42,5 +42,15 @@ enum DateStringFormatter {
         formatter.dateFormat = "HH:mm a"
         return formatter
     }()
+    
+    static func getConvertedDateString(from fromFormatter: DateFormatter, to toFormatter: DateFormatter, dateString: String?) -> String? {
+        guard let dateString else { return nil }
+        
+        if let date = fromFormatter.date(from: dateString) {
+            return toFormatter.string(from: date)
+        } else {
+            return nil
+        }
+    }
 }
 

@@ -28,15 +28,8 @@ class ChatListCollectionViewCell: UICollectionViewCell, Identifying {
         profileImageView.image = UIImage(named: chatRoom.chatroomImage)
         nameLabel.text = chatRoom.chatroomName
         
-        guard let lastChat = chatRoom.chatList.last else {
-            dateLabel.text = ""
-            messageLabel.text = ""
-            return
-        }
+        dateLabel.text = DateStringFormatter.getConvertedDateString(from: DateStringFormatter.yyyyMMddHHmmDashFormatter, to: DateStringFormatter.yyMMddDotFormatter, dateString: chatRoom.lastChatDate)
         
-        if let date = DateStringFormatter.yyyyMMddHHmmDashFormatter.date(from: lastChat.date) {
-            dateLabel.text = DateStringFormatter.yyMMddDotFormatter.string(from: date)
-        }
-        messageLabel.text = lastChat.message
+        messageLabel.text = chatRoom.lastChatMessage
     }
 }

@@ -104,7 +104,7 @@ extension ChatListViewController: UISearchBarDelegate {
     }
     
     private func updateSearchedList(_ searchText: String?) {
-        guard let searchText = searchText else {
+        guard let searchText else {
             searchedList = totalList
             return
         }

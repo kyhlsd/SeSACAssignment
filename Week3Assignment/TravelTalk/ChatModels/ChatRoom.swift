@@ -13,6 +13,12 @@ final class ChatRoom {
     let chatroomImage: String //채팅방 이미지
     let chatroomName: String //채팅방 이름
     var chatList: [Chat] //채팅 화면에서 사용할 데이터
+    var lastChatMessage: String? {
+        return chatList.last?.message
+    }
+    var lastChatDate: String? {
+        return chatList.last?.date
+    }
     
     init(chatroomId: Int, chatroomImage: String, chatroomName: String, chatList: [Chat] = []) {
         self.chatroomId = chatroomId
