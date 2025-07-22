@@ -21,12 +21,18 @@ class ChatViewController: UIViewController, Identifying {
     private let textViewPlaceholderText = "메세지를\u{00A0}입력하세요."
     private lazy var initialBottomConstraintConstant: CGFloat = inputConatainverViewBottomConstraint.constant
     
-    private let chatRoom: ChatRoom
+    private var chatRoom: ChatRoom {
+        didSet {
+            if let index = ChatList.list.firstIndex(of: chatRoom) {
+                ChatList.list[index].chatList = chatRoom.chatList
+            }
+        }
+    }
     private let me = ChatList.me
     
     init(chatRoom: ChatRoom) {
         self.chatRoom = chatRoom
-        super.init()
+        super.init(nibName: nil, bundle: nil)
     }
     
     init?(coder: NSCoder, chatRoom: ChatRoom) {
