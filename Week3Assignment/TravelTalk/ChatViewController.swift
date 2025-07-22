@@ -21,18 +21,15 @@ class ChatViewController: UIViewController, Identifying {
     private let textViewPlaceholderText = "메세지를\u{00A0}입력하세요."
     private lazy var initialBottomConstraintConstant: CGFloat = inputConatainverViewBottomConstraint.constant
     
-    private let chatRoomId: Int
     private var chatListManager: ChatListManager
     private let me = ChatList.me
     
     init(chatRoomId: Int) {
-        self.chatRoomId = chatRoomId
         self.chatListManager = ChatListManager(chatRoomId: chatRoomId)
-        super.init()
+        super.init(nibName: nil, bundle: nil)
     }
     
     init?(coder: NSCoder, chatRoomId: Int) {
-        self.chatRoomId = chatRoomId
         self.chatListManager = ChatListManager(chatRoomId: chatRoomId)
         super.init(coder: coder)
     }
@@ -89,9 +86,7 @@ class ChatViewController: UIViewController, Identifying {
     }
     
     private func configureNavigationItemTitle() {
-        if let index = ChatList.list.firstIndex(where: { chatRoom in
-            chatRoom.chatroomId == chatRoomId
-        }) {
+        if let index = ChatList.getIndexWithId(with: chatListManager.chatRoomId) {
             navigationItem.title = ChatList.list[index].chatroomName
         }
     }

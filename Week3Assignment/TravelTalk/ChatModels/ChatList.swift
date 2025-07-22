@@ -18,6 +18,12 @@ struct ChatList {
     static let other_friend = User(name: "Other Friend", image: "Other")
     static let simsim = User(name: "심심이", image: "Simsim")
     
+    static func getIndexWithId(with chatRoomId: Int) -> Int? {
+        return Self.list.firstIndex(where: { chatRoom in
+            chatRoom.chatroomId == chatRoomId
+        })
+    }
+    
     static var list: [ChatRoom] = [
         ChatRoom(chatroomId: 1,
                  chatroomImage: "Sanlio",
