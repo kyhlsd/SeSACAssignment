@@ -109,33 +109,6 @@ class ChatViewController: UIViewController, Identifying {
         }
     }
     
-    // MARK: Notification Handlers
-    @objc private func handleKeyboardWillShow(_ notification: Notification) {
-        guard let userInfo = notification.userInfo,
-              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
-              let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
-
-        let keyboardHeight = keyboardFrame.height
-        let tabBarHeight = tabBarController?.tabBar.frame.height ?? 0
-        let safeOffset = keyboardHeight - tabBarHeight
-        
-        
-        updateBottomConstraint(with: safeOffset, animationDuration: animationDuration)
-    }
-
-    @objc private func handleKeyboardWillHide(_ notification: Notification) {
-        guard let userInfo = notification.userInfo,
-              let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
-
-        updateBottomConstraint(animationDuration: animationDuration)
-    }
-    
-    private func updateBottomConstraint(with constant: CGFloat = 0.0, animationDuration: TimeInterval) {
-        UIView.animate(withDuration: animationDuration) {
-            self.inputConatainverViewBottomConstraint.constant = self.initialBottomConstraintConstant + constant
-        }
-    }
-    
     @IBAction func dismissKeyboard(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
     }
@@ -219,6 +192,36 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
         if !chatRoom.chatList.isEmpty {
             let index = IndexPath(row: chatRoom.chatList.count - 1, section: 0)
             chatTableView.scrollToRow(at: index, at: .bottom, animated: false)
+        }
+    }
+}
+
+// MARK: Update Bottom Constraint when Keyboard Shows/Hides
+extension ChatViewController: UpdateBottomConstraintProtocol {
+    // MARK: Notification Handlers
+    @objc func handleKeyboardWillShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+              let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
+
+        let keyboardHeight = keyboardFrame.height
+        let tabBarHeight = tabBarController?.tabBar.frame.height ?? 0
+        let safeOffset = keyboardHeight - tabBarHeight
+        
+        
+        updateBottomConstraint(with: safeOffset, animationDuration: animationDuration)
+    }
+
+    @objc func handleKeyboardWillHide(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
+
+        updateBottomConstraint(animationDuration: animationDuration)
+    }
+    
+    func updateBottomConstraint(with constant: CGFloat = 0.0, animationDuration: TimeInterval) {
+        UIView.animate(withDuration: animationDuration) {
+            self.inputConatainverViewBottomConstraint.constant = self.initialBottomConstraintConstant + constant
         }
     }
 }
