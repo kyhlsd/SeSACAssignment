@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="NewDateReceivedMessageTableViewCell" rowHeight="126" id="h9g-AR-e88" customClass="NewDateReceivedMessageTableViewCell" customModule="Week3Assignment" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="391" height="126"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="h9g-AR-e88" id="be6-tQ-bGc">
+                <rect key="frame" x="0.0" y="0.0" width="391" height="126"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EJ9-5y-VDf">
+                        <rect key="frame" x="12" y="27" width="40" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="EJ9-5y-VDf" secondAttribute="height" multiplier="1:1" id="k5d-48-LA7"/>
+                            <constraint firstAttribute="width" constant="40" id="rqc-sk-v1u"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Den" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sy6-lS-ivd">
+                        <rect key="frame" x="59.999999999999993" y="27" width="26.666666666666664" height="20"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RrE-vN-tTa">
+                        <rect key="frame" x="59.999999999999986" y="47" width="232.66666666666663" height="67"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="잔디는 생물인거 아시죠? 매일 물을 주셔야 살 수 있습니다!!" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="puN-QD-ah2">
+                                <rect key="frame" x="8" y="8" width="216.66666666666666" height="51"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="puN-QD-ah2" firstAttribute="leading" secondItem="RrE-vN-tTa" secondAttribute="leading" constant="8" id="YOR-vu-qG4"/>
+                            <constraint firstItem="puN-QD-ah2" firstAttribute="top" secondItem="RrE-vN-tTa" secondAttribute="top" constant="8" id="bdC-pc-5Os"/>
+                            <constraint firstAttribute="bottom" secondItem="puN-QD-ah2" secondAttribute="bottom" constant="8" id="ovE-gb-1tl"/>
+                            <constraint firstAttribute="trailing" secondItem="puN-QD-ah2" secondAttribute="trailing" constant="8" id="ueU-HC-ED1"/>
+                        </constraints>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="88:88 오전" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dQH-f5-bgm">
+                        <rect key="frame" x="300.66666666666669" y="102" width="50" height="12"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="50" id="jzP-Jb-w9h"/>
+                            <constraint firstAttribute="height" constant="12" id="owt-S2-Pi5"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="88년 88월 88일" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pwE-k2-Som">
+                        <rect key="frame" x="153.66666666666666" y="12" width="84" height="15"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="84" id="2cQ-0K-Oos"/>
+                            <constraint firstAttribute="height" constant="15" id="ZoQ-iz-wDF"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" systemColor="systemGrayColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstItem="dQH-f5-bgm" firstAttribute="bottom" secondItem="RrE-vN-tTa" secondAttribute="bottom" id="2OA-59-fmR"/>
+                    <constraint firstItem="dQH-f5-bgm" firstAttribute="leading" secondItem="RrE-vN-tTa" secondAttribute="trailing" constant="8" id="3rY-Iy-c9n"/>
+                    <constraint firstItem="Sy6-lS-ivd" firstAttribute="bottom" secondItem="EJ9-5y-VDf" secondAttribute="centerY" id="4VM-9P-NSh"/>
+                    <constraint firstItem="pwE-k2-Som" firstAttribute="centerX" secondItem="be6-tQ-bGc" secondAttribute="centerX" id="8Uc-Or-TVH"/>
+                    <constraint firstItem="pwE-k2-Som" firstAttribute="top" secondItem="be6-tQ-bGc" secondAttribute="top" constant="12" id="CZa-2V-FaH"/>
+                    <constraint firstItem="EJ9-5y-VDf" firstAttribute="leading" secondItem="be6-tQ-bGc" secondAttribute="leading" constant="12" id="EAC-JB-4bS"/>
+                    <constraint firstItem="EJ9-5y-VDf" firstAttribute="top" secondItem="pwE-k2-Som" secondAttribute="bottom" id="Qkg-tR-OUf"/>
+                    <constraint firstItem="RrE-vN-tTa" firstAttribute="top" secondItem="EJ9-5y-VDf" secondAttribute="centerY" id="RKn-KC-XgJ"/>
+                    <constraint firstAttribute="bottom" secondItem="RrE-vN-tTa" secondAttribute="bottom" constant="12" id="V1M-bq-QbZ"/>
+                    <constraint firstItem="RrE-vN-tTa" firstAttribute="leading" secondItem="Sy6-lS-ivd" secondAttribute="leading" id="VO4-QT-TYy"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="dQH-f5-bgm" secondAttribute="trailing" constant="12" id="ctF-cL-Hz7"/>
+                    <constraint firstItem="Sy6-lS-ivd" firstAttribute="leading" secondItem="EJ9-5y-VDf" secondAttribute="trailing" constant="8" id="pZf-Bw-8MD"/>
+                    <constraint firstItem="Sy6-lS-ivd" firstAttribute="top" secondItem="EJ9-5y-VDf" secondAttribute="top" id="snr-xq-3Wk"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="l7g-uK-Uv9"/>
+            <connections>
+                <outlet property="messageContainerView" destination="RrE-vN-tTa" id="9IK-1r-NrY"/>
+                <outlet property="messageLabel" destination="puN-QD-ah2" id="MDP-Cr-hbU"/>
+                <outlet property="nameLabel" destination="Sy6-lS-ivd" id="Bbb-x5-Ehp"/>
+                <outlet property="newDateLabel" destination="pwE-k2-Som" id="ghX-o8-zHl"/>
+                <outlet property="profileImageView" destination="EJ9-5y-VDf" id="Xux-vw-UVk"/>
+                <outlet property="timeLabel" destination="dQH-f5-bgm" id="wIb-GG-9Cb"/>
+            </connections>
+            <point key="canvasLocation" x="183.96946564885496" y="16.197183098591552"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

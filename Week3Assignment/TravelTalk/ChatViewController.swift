@@ -17,13 +17,12 @@ class ChatViewController: UIViewController, Identifying {
     @IBOutlet var tapGestureRecognizer: UITapGestureRecognizer!
     @IBOutlet var inputConatainverViewBottomConstraint: NSLayoutConstraint!
     
-    private var textViewMaxHeight: CGFloat = 0
+    private lazy var textViewMaxHeight: CGFloat = getTextViewMaxHeight(maxLines: 3)
     private let textViewPlaceholderText = "메세지를\u{00A0}입력하세요."
-    private var initialBottomConstraintConstant: CGFloat = 0
+    private lazy var initialBottomConstraintConstant: CGFloat = inputConatainverViewBottomConstraint.constant
     
     private let chatRoom: ChatRoom
     private let me = ChatList.me
-    private var chatLists = [[Chat]]()
     
     init(chatRoom: ChatRoom) {
         self.chatRoom = chatRoom
@@ -47,8 +46,6 @@ class ChatViewController: UIViewController, Identifying {
         configureNavigationItemTitle()
         
         configureNotificationCenter()
-        
-        separatedChatListByDate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,9 +71,6 @@ class ChatViewController: UIViewController, Identifying {
         inputTextView.delegate = self
         inputTextView.text = textViewPlaceholderText
         inputContainerView.layer.cornerRadius = 12
-        
-        setTextViewMaxHeight()
-        initialBottomConstraintConstant = inputConatainverViewBottomConstraint.constant
     }
     
     private func configureTableView() {
@@ -89,6 +83,10 @@ class ChatViewController: UIViewController, Identifying {
         chatTableView.register(recievedCellXib, forCellReuseIdentifier: ReceivedMessageTableViewCell.identifier)
         let sendCellXib = UINib(nibName: SendMessageTableViewCell.identifier, bundle: nil)
         chatTableView.register(sendCellXib, forCellReuseIdentifier: SendMessageTableViewCell.identifier)
+        let newDateRecievedCellXib = UINib(nibName: NewDateReceivedMessageTableViewCell.identifier, bundle: nil)
+        chatTableView.register(newDateRecievedCellXib, forCellReuseIdentifier: NewDateReceivedMessageTableViewCell.identifier)
+        let newDateSendCellXib = UINib(nibName: NewDateSendMessageTableViewCell.identifier, bundle: nil)
+        chatTableView.register(newDateSendCellXib, forCellReuseIdentifier: NewDateSendMessageTableViewCell.identifier)
     }
     
     private func configureNavigationItemTitle() {
@@ -102,52 +100,13 @@ class ChatViewController: UIViewController, Identifying {
     
     @IBAction func sendButtonTapped(_ sender: UIButton) {
         if inputTextView.text != textViewPlaceholderText, !inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            let formatter = DateStringFormatter.yyyyMMddHHmmDashFormatter
-            let date = formatter.string(from: Date())
+            let date = DateStringFormatter.yyyyMMddHHmmDashFormatter.string(from: Date())
             let chat = Chat(user: me, date: date, message: inputTextView.text)
-            
-            guard let recentDateString = chatLists.last?.last?.date, let recentDate = formatter.date(from: recentDateString) else { return }
-            
-            let calendar = Calendar.current
-            if calendar.isDate(Date(), inSameDayAs: recentDate), var last = chatLists.last {
-                last.append(chat)
-            } else {
-                chatLists.append([chat])
-            }
             
             chatRoom.chatList.append(chat)
             chatTableView.reloadData()
             inputTextView.text = ""
         }
-    }
-    
-    private func separatedChatListByDate() {
-        var recentDate: Date?
-        let calendar = Calendar.current
-        
-        var chatLists = [[Chat]]()
-        var count = 0
-        
-        for chat in chatRoom.chatList {
-            guard let date = DateStringFormatter.yyyyMMddHHmmDashFormatter.date(from: chat.date) else { continue }
-            
-            guard let recent = recentDate else {
-                chatLists.append([chat])
-                recentDate = date
-                count += 1
-                continue
-            }
-            
-            if calendar.isDate(date, inSameDayAs: recent) {
-                chatLists[count - 1].append(chat)
-            } else {
-                chatLists.append([chat])
-                recentDate = date
-                count += 1
-            }
-        }
-        
-        self.chatLists = chatLists
     }
     
     // MARK: Notification Handlers
@@ -172,7 +131,9 @@ class ChatViewController: UIViewController, Identifying {
     }
     
     private func updateBottomConstraint(with constant: CGFloat = 0.0, animationDuration: TimeInterval) {
-        inputConatainverViewBottomConstraint.constant = initialBottomConstraintConstant + constant
+        UIView.animate(withDuration: animationDuration) {
+            self.inputConatainverViewBottomConstraint.constant = self.initialBottomConstraintConstant + constant
+        }
     }
     
     @IBAction func dismissKeyboard(_ sender: UITapGestureRecognizer) {
@@ -201,59 +162,62 @@ extension ChatViewController: UITextViewDelegate {
         }
     }
     
-    private func setTextViewMaxHeight() {
-        let maxLines = 3
+    private func getTextViewMaxHeight(maxLines: Int) -> CGFloat {
         let attributedText = NSAttributedString(string: String(repeating: "\n", count: maxLines), attributes: [.font: inputTextView.font ?? UIFont.systemFont(ofSize: 12)])
         let boundingRect = attributedText.boundingRect(with: CGSize(width: 0, height: CGFloat.greatestFiniteMagnitude), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
-        textViewMaxHeight = ceil(boundingRect.height)
+        return ceil(boundingRect.height)
     }
 }
 
 // MARK: TableView
 extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return chatLists.count
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return chatLists[section].first?.date
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let firstDate = chatLists[section].first?.date else { return nil }
-        
-        guard let date = DateStringFormatter.yyyyMMddHHmmDashFormatter.date(from: firstDate) else { return nil }
-        
-        let koreanFormatter = DateStringFormatter.koreanFormatter
-        let label = UILabel()
-        label.text = koreanFormatter.string(from: date)
-        label.font = .systemFont(ofSize: 12)
-        label.textColor = .systemGray
-        label.textAlignment = .center
-        return label
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chatLists[section].count
+        return chatRoom.chatList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let row = chatLists[indexPath.section][indexPath.row]
-        if row.user == me {
-            let cell = tableView.dequeueReusableCell(for: indexPath, cellType: SendMessageTableViewCell.self)
-            cell.configureData(with: row)
-            return cell
-        } else {
-            let cell = tableView.dequeueReusableCell(for: indexPath, cellType: ReceivedMessageTableViewCell.self)
-            cell.configureData(with: row)
-            return cell
+        let row = chatRoom.chatList[indexPath.row]
+       
+        if row.user == me { // 내가 보낸 메세지
+            if isNewDate(index: indexPath.row) { // 날짜가 바뀌었을 때
+                let cell = tableView.dequeueReusableCell(for: indexPath, cellType: NewDateSendMessageTableViewCell.self)
+                cell.configureData(with: row)
+                return cell
+            } else { // 날짜가 그대로일 때
+                let cell = tableView.dequeueReusableCell(for: indexPath, cellType: SendMessageTableViewCell.self)
+                cell.configureData(with: row)
+                return cell
+            }
+        } else { // 다른 사람이 보낸 메세지
+            if isNewDate(index: indexPath.row) { // 날짜가 바뀌었을 때
+                let cell = tableView.dequeueReusableCell(for: indexPath, cellType: NewDateReceivedMessageTableViewCell.self)
+                cell.configureData(with: row)
+                return cell
+            } else { // 날짜가 그대로일 때
+                let cell = tableView.dequeueReusableCell(for: indexPath, cellType: ReceivedMessageTableViewCell.self)
+                cell.configureData(with: row)
+                return cell
+            }
         }
     }
     
+    private func isNewDate(index: Int) -> Bool {
+        if index == 0 { return true }
+        
+        let formatter = DateStringFormatter.yyyyMMddHHmmDashFormatter
+        let prevDate = formatter.date(from: chatRoom.chatList[index - 1].date)
+        let nowDate = formatter.date(from: chatRoom.chatList[index].date)
+        
+        guard let prevDate, let nowDate else { return false }
+        
+        let calendar = Calendar.current
+        return !calendar.isDate(prevDate, inSameDayAs: nowDate)
+    }
+    
     private func scrollToLastRow() {
-        if chatLists.count > 0, chatLists[chatLists.count - 1].count > 0 {
-            let index = IndexPath(row: chatLists[chatLists.count - 1].count - 1, section: chatLists.count - 1)
+        if !chatRoom.chatList.isEmpty {
+            let index = IndexPath(row: chatRoom.chatList.count - 1, section: 0)
             chatTableView.scrollToRow(at: index, at: .bottom, animated: false)
         }
     }
