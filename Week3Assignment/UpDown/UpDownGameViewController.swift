@@ -56,8 +56,7 @@ class UpDownGameViewController: UIViewController, Identifying {
         numberCollectionView.delegate = self
         numberCollectionView.dataSource = self
         
-        let xib = UINib(nibName: UpDownGameCollectionViewCell.identifier, bundle: nil)
-        numberCollectionView.register(xib, forCellWithReuseIdentifier: UpDownGameCollectionViewCell.identifier)
+        numberCollectionView.register(cellType: UpDownGameCollectionViewCell.self)
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal

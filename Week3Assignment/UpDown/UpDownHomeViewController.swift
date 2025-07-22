@@ -18,6 +18,8 @@ class UpDownHomeViewController: UIViewController {
         case outOfRange
     }
     
+    private let maxNumber = 1000
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -34,7 +36,7 @@ class UpDownHomeViewController: UIViewController {
     
     @IBAction func startButtonTapped(_ sender: UIButton) {
         do {
-            let number = try getValidNumber()
+            let number = try getValidNumber(maxNumber: maxNumber)
             
             view.endEditing(true)
             numberTextField.text = ""
@@ -52,7 +54,7 @@ class UpDownHomeViewController: UIViewController {
         }
     }
     
-    private func getValidNumber() throws -> Int  {
+    private func getValidNumber(maxNumber: Int) throws -> Int  {
         let trimmed = numberTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         
         if trimmed.isEmpty {
@@ -63,7 +65,7 @@ class UpDownHomeViewController: UIViewController {
             throw UpDownNumberError.nonNatural
         }
         
-        if number < 1 || number > 1000 {
+        if number < 1 || number > maxNumber {
             throw UpDownNumberError.outOfRange
         }
         
