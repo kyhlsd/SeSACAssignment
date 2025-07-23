@@ -19,7 +19,7 @@ final class TabBarViewController: UITabBarController {
     private func setViewControllers() {
         let lottoViewController = LottoViewController()
         lottoViewController.tabBarItem = UITabBarItem(title: "Lotto", image: UIImage(systemName: "die.face.5"), tag: 0)
-        let searchMovieViewController = SearchMoviewViewController()
+        let searchMovieViewController = SearchMovieViewController()
         searchMovieViewController.tabBarItem = UITabBarItem(title: "Movie", image: UIImage(systemName: "movieclapper"), tag: 1)
         
         setViewControllers([lottoViewController, searchMovieViewController], animated: true)
