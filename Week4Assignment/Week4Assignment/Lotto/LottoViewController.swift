@@ -17,6 +17,7 @@ final class LottoViewController: UIViewController {
         textField.borderStyle = .roundedRect
         return textField
     }()
+    private let pickerView = UIPickerView()
     private let winningInfoLabel = {
         let label = UILabel()
         label.text = "당첨번호 안내"
@@ -59,16 +60,6 @@ final class LottoViewController: UIViewController {
         configureViewDesign()
         
         setTapGesture()
-    }
-    
-    private func setTapGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc
-    private func dismissKeyboard() {
-        view.endEditing(true)
     }
     
     private func updateViewsWithRoundNumber(with number: Int) {
@@ -115,6 +106,7 @@ final class LottoViewController: UIViewController {
     }
 }
 
+// MARK: UI Design
 extension LottoViewController: ViewDesignProtocol {
     func configureHierarchy() {
         [inputTextField, winningInfoLabel, dateLabel, separatorLine, resultLabel, resultStackView].forEach {
@@ -135,14 +127,17 @@ extension LottoViewController: ViewDesignProtocol {
         resultStackView.addArrangedSubview(lottoBall5)
         resultStackView.addArrangedSubview(lottoBall6)
         
-        let plusImageView = UIImageView(image: UIImage(systemName: "plus"))
-        plusImageView.tintColor = .black
-        plusImageView.contentMode = .center
-        let config = UIImage.SymbolConfiguration(weight: .bold)
-        plusImageView.preferredSymbolConfiguration = config
-        plusImageView.snp.makeConstraints { make in
-            make.height.equalTo(plusImageView.snp.width)
-        }
+        let plusImageView = {
+            let imageView = UIImageView(image: UIImage(systemName: "plus"))
+            imageView.tintColor = .black
+            imageView.contentMode = .center
+            let config = UIImage.SymbolConfiguration(weight: .bold)
+            imageView.preferredSymbolConfiguration = config
+            imageView.snp.makeConstraints { make in
+                make.height.equalTo(imageView.snp.width)
+            }
+            return imageView
+        }()
         
         resultStackView.addArrangedSubview(plusImageView)
         
@@ -189,7 +184,6 @@ extension LottoViewController: ViewDesignProtocol {
     func configureView() {
         view.backgroundColor = .white
         
-        let pickerView = UIPickerView()
         pickerView.delegate = self
         pickerView.dataSource = self
         
@@ -198,6 +192,7 @@ extension LottoViewController: ViewDesignProtocol {
     }
 }
 
+// MARK: PickerView
 extension LottoViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -217,8 +212,22 @@ extension LottoViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
 }
 
+// MARK: TextField
 extension LottoViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         return false
+    }
+}
+
+// MARK: TapGesture - DismissKeyboard
+extension LottoViewController: UseKeyboardProtocol {
+    func setTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
 }

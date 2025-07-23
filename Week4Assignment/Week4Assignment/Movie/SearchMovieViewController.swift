@@ -64,33 +64,17 @@ final class SearchMovieViewController: UIViewController {
         super.viewDidLayoutSubviews()
         searchTextField.layer.addBorder([.bottom], color: .white, width: 2)
     }
-
-    private func setTapGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
-    }
     
     @objc
-    private func dismissKeyboard() {
-        view.endEditing(true)
-    }
-    
-    private func updateSearchedList(_ searchText: String?) {
-        guard let searchText else {
-            searchedList = totalList
-            return
-        }
-        
-        let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-        if trimmed.isEmpty {
-            searchedList = totalList
-        } else {
-            searchedList = totalList.filter { $0.matches(keyword: searchText) }
-        }
+    private func searchMovie() {
+        updateSearchedList(searchTextField.text)
+        tableView.reloadData()
+        dismissKeyboard()
     }
 }
 
+
+// MARK: UI Design
 extension SearchMovieViewController: ViewDesignProtocol {
     func configureHierarchy() {
         [backgroundImageView, searchTextField, searchButton, tableView].forEach {
@@ -131,22 +115,31 @@ extension SearchMovieViewController: ViewDesignProtocol {
         tableView.delegate = self
         tableView.dataSource = self
     }
-    
-    @objc
-    private func searchMovie() {
-        updateSearchedList(searchTextField.text)
-        tableView.reloadData()
-        view.endEditing(true)
-    }
 }
 
+// MARK: TextField
 extension SearchMovieViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         searchMovie()
         return true
     }
+    
+    private func updateSearchedList(_ searchText: String?) {
+        guard let searchText else {
+            searchedList = totalList
+            return
+        }
+        
+        let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            searchedList = totalList
+        } else {
+            searchedList = totalList.filter { $0.matches(keyword: searchText) }
+        }
+    }
 }
 
+// MARK: TableView
 extension SearchMovieViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchedList.isEmpty {
@@ -165,5 +158,19 @@ extension SearchMovieViewController: UITableViewDelegate, UITableViewDataSource 
         let trimmed = searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         cell.configureData(with: searchedList[indexPath.row], index: indexPath.row + 1, searchText: trimmed)
         return cell
+    }
+}
+
+// MARK: TapGesture - DismissKeyboard
+extension SearchMovieViewController: UseKeyboardProtocol {
+    func setTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
