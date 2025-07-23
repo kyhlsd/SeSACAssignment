@@ -113,19 +113,10 @@ extension LottoViewController: ViewDesignProtocol {
             view.addSubview($0)
         }
         
-        let lottoBall = LottoBall(number: 1)
-        let lottoBall2 = LottoBall(number: 2)
-        let lottoBall3 = LottoBall(number: 3)
-        let lottoBall4 = LottoBall(number: 4)
-        let lottoBall5 = LottoBall(number: 5)
-        let lottoBall6 = LottoBall(number: 6)
-        
-        resultStackView.addArrangedSubview(lottoBall)
-        resultStackView.addArrangedSubview(lottoBall2)
-        resultStackView.addArrangedSubview(lottoBall3)
-        resultStackView.addArrangedSubview(lottoBall4)
-        resultStackView.addArrangedSubview(lottoBall5)
-        resultStackView.addArrangedSubview(lottoBall6)
+        for i in 1...6 {
+            let lottoBall = LottoBall(number: i)
+            resultStackView.addArrangedSubview(lottoBall)
+        }
         
         let plusImageView = {
             let imageView = UIImageView(image: UIImage(systemName: "plus"))
