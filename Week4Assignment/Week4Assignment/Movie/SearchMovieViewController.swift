@@ -10,12 +10,20 @@ import SnapKit
 
 final class SearchMovieViewController: UIViewController {
 
+    private let backgroundImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.image = .searchMovieBackground
+        imageView.alpha = 0.2
+        return imageView
+    }()
     private let searchTextField = {
         let textField = UITextField()
-        textField.placeholder = "이름 또는 개봉일로 검색하세요."
+        textField.attributedPlaceholder = NSAttributedString(string: "이름 또는 개봉일로 검색하세요.", attributes: [.foregroundColor: UIColor.darkGray])
         textField.textColor = .white
         textField.returnKeyType = .search
         textField.clearButtonMode = .always
+        textField.overrideUserInterfaceStyle = .dark
         return textField
     }()
     private let searchButton = {
@@ -28,10 +36,11 @@ final class SearchMovieViewController: UIViewController {
     }()
     private let tableView = {
         let tableView = UITableView()
-        tableView.rowHeight = 40
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
+        tableView.rowHeight = 40
         tableView.register(cellType: SearchMovieTableViewCell.self)
+        tableView.register(cellType: EmptyListTableViewCell.self)
         return tableView
     }()
     
@@ -46,8 +55,14 @@ final class SearchMovieViewController: UIViewController {
         configureViewDesign()
         
         setTapGesture()
+        searchButton.addTarget(self, action: #selector(searchMovie), for: .touchUpInside)
         
         updateSearchedList(nil)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        searchTextField.layer.addBorder([.bottom], color: .white, width: 2)
     }
 
     private func setTapGesture() {
@@ -78,13 +93,17 @@ final class SearchMovieViewController: UIViewController {
 
 extension SearchMovieViewController: ViewDesignProtocol {
     func configureHierarchy() {
-        [searchTextField, searchButton, tableView].forEach {
+        [backgroundImageView, searchTextField, searchButton, tableView].forEach {
             view.addSubview($0)
         }
     }
     
     func configureLayout() {
         let safeArea = view.safeAreaLayoutGuide
+        
+        backgroundImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         searchTextField.snp.makeConstraints { make in
             make.top.leading.equalTo(safeArea).offset(20)
@@ -95,7 +114,7 @@ extension SearchMovieViewController: ViewDesignProtocol {
             make.verticalEdges.equalTo(searchTextField)
             make.trailing.equalTo(safeArea).inset(20)
             make.width.equalTo(80)
-            make.leading.equalTo(searchTextField.snp.trailing).offset(12)
+            make.leading.equalTo(searchTextField.snp.trailing).offset(20)
         }
         
         tableView.snp.makeConstraints { make in
@@ -111,8 +130,6 @@ extension SearchMovieViewController: ViewDesignProtocol {
         searchTextField.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
-        
-        searchButton.addTarget(self, action: #selector(searchMovie), for: .touchUpInside)
     }
     
     @objc
@@ -132,10 +149,18 @@ extension SearchMovieViewController: UITextFieldDelegate {
 
 extension SearchMovieViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if searchedList.isEmpty {
+            return 1
+        }
+        
         return min(searchedList.count, 10)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if searchedList.isEmpty {
+            return tableView.dequeueReusableCell(cellType: EmptyListTableViewCell.self, for: indexPath)
+        }
+        
         let cell = tableView.dequeueReusableCell(cellType: SearchMovieTableViewCell.self, for: indexPath)
         let trimmed = searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         cell.configureData(with: searchedList[indexPath.row], index: indexPath.row + 1, searchText: trimmed)

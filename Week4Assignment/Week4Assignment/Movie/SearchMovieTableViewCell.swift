@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class SearchMovieTableViewCell: UITableViewCell, Identifying {
+final class SearchMovieTableViewCell: UITableViewCell, Identifying {
     
     private let indexLabel = {
         let label = UILabel()
@@ -84,5 +84,6 @@ extension SearchMovieTableViewCell: ViewDesignProtocol {
     
     func configureView() {
         backgroundColor = .clear
+        selectionStyle = .none
     }
 }
