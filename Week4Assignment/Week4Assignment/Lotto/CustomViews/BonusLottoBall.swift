@@ -14,7 +14,7 @@ final class BonusLottoBall: UIView {
         let label = UILabel()
         label.text = "보너스"
         label.textColor = .systemGray
-        label.font = .systemFont(ofSize: 12)
+        label.font = .systemFont(ofSize: 12, weight: .semibold)
         label.textAlignment = .center
         return label
     }()
@@ -42,5 +42,9 @@ final class BonusLottoBall: UIView {
             make.horizontalEdges.equalTo(lottoBall)
             make.bottom.equalToSuperview()
         }
+    }
+    
+    func setNumber(number: Int) {
+        lottoBall.setNumber(number: number)
     }
 }

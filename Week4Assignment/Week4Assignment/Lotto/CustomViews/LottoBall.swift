@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 final class LottoBall: UILabel {
-    private let number: Int
+    private var number: Int
     
     init(number: Int) {
         self.number = number
@@ -44,6 +44,12 @@ final class LottoBall: UILabel {
         snp.makeConstraints { make in
             make.height.equalTo(self.snp.width)
         }
+    }
+    
+    func setNumber(number: Int) {
+        self.number = number
+        text = String(number)
+        setBackgroundColor()
     }
     
     private func setBackgroundColor() {
