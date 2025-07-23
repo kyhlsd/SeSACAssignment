@@ -74,7 +74,7 @@ final class LottoViewController: UIViewController {
     private func updateViewsWithRoundNumber(with number: Int) {
         let numberString = "\(number)"
         inputTextField.text = numberString
-        resultLabel.text = numberString + "회 당첨결과"
+        resultLabel.setAttributedTextlWithKeyword(text: numberString + "회 당첨결과", keyword: numberString + "회", pointColor: .systemYellow)
         
         let formatter = DateFormatters.yyMMddDashFormatter
         if let recentDate = formatter.date(from: recentDate) {
