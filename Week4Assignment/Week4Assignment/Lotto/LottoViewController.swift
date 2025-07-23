@@ -17,7 +17,6 @@ final class LottoViewController: UIViewController {
         textField.borderStyle = .roundedRect
         return textField
     }()
-    
     private let winningInfoLabel = {
         let label = UILabel()
         label.text = "당첨번호 안내"
@@ -59,17 +58,7 @@ final class LottoViewController: UIViewController {
 
         configureViewDesign()
         
-        setPickerView()
-        
         setTapGesture()
-        
-    }
-    
-    private func setPickerView() {
-        let pickerView = UIPickerView()
-        pickerView.delegate = self
-        pickerView.dataSource = self
-        inputTextField.inputView = pickerView
     }
     
     private func setTapGesture() {
@@ -199,6 +188,13 @@ extension LottoViewController: ViewDesignProtocol {
     
     func configureView() {
         view.backgroundColor = .white
+        
+        let pickerView = UIPickerView()
+        pickerView.delegate = self
+        pickerView.dataSource = self
+        
+        inputTextField.inputView = pickerView
+        inputTextField.delegate = self
     }
 }
 
@@ -219,6 +215,10 @@ extension LottoViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return "\(row + 1)"
     }
-    
-    
+}
+
+extension LottoViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return false
+    }
 }
