@@ -8,7 +8,7 @@
 import Foundation
 
 struct ChatListManager {
-    var chatRoomId: Int
+    let chatRoomId: Int
     @ChatListBinding(defaultValue: [])
     var chatList: [Chat]
     init(chatRoomId: Int) {
