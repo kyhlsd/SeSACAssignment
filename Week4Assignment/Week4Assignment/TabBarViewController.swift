@@ -1,0 +1,34 @@
+//
+//  TabBarViewController.swift
+//  Week4Assignment
+//
+//  Created by 김영훈 on 7/23/25.
+//
+
+import UIKit
+
+final class TabBarViewController: UITabBarController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        setViewControllers()
+        setAppearance()
+    }
+    
+    private func setViewControllers() {
+        let lottoViewController = LottoViewController()
+        lottoViewController.tabBarItem = UITabBarItem(title: "Lotto", image: UIImage(systemName: "die.face.5"), tag: 0)
+        let searchMovieViewController = SearchMoviewViewController()
+        searchMovieViewController.tabBarItem = UITabBarItem(title: "Movie", image: UIImage(systemName: "movieclapper"), tag: 1)
+        
+        setViewControllers([lottoViewController, searchMovieViewController], animated: true)
+    }
+    
+    private func setAppearance() {
+        let appearance = UITabBarAppearance()
+        appearance.shadowColor = .lightGray
+        tabBar.standardAppearance = appearance
+        tabBar.scrollEdgeAppearance = appearance
+    }
+}
