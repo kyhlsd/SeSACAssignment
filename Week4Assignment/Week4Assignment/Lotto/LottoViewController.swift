@@ -79,7 +79,7 @@ final class LottoViewController: UIViewController {
         let formatter = DateFormatters.yyMMddDashFormatter
         if let recentDate = formatter.date(from: recentDate) {
             let calendar = Calendar.current
-            if let date = calendar.date(byAdding: .day, value: -(maxNumber - number + 1) * 7, to: recentDate) {
+            if let date = calendar.date(byAdding: .day, value: -(maxNumber - number) * 7, to: recentDate) {
                 dateLabel.text = formatter.string(from: date) + " 추첨"
             }
         }
@@ -208,12 +208,12 @@ extension LottoViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        updateViewsWithRoundNumber(with: row + 1)
+        updateViewsWithRoundNumber(with: maxNumber - row)
         showLottoNumbers()
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return "\(row + 1)"
+        return "\(maxNumber - row)"
     }
 }
 
