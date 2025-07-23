@@ -12,7 +12,7 @@ final class SearchMovieViewController: UIViewController {
 
     private let searchTextField = {
         let textField = UITextField()
-        textField.placeholder = "영화를 검색해보세요."
+        textField.placeholder = "이름 또는 개봉일로 검색하세요."
         textField.textColor = .white
         textField.returnKeyType = .search
         textField.clearButtonMode = .always
@@ -35,12 +35,19 @@ final class SearchMovieViewController: UIViewController {
         return tableView
     }()
     
+    private let totalList = MovieInfo.movies.sorted {
+        $0.audienceCount > $1.audienceCount
+    }
+    private var searchedList = [Movie]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         configureViewDesign()
         
         setTapGesture()
+        
+        updateSearchedList(nil)
     }
 
     private func setTapGesture() {
@@ -52,6 +59,20 @@ final class SearchMovieViewController: UIViewController {
     @objc
     private func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    private func updateSearchedList(_ searchText: String?) {
+        guard let searchText else {
+            searchedList = totalList
+            return
+        }
+        
+        let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            searchedList = totalList
+        } else {
+            searchedList = totalList.filter { $0.matches(keyword: searchText) }
+        }
     }
 }
 
@@ -90,20 +111,34 @@ extension SearchMovieViewController: ViewDesignProtocol {
         searchTextField.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
+        
+        searchButton.addTarget(self, action: #selector(searchMovie), for: .touchUpInside)
+    }
+    
+    @objc
+    private func searchMovie() {
+        updateSearchedList(searchTextField.text)
+        tableView.reloadData()
+        view.endEditing(true)
     }
 }
 
 extension SearchMovieViewController: UITextFieldDelegate {
-    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        searchMovie()
+        return true
+    }
 }
 
 extension SearchMovieViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return min(searchedList.count, 10)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(cellType: SearchMovieTableViewCell.self, for: indexPath)
+        let trimmed = searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        cell.configureData(with: searchedList[indexPath.row], index: indexPath.row + 1, searchText: trimmed)
         return cell
     }
 }

@@ -14,26 +14,27 @@ class SearchMovieTableViewCell: UITableViewCell, Identifying {
         let label = UILabel()
         label.backgroundColor = .white
         label.textColor = .black
-        label.text = "10"
         label.font = .systemFont(ofSize: 14, weight: .semibold)
         label.textAlignment = .center
         return label
     }()
     private let titleLabel = {
         let label = UILabel()
-        label.text = "스케어리 스토리: 어둠의 속"
         label.textColor = .white
         label.font = .systemFont(ofSize: 14, weight: .semibold)
         return label
     }()
     private let dateLabel = {
         let label = UILabel()
-        label.text = "8888-88-88"
-        label.textColor = .lightGray
-        label.textAlignment = .right
-        label.font = .systemFont(ofSize: 12, weight: .semibold)
+        label.textAlignment = .center
         return label
     }()
+    
+    private let dateLabelAttributes: [NSAttributedString.Key: Any] = [
+        .font: UIFont.monospacedDigitSystemFont(ofSize: 12, weight: .semibold),
+        .kern: 0,
+        .foregroundColor: UIColor.systemGray
+    ]
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -43,6 +44,14 @@ class SearchMovieTableViewCell: UITableViewCell, Identifying {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configureData(with movie: Movie, index: Int, searchText: String) {
+        indexLabel.text = "\(index)"
+        titleLabel.setAttributedTextlWithKeyword(text: movie.title, keyword: searchText, pointColor: .systemRed)
+
+        let dateString = DateFormatters.getConvertedDateString(from: DateFormatters.yyyyMMddFormatter, to: DateFormatters.yyyyMMddDashFormatter, dateString: movie.releaseDate) ?? ""
+        dateLabel.setAttributedTextlWithKeyword(text: dateString, keyword: searchText, pointColor: .systemRed, attributes: dateLabelAttributes)
     }
 }
 

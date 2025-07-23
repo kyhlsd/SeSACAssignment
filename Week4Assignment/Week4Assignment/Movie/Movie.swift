@@ -11,6 +11,19 @@ struct Movie {
     let title: String
     let releaseDate: String
     let audienceCount: Int
+    
+    func matches(keyword: String) -> Bool {
+        if title.localizedCaseInsensitiveContains(keyword) {
+            return true
+        }
+        
+        let dateString = DateFormatters.getConvertedDateString(from: DateFormatters.yyyyMMddFormatter, to: DateFormatters.yyyyMMddDashFormatter, dateString: releaseDate)
+        if let dateString, dateString.localizedCaseInsensitiveContains(keyword) {
+            return true
+        }
+        
+        return false
+    }
 }
 
 struct MovieInfo {
