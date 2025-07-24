@@ -149,6 +149,8 @@
 /* Begin XCBuildConfiguration section */
 		15D4FA392E30A15600AE119E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 15D4FA272E30A15400AE119E /* Week4Assignment */;
+			baseConfigurationReferenceRelativePath = Secret.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
