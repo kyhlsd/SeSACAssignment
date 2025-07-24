@@ -11,6 +11,7 @@ struct LottoResult: Decodable {
     let date: String
     let numbers: [Int]
     let bonusNumber: Int
+    let round: Int
     
     enum CodingKeys: String, CodingKey {
         case date = "drwNoDate"
@@ -21,12 +22,14 @@ struct LottoResult: Decodable {
         case number5 = "drwtNo5"
         case number6 = "drwtNo6"
         case bonusNumber = "bnusNo"
+        case round = "drwNo"
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.date = try container.decode(String.self, forKey: .date)
         self.bonusNumber = try container.decode(Int.self, forKey: .bonusNumber)
+        self.round = try container.decode(Int.self, forKey: .round)
         
         var numbers = [Int]()
         for i in 1...6 {

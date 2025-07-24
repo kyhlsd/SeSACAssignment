@@ -13,7 +13,6 @@ final class LottoViewController: UIViewController {
 
     private let inputTextField = {
         let textField = UITextField()
-        textField.placeholder = "회차를 선택하세요"
         textField.textAlignment = .center
         textField.borderStyle = .roundedRect
         return textField
@@ -27,7 +26,6 @@ final class LottoViewController: UIViewController {
     }()
     private let dateLabel = {
         let label = UILabel()
-        label.text = "추첨 날짜"
         label.font = .systemFont(ofSize: 12, weight: .semibold)
         label.textColor = .systemGray
         return label
@@ -39,7 +37,6 @@ final class LottoViewController: UIViewController {
     }()
     private let resultLabel = {
         let label = UILabel()
-        label.text = "당첨 결과"
         label.font = .boldSystemFont(ofSize: 20)
         return label
     }()
@@ -54,6 +51,11 @@ final class LottoViewController: UIViewController {
     
     private let maxNumber = 1181
     private let recentDate = "2025-07-19"
+    private var lottoResult: LottoResult? {
+        didSet {
+            showLottoNumbers()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,6 +65,7 @@ final class LottoViewController: UIViewController {
         setTapGesture()
         
         fetchData(targetRound: 1181)
+        updateViewsWithRoundNumber(with: 1181)
     }
     
     private func fetchData(targetRound: Int) {
@@ -72,9 +75,10 @@ final class LottoViewController: UIViewController {
             .responseDecodable(of: LottoResult.self) { response in
                 switch response.result {
                 case .success(let value):
-                    dump(value)
+                    self.lottoResult = value
                 case .failure(let error):
                     print(error)
+                    self.lottoResult = nil
                 }
             }
     }
@@ -85,39 +89,25 @@ final class LottoViewController: UIViewController {
         resultLabel.setAttributedTextlWithKeyword(text: numberString + "회 당첨결과", keyword: numberString + "회", pointColor: .systemYellow)
         
         let formatter = DateFormatters.yyMMddDashFormatter
-        if let recentDate = formatter.date(from: recentDate) {
-            let calendar = Calendar.current
-            if let date = calendar.date(byAdding: .day, value: -(maxNumber - number) * 7, to: recentDate) {
-                dateLabel.text = formatter.string(from: date) + " 추첨"
-            }
+        if let recentDate = formatter.date(from: recentDate),
+           let date = Calendar.current.date(byAdding: .day, value: -(maxNumber - number) * 7, to: recentDate) { dateLabel.text = formatter.string(from: date) + " 추첨"
         }
-    }
-    
-    private func getLottoNumbers() -> [Int] {
-        var totalNumbers = [Int](1...45)
-        var selectedNumbers = [Int]()
-        
-        for _ in 0..<7 {
-            if let number = totalNumbers.randomElement() {
-                selectedNumbers.append(number)
-                totalNumbers.removeAll { $0 == number }
-            }
-        }
-        
-        return selectedNumbers
     }
     
     private func showLottoNumbers() {
-        let lottoNumbers = getLottoNumbers()
+        guard let lottoResult else { return }
+        
+        let numbers = lottoResult.numbers
+        let bonusNumber = lottoResult.bonusNumber
         var numberIndex = 0
         
         for subview in resultStackView.arrangedSubviews {
             subview.alpha = 0
             if let lottoBall = subview as? LottoBall {
-                lottoBall.setNumber(number: lottoNumbers[numberIndex])
+                lottoBall.setNumber(number: numbers[numberIndex])
                 numberIndex += 1
             } else if let bonusLottoBall = subview as? BonusLottoBall {
-                bonusLottoBall.setNumber(number: lottoNumbers[numberIndex])
+                bonusLottoBall.setNumber(number: bonusNumber)
                 numberIndex += 1
             }
         }
@@ -140,8 +130,9 @@ extension LottoViewController: ViewDesignProtocol {
             view.addSubview($0)
         }
         
-        for i in 1...6 {
-            let lottoBall = LottoBall(number: i)
+        for _ in 1...6 {
+            let lottoBall = LottoBall(number: 0)
+            lottoBall.alpha = 0
             resultStackView.addArrangedSubview(lottoBall)
         }
         
@@ -149,6 +140,7 @@ extension LottoViewController: ViewDesignProtocol {
             let imageView = UIImageView(image: UIImage(systemName: "plus"))
             imageView.tintColor = .black
             imageView.contentMode = .center
+            imageView.alpha = 0
             let config = UIImage.SymbolConfiguration(weight: .bold)
             imageView.preferredSymbolConfiguration = config
             imageView.snp.makeConstraints { make in
@@ -159,7 +151,8 @@ extension LottoViewController: ViewDesignProtocol {
         
         resultStackView.addArrangedSubview(plusImageView)
         
-        let bonusLottoBall = BonusLottoBall(number: 7)
+        let bonusLottoBall = BonusLottoBall(number: 0)
+        bonusLottoBall.alpha = 0
         resultStackView.addArrangedSubview(bonusLottoBall)
     }
     
@@ -180,6 +173,7 @@ extension LottoViewController: ViewDesignProtocol {
         dateLabel.snp.makeConstraints { make in
             make.trailing.equalTo(safeArea).inset(16)
             make.bottom.equalTo(winningInfoLabel.snp.bottom)
+            make.height.equalTo(16)
         }
         
         separatorLine.snp.makeConstraints { make in
@@ -191,6 +185,7 @@ extension LottoViewController: ViewDesignProtocol {
         resultLabel.snp.makeConstraints { make in
             make.top.equalTo(separatorLine).offset(20)
             make.centerX.equalTo(safeArea)
+            make.height.equalTo(24)
         }
         
         resultStackView.snp.makeConstraints { make in
@@ -221,8 +216,8 @@ extension LottoViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        fetchData(targetRound: maxNumber - row)
         updateViewsWithRoundNumber(with: maxNumber - row)
-        showLottoNumbers()
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
