@@ -30,11 +30,7 @@ final class LottoBall: UILabel {
     }
     
     private func configureLabel() {
-        if number < 1 || number > 45 {
-            text = "E"
-        } else {
-            text = String(number)
-        }
+        setLabel()
         textColor = .white
         textAlignment = .center
         clipsToBounds = true
@@ -48,13 +44,21 @@ final class LottoBall: UILabel {
     
     func setNumber(number: Int) {
         self.number = number
-        text = String(number)
+        setLabel()
         setBackgroundColor()
+    }
+    
+    private func setLabel() {
+        if number < 1 || number > 45 {
+            text = "E"
+        } else {
+            text = String(number)
+        }
     }
     
     private func setBackgroundColor() {
         switch number {
-        case 0..<10:
+        case 1..<10:
             backgroundColor = .systemYellow
         case 10..<20:
             backgroundColor = .systemCyan

@@ -48,6 +48,15 @@ final class LottoViewController: UIViewController {
         stackView.alignment = .top
         return stackView
     }()
+    private let errorLabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.textColor = .systemRed
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 12, weight: .bold)
+        label.isHidden = true
+        return label
+    }()
     private let indicatorView = {
         let indicatorView = UIActivityIndicatorView()
         indicatorView.style = .large
@@ -61,7 +70,11 @@ final class LottoViewController: UIViewController {
             pickerView.isUserInteractionEnabled = !isFetching
         }
     }
-    private var error: Error?
+    private var error: Error? {
+        didSet {
+            setErrorLabel()
+        }
+    }
     
     private let maxNumber = 1181
     private let recentDate = "2025-07-19"
@@ -110,15 +123,14 @@ final class LottoViewController: UIViewController {
         
         let formatter = DateFormatters.yyMMddDashFormatter
         if let recentDate = formatter.date(from: recentDate),
-           let date = Calendar.current.date(byAdding: .day, value: -(maxNumber - number) * 7, to: recentDate) { dateLabel.text = formatter.string(from: date) + " 추첨"
+           let date = Calendar.current.date(byAdding: .day, value: -(maxNumber - number) * 7, to: recentDate) {
+            dateLabel.text = formatter.string(from: date) + " 추첨"
         }
     }
     
     private func showLottoNumbers() {
-        guard let lottoResult else { return }
-        
-        let numbers = lottoResult.numbers
-        let bonusNumber = lottoResult.bonusNumber
+        let numbers = lottoResult?.numbers ?? [Int](repeating: 0, count: 6)
+        let bonusNumber = lottoResult?.bonusNumber ?? 0
         var numberIndex = 0
         
         for subview in resultStackView.arrangedSubviews {
@@ -139,14 +151,22 @@ final class LottoViewController: UIViewController {
             })
             delay += 0.07
         }
-
+    }
+    
+    private func setErrorLabel() {
+        if let error {
+            errorLabel.text = "오류가 발생했습니다.\n" + error.localizedDescription
+            errorLabel.isHidden = false
+        } else {
+            errorLabel.isHidden = true
+        }
     }
 }
 
 // MARK: UI Design
 extension LottoViewController: ViewDesignProtocol {
     func configureHierarchy() {
-        [inputTextField, winningInfoLabel, dateLabel, separatorLine, resultLabel, resultStackView, indicatorView].forEach {
+        [inputTextField, winningInfoLabel, dateLabel, separatorLine, resultLabel, resultStackView, errorLabel, indicatorView].forEach {
             view.addSubview($0)
         }
         
@@ -211,6 +231,12 @@ extension LottoViewController: ViewDesignProtocol {
         resultStackView.snp.makeConstraints { make in
             make.top.equalTo(resultLabel.snp.bottom).offset(16)
             make.horizontalEdges.equalTo(safeArea).inset(20)
+        }
+        
+        errorLabel.snp.makeConstraints { make in
+            make.top.equalTo(resultStackView.snp.bottom).offset(20)
+            make.horizontalEdges.equalTo(safeArea).inset(20)
+            make.height.equalTo(60)
         }
         
         indicatorView.snp.makeConstraints { make in
