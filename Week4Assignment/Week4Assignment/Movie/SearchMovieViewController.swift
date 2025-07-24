@@ -52,15 +52,20 @@ final class SearchMovieViewController: UIViewController {
         return tableView
     }()
     
+    private let lastDate = {
+        guard let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) else {
+            print("Failed to get yesterday date")
+            return "00000000"
+        }
+        return DateFormatters.yyyyMMddFormatter.string(from: yesterday)
+    }()
+    
     private var boxOfficeList = [BoxOffice]() {
         didSet {
             tableView.reloadData()
         }
     }
-    private let lastDate = {
-        guard let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) else { return "unknown Error"}
-        return DateFormatters.yyyyMMddFormatter.string(from: yesterday)
-    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
