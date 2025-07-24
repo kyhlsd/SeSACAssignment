@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Alamofire
 import SnapKit
 
 final class SearchMovieViewController: UIViewController {
@@ -44,25 +45,42 @@ final class SearchMovieViewController: UIViewController {
         return tableView
     }()
     
-    private let totalList = MovieInfo.movies.sorted {
-        $0.audienceCount > $1.audienceCount
+    private var boxOfficeList = [BoxOffice]() {
+        didSet {
+            tableView.reloadData()
+        }
     }
-    private var searchedList = [Movie]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         configureViewDesign()
         
         setTapGesture()
         searchButton.addTarget(self, action: #selector(searchMovie), for: .touchUpInside)
         
         updateSearchedList(nil)
+        
+        fetchData()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         searchTextField.layer.addBorder([.bottom], color: .white, width: 2)
+    }
+    
+    private func fetchData() {
+        let url = MovieAPIInfo.getURL(type: .daily, targetDate: "20250723")
+        AF.request(url, method: .get)
+            .validate(statusCode: 200..<300)
+            .responseDecodable(of: BoxOfficeResult.self) { response in
+                switch response.result {
+                case .success(let value):
+                    self.boxOfficeList = value.boxOfficeResult.dailyBoxOfficeList
+                case .failure(let error):
+                    print(error)
+                }
+            }
     }
     
     @objc
@@ -126,15 +144,15 @@ extension SearchMovieViewController: UITextFieldDelegate {
     
     private func updateSearchedList(_ searchText: String?) {
         guard let searchText else {
-            searchedList = totalList
+            
             return
         }
         
         let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         if trimmed.isEmpty {
-            searchedList = totalList
+            
         } else {
-            searchedList = totalList.filter { $0.matches(keyword: searchText) }
+            
         }
     }
 }
@@ -142,21 +160,21 @@ extension SearchMovieViewController: UITextFieldDelegate {
 // MARK: TableView
 extension SearchMovieViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchedList.isEmpty {
+        if boxOfficeList.isEmpty {
             return 1
         }
         
-        return min(searchedList.count, 10)
+        return boxOfficeList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if searchedList.isEmpty {
+        if boxOfficeList.isEmpty {
             return tableView.dequeueReusableCell(cellType: EmptyListTableViewCell.self, for: indexPath)
         }
         
         let cell = tableView.dequeueReusableCell(cellType: SearchMovieTableViewCell.self, for: indexPath)
         let trimmed = searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        cell.configureData(with: searchedList[indexPath.row], index: indexPath.row + 1, searchText: trimmed)
+        cell.configureData(with: boxOfficeList[indexPath.row])
         return cell
     }
 }

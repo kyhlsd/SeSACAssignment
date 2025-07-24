@@ -46,12 +46,10 @@ final class SearchMovieTableViewCell: UITableViewCell, Identifying {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureData(with movie: Movie, index: Int, searchText: String) {
-        indexLabel.text = "\(index)"
-        titleLabel.setAttributedTextlWithKeyword(text: movie.title, keyword: searchText, pointColor: .systemRed)
-
-        let dateString = DateFormatters.getConvertedDateString(from: DateFormatters.yyyyMMddFormatter, to: DateFormatters.yyyyMMddDashFormatter, dateString: movie.releaseDate) ?? ""
-        dateLabel.setAttributedTextlWithKeyword(text: dateString, keyword: searchText, pointColor: .systemRed, attributes: dateLabelAttributes)
+    func configureData(with boxOffice: BoxOffice) {
+        indexLabel.text = "\(boxOffice.rank)"
+        titleLabel.text = boxOffice.name
+        dateLabel.attributedText = NSAttributedString(string: boxOffice.openDate, attributes: dateLabelAttributes)
     }
 }
 
