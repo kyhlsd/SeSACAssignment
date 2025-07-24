@@ -95,6 +95,7 @@ final class LottoViewController: UIViewController {
         var numberIndex = 0
         
         for subview in resultStackView.arrangedSubviews {
+            subview.isHidden = true
             if let lottoBall = subview as? LottoBall {
                 lottoBall.setNumber(number: lottoNumbers[numberIndex])
                 numberIndex += 1
@@ -103,6 +104,13 @@ final class LottoViewController: UIViewController {
                 numberIndex += 1
             }
         }
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            for subview in self.resultStackView.arrangedSubviews {
+                subview.isHidden = false
+            }
+        })
+
     }
 }
 
