@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Alamofire
 import SnapKit
 
 final class LottoViewController: UIViewController {
@@ -60,6 +61,22 @@ final class LottoViewController: UIViewController {
         configureViewDesign()
         
         setTapGesture()
+        
+        fetchData(targetRound: 1181)
+    }
+    
+    private func fetchData(targetRound: Int) {
+        let url = LottoAPIHelper.getURL(targetRound: targetRound)
+        AF.request(url, method: .get)
+            .validate(statusCode: 200..<300)
+            .responseDecodable(of: LottoResult.self) { response in
+                switch response.result {
+                case .success(let value):
+                    dump(value)
+                case .failure(let error):
+                    print(error)
+                }
+            }
     }
     
     private func updateViewsWithRoundNumber(with number: Int) {

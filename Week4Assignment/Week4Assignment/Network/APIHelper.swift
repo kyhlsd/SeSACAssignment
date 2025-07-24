@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum MovieAPIInfo {
+enum MovieAPIHelper {
     static let originURL = "https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/search"
     static func getURL(type: apiType, targetDate: String) -> String {
         let apiKey = (Bundle.main.object(forInfoDictionaryKey: "MOVIE_API_KEY") as? String) ?? "nilKey"
@@ -17,6 +17,13 @@ enum MovieAPIInfo {
     enum apiType: String {
         case daily = "DailyBoxOfficeList"
         case weekly = "WeeklyBoxOfficeList"
+    }
+}
+
+enum LottoAPIHelper {
+    static let originURL = "https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo="
+    static func getURL(targetRound: Int) -> String {
+        return originURL + "\(targetRound)"
     }
 }
 

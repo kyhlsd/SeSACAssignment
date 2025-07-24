@@ -97,7 +97,7 @@ final class SearchMovieViewController: UIViewController {
     private func fetchData(targetDate: String) {
         if isFetching { return }
         
-        let url = MovieAPIInfo.getURL(type: .daily, targetDate: targetDate)
+        let url = MovieAPIHelper.getURL(type: .daily, targetDate: targetDate)
         
         isFetching = true
         AF.request(url, method: .get)
