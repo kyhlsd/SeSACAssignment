@@ -11,10 +11,10 @@ import SnapKit
 final class EmptyListTableViewCell: UITableViewCell, Identifying {
     private let label = {
         let label = UILabel()
-        label.text = "검색 결과가 없습니다."
         label.textColor = .systemGray
         label.font = .systemFont(ofSize: 14, weight: .semibold)
         label.textAlignment = .center
+        label.numberOfLines = 3
         return label
     }()
     
@@ -26,6 +26,14 @@ final class EmptyListTableViewCell: UITableViewCell, Identifying {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configureLabel(_ error: Error? = nil) {
+        if let error {
+            label.text = "오류가 발생했습니다.\n\(error.localizedDescription)"
+        } else {
+            label.text = "검색 결과가 없습니다."
+        }
     }
 }
 

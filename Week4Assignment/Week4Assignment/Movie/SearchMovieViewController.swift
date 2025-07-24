@@ -46,7 +46,6 @@ final class SearchMovieViewController: UIViewController {
         let tableView = UITableView()
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
-        tableView.rowHeight = 40
         tableView.register(cellType: SearchMovieTableViewCell.self)
         tableView.register(cellType: EmptyListTableViewCell.self)
         return tableView
@@ -63,6 +62,8 @@ final class SearchMovieViewController: UIViewController {
             isFetching ? indicatorView.startAnimating() : indicatorView.stopAnimating()
         }
     }
+    private var error: Error?
+    
     private let lastDate = {
         guard let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) else {
             print("Failed to get yesterday date")
@@ -70,7 +71,6 @@ final class SearchMovieViewController: UIViewController {
         }
         return DateFormatters.yyyyMMddFormatter.string(from: yesterday)
     }()
-    
     private var boxOfficeList = [BoxOffice]() {
         didSet {
             tableView.reloadData()
@@ -106,9 +106,10 @@ final class SearchMovieViewController: UIViewController {
                 switch response.result {
                 case .success(let value):
                     self.boxOfficeList = value.boxOfficeResult.dailyBoxOfficeList
+                    self.error = nil
                 case .failure(let error):
-                    print(error)
                     self.boxOfficeList.removeAll()
+                    self.error = error
                 }
                 self.isFetching = false
             }
@@ -228,12 +229,22 @@ extension SearchMovieViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if boxOfficeList.isEmpty {
-            return tableView.dequeueReusableCell(cellType: EmptyListTableViewCell.self, for: indexPath)
+            let cell = tableView.dequeueReusableCell(cellType: EmptyListTableViewCell.self, for: indexPath)
+            cell.configureLabel(error)
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(cellType: SearchMovieTableViewCell.self, for: indexPath)
+            cell.configureData(with: boxOfficeList[indexPath.row])
+            return cell
         }
-        
-        let cell = tableView.dequeueReusableCell(cellType: SearchMovieTableViewCell.self, for: indexPath)
-        cell.configureData(with: boxOfficeList[indexPath.row])
-        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if boxOfficeList.isEmpty {
+            return 60
+        } else {
+            return 40
+        }
     }
 }
 
