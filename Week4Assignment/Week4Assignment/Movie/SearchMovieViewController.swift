@@ -57,7 +57,10 @@ final class SearchMovieViewController: UIViewController {
             tableView.reloadData()
         }
     }
-    private let lastDate = "20250723"
+    private let lastDate = {
+        guard let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) else { return "unknown Error"}
+        return DateFormatters.yyyyMMddFormatter.string(from: yesterday)
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -214,11 +217,18 @@ extension SearchMovieViewController: UseKeyboardProtocol {
     func setTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
+        tapGesture.delegate = self
         view.addGestureRecognizer(tapGesture)
     }
     
     @objc
     func dismissKeyboard() {
         view.endEditing(true)
+    }
+}
+
+extension SearchMovieViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        return (touch.view as? UIButton == nil)
     }
 }
