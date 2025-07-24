@@ -51,7 +51,18 @@ final class SearchMovieViewController: UIViewController {
         tableView.register(cellType: EmptyListTableViewCell.self)
         return tableView
     }()
+    private let indicatorView = {
+        let indicatorView = UIActivityIndicatorView()
+        indicatorView.style = .large
+        indicatorView.color = .white
+        return indicatorView
+    }()
     
+    private var isFetching = false {
+        didSet {
+            isFetching ? indicatorView.startAnimating() : indicatorView.stopAnimating()
+        }
+    }
     private let lastDate = {
         guard let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) else {
             print("Failed to get yesterday date")
@@ -84,7 +95,11 @@ final class SearchMovieViewController: UIViewController {
     }
     
     private func fetchData(targetDate: String) {
+        if isFetching { return }
+        
         let url = MovieAPIInfo.getURL(type: .daily, targetDate: targetDate)
+        
+        isFetching = true
         AF.request(url, method: .get)
             .validate(statusCode: 200..<300)
             .responseDecodable(of: BoxOfficeResult.self) { response in
@@ -95,6 +110,7 @@ final class SearchMovieViewController: UIViewController {
                     print(error)
                     self.boxOfficeList.removeAll()
                 }
+                self.isFetching = false
             }
     }
     
@@ -142,7 +158,7 @@ final class SearchMovieViewController: UIViewController {
 // MARK: UI Design
 extension SearchMovieViewController: ViewDesignProtocol {
     func configureHierarchy() {
-        [backgroundImageView, searchTextField, nonValidDateLabel, searchButton, tableView].forEach {
+        [backgroundImageView, searchTextField, nonValidDateLabel, searchButton, tableView, indicatorView].forEach {
             view.addSubview($0)
         }
     }
@@ -176,6 +192,10 @@ extension SearchMovieViewController: ViewDesignProtocol {
             make.top.equalTo(nonValidDateLabel.snp.bottom).offset(4)
             make.bottom.equalTo(safeArea)
             make.horizontalEdges.equalTo(safeArea).inset(20)
+        }
+        
+        indicatorView.snp.makeConstraints { make in
+            make.center.equalTo(safeArea)
         }
     }
     
