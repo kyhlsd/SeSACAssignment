@@ -11,11 +11,10 @@ import SnapKit
 final class EmptyListTableViewCell: UITableViewCell, Identifying {
     private let label = {
         let label = UILabel()
-        label.text = "검색 결과가 없습니다.\n이름 또는 개봉일로 검색할 수 있습니다."
+        label.text = "검색 결과가 없습니다."
         label.textColor = .systemGray
         label.font = .systemFont(ofSize: 14, weight: .semibold)
         label.textAlignment = .center
-        label.numberOfLines = 2
         return label
     }()
     
