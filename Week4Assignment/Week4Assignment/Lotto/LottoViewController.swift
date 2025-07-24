@@ -48,6 +48,20 @@ final class LottoViewController: UIViewController {
         stackView.alignment = .top
         return stackView
     }()
+    private let indicatorView = {
+        let indicatorView = UIActivityIndicatorView()
+        indicatorView.style = .large
+        indicatorView.color = .systemGray
+        return indicatorView
+    }()
+    
+    private var isFetching = false {
+        didSet {
+            isFetching ? indicatorView.startAnimating() : indicatorView.stopAnimating()
+            pickerView.isUserInteractionEnabled = !isFetching
+        }
+    }
+    private var error: Error?
     
     private let maxNumber = 1181
     private let recentDate = "2025-07-19"
@@ -69,17 +83,23 @@ final class LottoViewController: UIViewController {
     }
     
     private func fetchData(targetRound: Int) {
+        if isFetching { return }
+        
         let url = LottoAPIHelper.getURL(targetRound: targetRound)
+        
+        isFetching = true
         AF.request(url, method: .get)
             .validate(statusCode: 200..<300)
             .responseDecodable(of: LottoResult.self) { response in
                 switch response.result {
                 case .success(let value):
                     self.lottoResult = value
+                    self.error = nil
                 case .failure(let error):
-                    print(error)
                     self.lottoResult = nil
+                    self.error = error
                 }
+                self.isFetching = false
             }
     }
     
@@ -126,7 +146,7 @@ final class LottoViewController: UIViewController {
 // MARK: UI Design
 extension LottoViewController: ViewDesignProtocol {
     func configureHierarchy() {
-        [inputTextField, winningInfoLabel, dateLabel, separatorLine, resultLabel, resultStackView].forEach {
+        [inputTextField, winningInfoLabel, dateLabel, separatorLine, resultLabel, resultStackView, indicatorView].forEach {
             view.addSubview($0)
         }
         
@@ -191,6 +211,10 @@ extension LottoViewController: ViewDesignProtocol {
         resultStackView.snp.makeConstraints { make in
             make.top.equalTo(resultLabel.snp.bottom).offset(16)
             make.horizontalEdges.equalTo(safeArea).inset(20)
+        }
+        
+        indicatorView.snp.makeConstraints { make in
+            make.center.equalTo(safeArea)
         }
     }
     
