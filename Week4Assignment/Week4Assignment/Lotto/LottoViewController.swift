@@ -76,8 +76,30 @@ final class LottoViewController: UIViewController {
         }
     }
     
-    private let maxNumber = 1181
-    private let recentDate = "2025-07-19"
+    private let maxRound = {
+        let referenceRound = 1181
+        guard let referenceDate = DateFormatters.yyyyMMddDashFormatter.date(from: "2025-07-19") else { return referenceRound }
+        
+        let dateGap = Calendar.current.getDateGap(from: referenceDate, to: Date())
+        
+        let calculatedRound = (dateGap - 1) / 7 + referenceRound
+        return max(calculatedRound, referenceRound)
+    }()
+    
+    private let recentDate = {
+        let referenceDateString = "2025-07-19"
+        let formatter = DateFormatters.yyyyMMddDashFormatter
+        guard let referenceDate = formatter.date(from: referenceDateString) else { return referenceDateString }
+        
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: Date())
+        // 지난주 토요일 만들기: weekday는 일요일이 1, 토요일이 7
+        let daysToSubtract = (weekday - 1 + 7) % 7 + 1
+        guard let lastSaturday = calendar.date(byAdding: .day, value: -daysToSubtract, to: Date()) else { return referenceDateString }
+        
+        return formatter.string(from: lastSaturday)
+    }()
+    
     private var lottoResult: LottoResult? {
         didSet {
             showLottoNumbers()
@@ -91,8 +113,8 @@ final class LottoViewController: UIViewController {
         
         setTapGesture()
         
-        fetchData(targetRound: 1181)
-        updateViewsWithRoundNumber(with: 1181)
+        fetchData(targetRound: maxRound)
+        updateViewsWithRoundNumber(with: maxRound)
     }
     
     private func fetchData(targetRound: Int) {
@@ -123,7 +145,7 @@ final class LottoViewController: UIViewController {
         
         let formatter = DateFormatters.yyMMddDashFormatter
         if let recentDate = formatter.date(from: recentDate),
-           let date = Calendar.current.date(byAdding: .day, value: -(maxNumber - number) * 7, to: recentDate) {
+           let date = Calendar.current.date(byAdding: .day, value: -(maxRound - number) * 7, to: recentDate) {
             dateLabel.text = formatter.string(from: date) + " 추첨"
         }
     }
@@ -262,16 +284,16 @@ extension LottoViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return maxNumber
+        return maxRound
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        fetchData(targetRound: maxNumber - row)
-        updateViewsWithRoundNumber(with: maxNumber - row)
+        fetchData(targetRound: maxRound - row)
+        updateViewsWithRoundNumber(with: maxRound - row)
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return "\(maxNumber - row)"
+        return "\(maxRound - row)"
     }
 }
 
