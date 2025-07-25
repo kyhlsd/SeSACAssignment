@@ -27,3 +27,13 @@ enum LottoAPIHelper {
     }
 }
 
+enum ShoppingAPIHelper {
+    static let originURL = "https://openapi.naver.com/v1/search/shop.json?query="
+    static func getURL(query: String) -> String {
+        return originURL + query
+    }
+    static let headers = [
+        "X-Naver-Client-Id": (Bundle.main.object(forInfoDictionaryKey: "X_NAVER_CLIENT_ID") as? String) ?? "nilId",
+        "X-Naver-Client-Secret": (Bundle.main.object(forInfoDictionaryKey: "X_NAVER_CLIENT_SECRET") as? String) ?? "nilSecret"
+    ]
+}
