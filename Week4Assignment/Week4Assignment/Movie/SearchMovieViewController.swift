@@ -10,56 +10,12 @@ import Alamofire
 import SnapKit
 
 final class SearchMovieViewController: UIViewController {
-
-    private let backgroundImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.image = .searchMovieBackground
-        imageView.alpha = 0.2
-        return imageView
-    }()
-    private let searchTextField = {
-        let textField = UITextField()
-        textField.attributedPlaceholder = NSAttributedString(string: "날짜를 입력하세요. ex) 20250723", attributes: [.foregroundColor: UIColor.darkGray])
-        textField.textColor = .white
-        textField.returnKeyType = .search
-        textField.clearButtonMode = .always
-        textField.overrideUserInterfaceStyle = .dark
-        return textField
-    }()
-    private let nonValidDateLabel = {
-        let label = UILabel()
-        label.textColor = .systemRed
-        label.textAlignment = .right
-        label.font = .systemFont(ofSize: 12, weight: .bold)
-        return label
-    }()
-    private let searchButton = {
-        let button = UIButton()
-        button.setTitle("검색", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 14)
-        button.backgroundColor = .white
-        return button
-    }()
-    private let tableView = {
-        let tableView = UITableView()
-        tableView.backgroundColor = .clear
-        tableView.separatorStyle = .none
-        tableView.register(cellType: SearchMovieTableViewCell.self)
-        tableView.register(cellType: EmptyListTableViewCell.self)
-        return tableView
-    }()
-    private let indicatorView = {
-        let indicatorView = UIActivityIndicatorView()
-        indicatorView.style = .large
-        indicatorView.color = .white
-        return indicatorView
-    }()
+    
+    private let searchMovieView = SearchMovieView()
     
     private var isFetching = false {
         didSet {
-            isFetching ? indicatorView.startAnimating() : indicatorView.stopAnimating()
+            isFetching ? searchMovieView.indicatorView.startAnimating() : searchMovieView.indicatorView.stopAnimating()
         }
     }
     private var error: Error?
@@ -73,25 +29,25 @@ final class SearchMovieViewController: UIViewController {
     }()
     private var boxOfficeList = [BoxOffice]() {
         didSet {
-            tableView.reloadData()
+            searchMovieView.tableView.reloadData()
         }
     }
     
+    override func loadView() {
+        self.view = searchMovieView
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureViewDesign()
+        searchMovieView.searchTextField.delegate = self
+        searchMovieView.tableView.delegate = self
+        searchMovieView.tableView.dataSource = self
         
         setTapGesture()
-        searchButton.addTarget(self, action: #selector(searchMovie), for: .touchUpInside)
+        searchMovieView.searchButton.addTarget(self, action: #selector(searchMovie), for: .touchUpInside)
         
         fetchData(targetDate: lastDate)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        searchTextField.layer.addBorder([.bottom], color: .white, width: 2)
     }
     
     private func fetchData(targetDate: String) {
@@ -119,7 +75,7 @@ final class SearchMovieViewController: UIViewController {
     private func searchMovie() {
         do {
             let targetDate = try getValidDate()
-            nonValidDateLabel.text = ""
+            searchMovieView.nonValidDateLabel.text = ""
             dismissKeyboard()
             
             fetchData(targetDate: targetDate)
@@ -129,7 +85,7 @@ final class SearchMovieViewController: UIViewController {
     }
     
     private func getValidDate() throws -> String {
-        let trimmed = searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let trimmed = searchMovieView.searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         if trimmed.isEmpty { return lastDate }
         
         guard let _ = DateFormatters.yyyyMMddFormatter.date(from: trimmed) else {
@@ -146,66 +102,12 @@ final class SearchMovieViewController: UIViewController {
     private func setNonValidDateLabel(with error: Error) {
         switch error {
         case NonValidDateError.futureDate:
-            nonValidDateLabel.text = "어제까지의 날짜만 조회 가능합니다."
+            searchMovieView.nonValidDateLabel.text = "어제까지의 날짜만 조회 가능합니다."
         case NonValidDateError.nonDateFormat:
-            nonValidDateLabel.text = "올바른 날짜 형식이 아닙니다. ex) 20250723"
+            searchMovieView.nonValidDateLabel.text = "올바른 날짜 형식이 아닙니다. ex) 20250723"
         default:
-            nonValidDateLabel.text = "알 수 없는 오류가 발생했습니다."
+            searchMovieView.nonValidDateLabel.text = "알 수 없는 오류가 발생했습니다."
         }
-    }
-}
-
-
-// MARK: UI Design
-extension SearchMovieViewController: ViewDesignProtocol {
-    func configureHierarchy() {
-        [backgroundImageView, searchTextField, nonValidDateLabel, searchButton, tableView, indicatorView].forEach {
-            view.addSubview($0)
-        }
-    }
-    
-    func configureLayout() {
-        let safeArea = view.safeAreaLayoutGuide
-        
-        backgroundImageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        searchTextField.snp.makeConstraints { make in
-            make.top.leading.equalTo(safeArea).offset(20)
-            make.height.equalTo(44)
-        }
-        
-        nonValidDateLabel.snp.makeConstraints { make in
-            make.top.equalTo(searchTextField.snp.bottom)
-            make.horizontalEdges.equalTo(searchTextField)
-            make.height.equalTo(16)
-        }
-        
-        searchButton.snp.makeConstraints { make in
-            make.verticalEdges.equalTo(searchTextField)
-            make.trailing.equalTo(safeArea).inset(20)
-            make.width.equalTo(80)
-            make.leading.equalTo(searchTextField.snp.trailing).offset(20)
-        }
-        
-        tableView.snp.makeConstraints { make in
-            make.top.equalTo(nonValidDateLabel.snp.bottom).offset(4)
-            make.bottom.equalTo(safeArea)
-            make.horizontalEdges.equalTo(safeArea).inset(20)
-        }
-        
-        indicatorView.snp.makeConstraints { make in
-            make.center.equalTo(safeArea)
-        }
-    }
-    
-    func configureView() {
-        view.backgroundColor = .black
-        
-        searchTextField.delegate = self
-        tableView.delegate = self
-        tableView.dataSource = self
     }
 }
 
@@ -266,5 +168,115 @@ extension SearchMovieViewController: UseKeyboardProtocol {
 extension SearchMovieViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         return (touch.view as? UIButton == nil)
+    }
+}
+
+// MARK: Views
+final fileprivate class SearchMovieView: UIView {
+    fileprivate let backgroundImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.image = .searchMovieBackground
+        imageView.alpha = 0.2
+        return imageView
+    }()
+    fileprivate let searchTextField = {
+        let textField = UITextField()
+        textField.attributedPlaceholder = NSAttributedString(string: "날짜를 입력하세요. ex) 20250723", attributes: [.foregroundColor: UIColor.darkGray])
+        textField.textColor = .white
+        textField.returnKeyType = .search
+        textField.clearButtonMode = .always
+        textField.overrideUserInterfaceStyle = .dark
+        return textField
+    }()
+    fileprivate let nonValidDateLabel = {
+        let label = UILabel()
+        label.textColor = .systemRed
+        label.textAlignment = .right
+        label.font = .systemFont(ofSize: 12, weight: .bold)
+        return label
+    }()
+    fileprivate let searchButton = {
+        let button = UIButton()
+        button.setTitle("검색", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 14)
+        button.backgroundColor = .white
+        return button
+    }()
+    fileprivate let tableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
+        tableView.register(cellType: SearchMovieTableViewCell.self)
+        tableView.register(cellType: EmptyListTableViewCell.self)
+        return tableView
+    }()
+    fileprivate let indicatorView = {
+        let indicatorView = UIActivityIndicatorView()
+        indicatorView.style = .large
+        indicatorView.color = .white
+        return indicatorView
+    }()
+    
+    override func draw(_ rect: CGRect) {
+        searchTextField.layer.addBorder([.bottom], color: .white, width: 2)
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configureViewDesign()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension SearchMovieView: ViewDesignProtocol {
+    func configureHierarchy() {
+        [backgroundImageView, searchTextField, nonValidDateLabel, searchButton, tableView, indicatorView].forEach {
+            addSubview($0)
+        }
+    }
+    
+    func configureLayout() {
+        let safeArea = safeAreaLayoutGuide
+        
+        backgroundImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        searchTextField.snp.makeConstraints { make in
+            make.top.leading.equalTo(safeArea).offset(20)
+            make.height.equalTo(44)
+        }
+        
+        nonValidDateLabel.snp.makeConstraints { make in
+            make.top.equalTo(searchTextField.snp.bottom)
+            make.horizontalEdges.equalTo(searchTextField)
+            make.height.equalTo(16)
+        }
+        
+        searchButton.snp.makeConstraints { make in
+            make.verticalEdges.equalTo(searchTextField)
+            make.trailing.equalTo(safeArea).inset(20)
+            make.width.equalTo(80)
+            make.leading.equalTo(searchTextField.snp.trailing).offset(20)
+        }
+        
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(nonValidDateLabel.snp.bottom).offset(4)
+            make.bottom.equalTo(safeArea)
+            make.horizontalEdges.equalTo(safeArea).inset(20)
+        }
+        
+        indicatorView.snp.makeConstraints { make in
+            make.center.equalTo(safeArea)
+        }
+    }
+    
+    func configureView() {
+        backgroundColor = .black
     }
 }
