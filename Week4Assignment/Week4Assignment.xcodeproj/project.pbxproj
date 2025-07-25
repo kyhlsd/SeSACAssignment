@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		15516BE52E320CD7007A32BC /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 15516BE42E320CD7007A32BC /* Alamofire */; };
+		15516D472E334848007A32BC /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 15516D462E334848007A32BC /* Kingfisher */; };
 		15D4FA4E2E30B16000AE119E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 15D4FA4D2E30B16000AE119E /* SnapKit */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15516D472E334848007A32BC /* Kingfisher in Frameworks */,
 				15D4FA4E2E30B16000AE119E /* SnapKit in Frameworks */,
 				15516BE52E320CD7007A32BC /* Alamofire in Frameworks */,
 			);
@@ -87,6 +89,7 @@
 			packageProductDependencies = (
 				15D4FA4D2E30B16000AE119E /* SnapKit */,
 				15516BE42E320CD7007A32BC /* Alamofire */,
+				15516D462E334848007A32BC /* Kingfisher */,
 			);
 			productName = Week4Assignment;
 			productReference = 15D4FA252E30A15400AE119E /* Week4Assignment.app */;
@@ -119,6 +122,7 @@
 			packageReferences = (
 				15D4FA4C2E30B16000AE119E /* XCRemoteSwiftPackageReference "SnapKit" */,
 				15516BE32E320CD7007A32BC /* XCRemoteSwiftPackageReference "Alamofire" */,
+				15516D452E334848007A32BC /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 15D4FA262E30A15400AE119E /* Products */;
@@ -366,6 +370,14 @@
 				minimumVersion = 5.10.2;
 			};
 		};
+		15516D452E334848007A32BC /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.5.0;
+			};
+		};
 		15D4FA4C2E30B16000AE119E /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -381,6 +393,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 15516BE32E320CD7007A32BC /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		15516D462E334848007A32BC /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 15516D452E334848007A32BC /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 		15D4FA4D2E30B16000AE119E /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;

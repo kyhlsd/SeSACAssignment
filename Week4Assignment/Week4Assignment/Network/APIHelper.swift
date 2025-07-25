@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 enum MovieAPIHelper {
     static let originURL = "https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/search"
@@ -32,7 +33,7 @@ enum ShoppingAPIHelper {
     static func getURL(query: String) -> String {
         return originURL + query
     }
-    static let headers = [
+    static let headers: HTTPHeaders = [
         "X-Naver-Client-Id": (Bundle.main.object(forInfoDictionaryKey: "X_NAVER_CLIENT_ID") as? String) ?? "nilId",
         "X-Naver-Client-Secret": (Bundle.main.object(forInfoDictionaryKey: "X_NAVER_CLIENT_SECRET") as? String) ?? "nilSecret"
     ]

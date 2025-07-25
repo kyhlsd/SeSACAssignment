@@ -18,4 +18,6 @@ struct ShoppingItem: Decodable {
     let title: String
     let image: String
     let productId: String
+    let mallName: String
+    let lprice: String
 }
