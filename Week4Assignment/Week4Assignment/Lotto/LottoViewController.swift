@@ -11,63 +11,12 @@ import SnapKit
 
 final class LottoViewController: UIViewController {
 
-    private let inputTextField = {
-        let textField = UITextField()
-        textField.textAlignment = .center
-        textField.borderStyle = .roundedRect
-        return textField
-    }()
-    private let pickerView = UIPickerView()
-    private let winningInfoLabel = {
-        let label = UILabel()
-        label.text = "당첨번호 안내"
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
-        return label
-    }()
-    private let dateLabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .semibold)
-        label.textColor = .systemGray
-        return label
-    }()
-    private let separatorLine = {
-        let view = UIView()
-        view.backgroundColor = .lightGray
-        return view
-    }()
-    private let resultLabel = {
-        let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 20)
-        return label
-    }()
-    private let resultStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 8
-        stackView.distribution = .fillEqually
-        stackView.alignment = .top
-        return stackView
-    }()
-    private let errorLabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.textColor = .systemRed
-        label.textAlignment = .center
-        label.font = .systemFont(ofSize: 12, weight: .bold)
-        label.isHidden = true
-        return label
-    }()
-    private let indicatorView = {
-        let indicatorView = UIActivityIndicatorView()
-        indicatorView.style = .large
-        indicatorView.color = .systemGray
-        return indicatorView
-    }()
+    private let lottoView = LottoView()
     
     private var isFetching = false {
         didSet {
-            isFetching ? indicatorView.startAnimating() : indicatorView.stopAnimating()
-            pickerView.isUserInteractionEnabled = !isFetching
+            isFetching ? lottoView.indicatorView.startAnimating() : lottoView.indicatorView.stopAnimating()
+            lottoView.pickerView.isUserInteractionEnabled = !isFetching
         }
     }
     private var error: Error? {
@@ -106,10 +55,16 @@ final class LottoViewController: UIViewController {
         }
     }
     
+    override func loadView() {
+        self.view = lottoView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        configureViewDesign()
+        
+        lottoView.pickerView.delegate = self
+        lottoView.pickerView.dataSource = self
+        lottoView.inputTextField.delegate = self
         
         setTapGesture()
         
@@ -140,13 +95,13 @@ final class LottoViewController: UIViewController {
     
     private func updateViewsWithRoundNumber(with number: Int) {
         let numberString = "\(number)"
-        inputTextField.text = numberString
-        resultLabel.setAttributedTextlWithKeyword(text: numberString + "회 당첨결과", keyword: numberString + "회", pointColor: .systemYellow)
+        lottoView.inputTextField.text = numberString
+        lottoView.resultLabel.setAttributedTextlWithKeyword(text: numberString + "회 당첨결과", keyword: numberString + "회", pointColor: .systemYellow)
         
         let formatter = DateFormatters.yyMMddDashFormatter
         if let recentDate = formatter.date(from: recentDate),
            let date = Calendar.current.date(byAdding: .day, value: -(maxRound - number) * 7, to: recentDate) {
-            dateLabel.text = formatter.string(from: date) + " 추첨"
+            lottoView.dateLabel.text = formatter.string(from: date) + " 추첨"
         }
     }
     
@@ -155,7 +110,7 @@ final class LottoViewController: UIViewController {
         let bonusNumber = lottoResult?.bonusNumber ?? 0
         var numberIndex = 0
         
-        for subview in resultStackView.arrangedSubviews {
+        for subview in lottoView.resultStackView.arrangedSubviews {
             subview.alpha = 0
             if let lottoBall = subview as? LottoBall {
                 lottoBall.setNumber(number: numbers[numberIndex])
@@ -167,7 +122,7 @@ final class LottoViewController: UIViewController {
         }
         
         var delay = 0.0
-        for subview in self.resultStackView.arrangedSubviews {
+        for subview in lottoView.resultStackView.arrangedSubviews {
             UIView.animate(withDuration: 0.5, delay: delay, animations: {
                 subview.alpha = 1
             })
@@ -177,19 +132,123 @@ final class LottoViewController: UIViewController {
     
     private func setErrorLabel() {
         if let error {
-            errorLabel.text = "오류가 발생했습니다.\n" + error.localizedDescription
-            errorLabel.isHidden = false
+            lottoView.errorLabel.text = "오류가 발생했습니다.\n" + error.localizedDescription
+            lottoView.errorLabel.isHidden = false
         } else {
-            errorLabel.isHidden = true
+            lottoView.errorLabel.isHidden = true
         }
     }
 }
 
-// MARK: UI Design
-extension LottoViewController: ViewDesignProtocol {
+// MARK: PickerView
+extension LottoViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return maxRound
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        fetchData(targetRound: maxRound - row)
+        updateViewsWithRoundNumber(with: maxRound - row)
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return "\(maxRound - row)"
+    }
+}
+
+// MARK: TextField
+extension LottoViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return false
+    }
+}
+
+// MARK: TapGesture - DismissKeyboard
+extension LottoViewController: UseKeyboardProtocol {
+    func setTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc
+    func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}
+
+// MARK: Views
+final fileprivate class LottoView: UIView {
+    fileprivate let inputTextField = {
+        let textField = UITextField()
+        textField.textAlignment = .center
+        textField.borderStyle = .roundedRect
+        return textField
+    }()
+    fileprivate let pickerView = UIPickerView()
+    fileprivate let winningInfoLabel = {
+        let label = UILabel()
+        label.text = "당첨번호 안내"
+        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        return label
+    }()
+    fileprivate let dateLabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 12, weight: .semibold)
+        label.textColor = .systemGray
+        return label
+    }()
+    fileprivate let separatorLine = {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+        return view
+    }()
+    fileprivate let resultLabel = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 20)
+        return label
+    }()
+    fileprivate let resultStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 8
+        stackView.distribution = .fillEqually
+        stackView.alignment = .top
+        return stackView
+    }()
+    fileprivate let errorLabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.textColor = .systemRed
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 12, weight: .bold)
+        label.isHidden = true
+        return label
+    }()
+    fileprivate let indicatorView = {
+        let indicatorView = UIActivityIndicatorView()
+        indicatorView.style = .large
+        indicatorView.color = .systemGray
+        return indicatorView
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configureViewDesign()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension LottoView: ViewDesignProtocol {
     func configureHierarchy() {
         [inputTextField, winningInfoLabel, dateLabel, separatorLine, resultLabel, resultStackView, errorLabel, indicatorView].forEach {
-            view.addSubview($0)
+            addSubview($0)
         }
         
         for _ in 1...6 {
@@ -219,7 +278,7 @@ extension LottoViewController: ViewDesignProtocol {
     }
     
     func configureLayout() {
-        let safeArea = view.safeAreaLayoutGuide
+        let safeArea = safeAreaLayoutGuide
         
         inputTextField.snp.makeConstraints { make in
             make.top.equalTo(safeArea).offset(20)
@@ -267,52 +326,7 @@ extension LottoViewController: ViewDesignProtocol {
     }
     
     func configureView() {
-        view.backgroundColor = .white
-        
-        pickerView.delegate = self
-        pickerView.dataSource = self
-        
+        backgroundColor = .white
         inputTextField.inputView = pickerView
-        inputTextField.delegate = self
-    }
-}
-
-// MARK: PickerView
-extension LottoViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return maxRound
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        fetchData(targetRound: maxRound - row)
-        updateViewsWithRoundNumber(with: maxRound - row)
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return "\(maxRound - row)"
-    }
-}
-
-// MARK: TextField
-extension LottoViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        return false
-    }
-}
-
-// MARK: TapGesture - DismissKeyboard
-extension LottoViewController: UseKeyboardProtocol {
-    func setTapGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc
-    func dismissKeyboard() {
-        view.endEditing(true)
     }
 }
