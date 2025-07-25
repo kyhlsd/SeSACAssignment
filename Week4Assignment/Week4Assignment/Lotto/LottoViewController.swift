@@ -37,8 +37,6 @@ final class LottoViewController: UIViewController {
     
     private let recentDate = {
         let referenceDateString = "2025-07-19"
-        let formatter = DateFormatters.yyyyMMddDashFormatter
-        guard let referenceDate = formatter.date(from: referenceDateString) else { return referenceDateString }
         
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: Date())
@@ -46,7 +44,7 @@ final class LottoViewController: UIViewController {
         let daysToSubtract = (weekday - 1 + 7) % 7 + 1
         guard let lastSaturday = calendar.date(byAdding: .day, value: -daysToSubtract, to: Date()) else { return referenceDateString }
         
-        return formatter.string(from: lastSaturday)
+        return DateFormatters.yyyyMMddDashFormatter.string(from: lastSaturday)
     }()
     
     private var lottoResult: LottoResult? {
