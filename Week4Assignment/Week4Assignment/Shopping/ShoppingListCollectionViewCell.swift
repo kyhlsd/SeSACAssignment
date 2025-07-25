@@ -73,6 +73,9 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
             .cacheOriginalImage
         ])
         
+        let buttonImage = MyFavoritesDummy.isFavorite(itemId: shoppingItem.productId) ? "heart.fill" : "heart"
+        favoriteButton.setImage(UIImage(systemName: buttonImage), for: .normal)
+        
         mallLabel.text = shoppingItem.mallName
         
         let title = shoppingItem.title

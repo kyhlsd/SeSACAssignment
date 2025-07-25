@@ -26,6 +26,8 @@ final class ShoppingListViewController: UIViewController {
         shoppingListView.collectionView.dataSource = self
         
         fetchData(query: "캠핑카")
+        
+        navigationItem.title = "캠핑카"
     }
     
     private func fetchData(query: String) {
@@ -38,6 +40,8 @@ final class ShoppingListViewController: UIViewController {
                 case .success(let value):
                     self.shoppingResult = value
                     self.shoppingListView.collectionView.reloadData()
+                    let totalCount = NumberFormatters.demicalFormatter.string(from: value.total as NSNumber) ?? ""
+                    self.shoppingListView.totalCountLabel.text = totalCount + " 개의 검색 결과"
                 case .failure(let error):
                     print(error)
                 }
@@ -62,6 +66,13 @@ extension ShoppingListViewController: UICollectionViewDelegate, UICollectionView
 
 // MARK: Views
 final fileprivate class ShoppingListView: UIView {
+    fileprivate let totalCountLabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.textColor = .systemGreen
+        return label
+    }()
+    
     fileprivate let collectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -92,7 +103,7 @@ final fileprivate class ShoppingListView: UIView {
 
 extension ShoppingListView: ViewDesignProtocol {
     func configureHierarchy() {
-        [collectionView].forEach {
+        [collectionView, totalCountLabel].forEach {
             addSubview($0)
         }
     }
@@ -100,8 +111,14 @@ extension ShoppingListView: ViewDesignProtocol {
     func configureLayout() {
         let safeArea = safeAreaLayoutGuide
         
+        totalCountLabel.snp.makeConstraints { make in
+            make.top.equalTo(safeArea)
+            make.horizontalEdges.equalTo(safeArea).inset(12)
+            make.height.equalTo(18)
+        }
         collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(safeArea)
+            make.top.equalTo(totalCountLabel.snp.bottom).offset(12)
+            make.horizontalEdges.bottom.equalTo(safeArea)
         }
     }
     
