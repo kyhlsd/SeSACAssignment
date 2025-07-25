@@ -19,5 +19,24 @@ struct ShoppingItem: Decodable {
     let image: String
     let productId: String
     let mallName: String
-    let lprice: String
+    let lprice: Int
+    
+    enum CodingKeys: CodingKey {
+        case title
+        case image
+        case productId
+        case mallName
+        case lprice
+    }
+    
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.image = try container.decode(String.self, forKey: .image)
+        self.productId = try container.decode(String.self, forKey: .productId)
+        self.mallName = try container.decode(String.self, forKey: .mallName)
+        
+        let lpriceString = try container.decode(String.self, forKey: .lprice)
+        self.lprice = Int(lpriceString) ?? -1
+    }
 }

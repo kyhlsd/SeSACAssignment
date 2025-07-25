@@ -16,6 +16,7 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
         imageView.contentMode = .scaleToFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 12
+        imageView.kf.indicatorType = .activity
         return imageView
     }()
     
@@ -30,19 +31,22 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
     
     private let mallLabel = {
         let label = UILabel()
+        label.font = .systemFont(ofSize: 12)
         label.textColor = .lightGray
         return label
     }()
     
     private let titleLabel = {
         let label = UILabel()
-        label.textColor = .white
-        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 14)
+        label.textColor = .systemGray4
+        label.numberOfLines = 2
         return label
     }()
     
     private let priceLabel = {
         let label = UILabel()
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
         label.textColor = .white
         return label
     }()
@@ -57,6 +61,10 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func draw(_ rect: CGRect) {
+        favoriteButton.layer.cornerRadius = favoriteButton.frame.height / 2
+    }
+    
     func configureData(with shoppingItem: ShoppingItem) {
         let url = URL(string: shoppingItem.image)
         imageView.kf.setImage(with: url, options: [
@@ -66,8 +74,21 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
         ])
         
         mallLabel.text = shoppingItem.mallName
-        titleLabel.text = shoppingItem.title
-        priceLabel.text = shoppingItem.lprice
+        
+        let title = shoppingItem.title
+        guard let data = title.data(using: .utf8) else { return }
+        let options: [NSAttributedString.DocumentReadingOptionKey: Any] = [
+            .documentType: NSAttributedString.DocumentType.html,
+            .characterEncoding: String.Encoding.utf8.rawValue,
+        ]
+        
+        DispatchQueue.main.async {
+            guard let attributedString = try? NSAttributedString(data: data, options: options, documentAttributes: nil) else { return }
+            self.titleLabel.text = attributedString.string
+        }
+        
+        let formatter = NumberFormatters.demicalFormatter
+        priceLabel.text = formatter.string(from: NSNumber(value: shoppingItem.lprice))
     }
 }
 
@@ -85,30 +106,30 @@ extension ShoppingListCollectionViewCell: ViewDesignProtocol {
         }
         
         favoriteButton.snp.makeConstraints { make in
-            make.size.equalTo(24)
+            make.size.equalTo(28)
             make.bottom.trailing.equalTo(imageView).inset(8)
         }
         
         mallLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(4)
             make.horizontalEdges.equalTo(imageView).inset(8)
-            make.height.equalTo(20)
+            make.height.equalTo(16)
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(mallLabel.snp.bottom).offset(4)
+            make.top.equalTo(mallLabel.snp.bottom)
             make.horizontalEdges.equalTo(mallLabel)
         }
+        
         priceLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.top.equalTo(titleLabel.snp.bottom)
             make.horizontalEdges.equalTo(mallLabel)
-            make.bottom.equalToSuperview()
+            make.bottom.lessThanOrEqualToSuperview()
             make.height.equalTo(20)
         }
     }
     
     func configureView() {
-//        backgroundColor = .clear
-//        contentView.backgroundColor = .clear
+
     }
 }
