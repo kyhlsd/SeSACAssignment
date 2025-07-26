@@ -35,7 +35,7 @@ extension SearchShoppingViewController: UISearchBarDelegate {
             let viewController = ShoppingListViewController(searchText: searchText)
             navigationController?.pushViewController(viewController, animated: true)
         } else {
-            
+            showDefaultAlert(title: "검색 오류", message: "검색어를 2자 이상 입력해주세요.")
         }
     }
 }

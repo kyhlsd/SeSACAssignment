@@ -57,6 +57,8 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
         super.init(frame: frame)
         
         configureViewDesign()
+        
+        favoriteButton.addTarget(self, action: #selector(favoriteButtonDidTapped), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -154,7 +156,5 @@ extension ShoppingListCollectionViewCell: ViewDesignProtocol {
         }
     }
     
-    func configureView() {
-        favoriteButton.addTarget(self, action: #selector(favoriteButtonDidTapped), for: .touchUpInside)
-    }
+    func configureView() { }
 }
