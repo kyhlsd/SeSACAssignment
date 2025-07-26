@@ -106,7 +106,7 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
     @objc
     private func favoriteButtonDidTapped() {
         if let productId = shoppingItem?.productId {
-            MyFavoritesDummy.toggleItemInFavorites(productId: productId)
+            MyFavoritesDummy.toggleItemInFavorites(itemId: productId)
             setButtonImage(productId: productId)
         }
     }

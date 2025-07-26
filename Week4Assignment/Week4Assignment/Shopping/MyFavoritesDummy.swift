@@ -8,15 +8,17 @@
 import Foundation
 
 enum MyFavoritesDummy {
-    static var items = [String]()
+    @UserDefault(key: "MyFavorites", defaultValue: [])
+    static var items: [String]
+    
     static func isFavorite(itemId: String) -> Bool {
         return items.contains(itemId)
     }
-    static func toggleItemInFavorites(productId: String) {
-        if let index = items.firstIndex(of: productId) {
+    static func toggleItemInFavorites(itemId: String) {
+        if let index = items.firstIndex(of: itemId) {
             items.remove(at: index)
         } else {
-            items.append(productId)
+            items.append(itemId)
         }
     }
 }
