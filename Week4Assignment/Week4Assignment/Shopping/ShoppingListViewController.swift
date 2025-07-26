@@ -24,6 +24,7 @@ final class ShoppingListViewController: UIViewController {
 
         shoppingListView.collectionView.delegate = self
         shoppingListView.collectionView.dataSource = self
+        shoppingListView.optionStackView.delegate = self
         
         fetchData(query: "캠핑카")
         
@@ -49,7 +50,14 @@ final class ShoppingListViewController: UIViewController {
     }
 }
 
-//MARK: CollectionView
+// MARK: OptionStackView
+extension ShoppingListViewController: OptionDidSelectDelegate {
+    func didSelectButton(index: Int) {
+        print(SortOptions.allCases[index].rawValue)
+    }
+}
+
+// MARK: CollectionView
 extension ShoppingListViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return shoppingResult?.items.count ?? 0
@@ -73,12 +81,18 @@ final fileprivate class ShoppingListView: UIView {
         return label
     }()
     
+    fileprivate let optionStackView = {
+        let list = SortOptions.allCases.map { $0.rawValue }
+        let optionStackView = OptionStackView(list: list)
+        return optionStackView
+    }()
+    
     fileprivate let collectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 12
         layout.minimumLineSpacing = 12
-        layout.sectionInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 12, bottom: 12, right: 12)
         
         let deviceWidth = UIScreen.main.bounds.width
         let width = (deviceWidth - (12 * 2) - 12) / 2
@@ -103,7 +117,7 @@ final fileprivate class ShoppingListView: UIView {
 
 extension ShoppingListView: ViewDesignProtocol {
     func configureHierarchy() {
-        [collectionView, totalCountLabel].forEach {
+        [collectionView, optionStackView, totalCountLabel].forEach {
             addSubview($0)
         }
     }
@@ -116,8 +130,16 @@ extension ShoppingListView: ViewDesignProtocol {
             make.horizontalEdges.equalTo(safeArea).inset(12)
             make.height.equalTo(18)
         }
+        
+        optionStackView.snp.makeConstraints { make in
+            make.top.equalTo(totalCountLabel.snp.bottom).offset(8)
+            make.leading.equalTo(totalCountLabel)
+            make.trailing.lessThanOrEqualTo(totalCountLabel)
+            make.height.equalTo(36)
+        }
+        
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(totalCountLabel.snp.bottom).offset(12)
+            make.top.equalTo(optionStackView.snp.bottom).offset(12)
             make.horizontalEdges.bottom.equalTo(safeArea)
         }
     }
