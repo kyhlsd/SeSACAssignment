@@ -18,7 +18,37 @@ final class SearchShoppingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        searchShoppingView.searchBar.delegate = self
+        
         navigationItem.title = "영캠러의 쇼핑쇼핑"
+        navigationItem.backButtonTitle = " "
+        
+        setTapGesture()
+    }
+}
+
+extension SearchShoppingViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let searchText = searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        
+        if searchText.count >= 2 {
+            let viewController = ShoppingListViewController(searchText: searchText)
+            navigationController?.pushViewController(viewController, animated: true)
+        } else {
+            
+        }
+    }
+}
+
+extension SearchShoppingViewController: UseKeyboardProtocol {
+    func setTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
 

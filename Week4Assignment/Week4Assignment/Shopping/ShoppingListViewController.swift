@@ -13,8 +13,17 @@ final class ShoppingListViewController: UIViewController {
     private let shoppingListView = ShoppingListView()
     
     private var shoppingResult: ShoppingResult?
-    private let searchText = "캠핑카"
+    private let searchText: String
     private var prevIndex = 0
+    
+    init(searchText: String) {
+        self.searchText = searchText
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         self.view = shoppingListView

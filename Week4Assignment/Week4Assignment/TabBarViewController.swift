@@ -24,6 +24,7 @@ final class TabBarViewController: UITabBarController {
         searchMovieViewController.tabBarItem = UITabBarItem(title: "Movie", image: UIImage(systemName: "movieclapper"), tag: 1)
         
         let shoppingNavigationViewController = UINavigationController(rootViewController: SearchShoppingViewController())
+        shoppingNavigationViewController.navigationBar.tintColor = .white
         shoppingNavigationViewController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         shoppingNavigationViewController.tabBarItem = UITabBarItem(title: "Shopping", image: UIImage(systemName: "cart"), tag: 2)
         
