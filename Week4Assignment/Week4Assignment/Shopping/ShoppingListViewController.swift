@@ -14,6 +14,8 @@ final class ShoppingListViewController: UIViewController {
     private let shoppingListView = ShoppingListView()
     
     private var shoppingResult: ShoppingResult?
+    private let searchText = "캠핑카"
+    private var prevIndex = 0
     
     override func loadView() {
         self.view = shoppingListView
@@ -26,13 +28,13 @@ final class ShoppingListViewController: UIViewController {
         shoppingListView.collectionView.dataSource = self
         shoppingListView.optionStackView.delegate = self
         
-        fetchData(query: "캠핑카")
+        fetchData(searchText: searchText)
         
-        navigationItem.title = "캠핑카"
+        navigationItem.title = searchText
     }
     
-    private func fetchData(query: String) {
-        let url = ShoppingAPIHelper.getURL(query: query)
+    private func fetchData(searchText: String, sortOption: SortOption = .accuracy) {
+        let url = ShoppingAPIHelper.getURL(searchText: searchText, sortOption: sortOption)
         let headers = ShoppingAPIHelper.headers
         AF.request(url, method: .get, headers: headers)
             .validate(statusCode: 200..<300)
@@ -53,7 +55,10 @@ final class ShoppingListViewController: UIViewController {
 // MARK: OptionStackView
 extension ShoppingListViewController: OptionDidSelectDelegate {
     func didSelectButton(index: Int) {
-        print(SortOptions.allCases[index].rawValue)
+        if index != prevIndex {
+            fetchData(searchText: searchText, sortOption: SortOption.allCases[index])
+            prevIndex = index
+        }
     }
 }
 
@@ -82,7 +87,7 @@ final fileprivate class ShoppingListView: UIView {
     }()
     
     fileprivate let optionStackView = {
-        let list = SortOptions.allCases.map { $0.rawValue }
+        let list = SortOption.allCases.map { $0.rawValue }
         let optionStackView = OptionStackView(list: list)
         return optionStackView
     }()
