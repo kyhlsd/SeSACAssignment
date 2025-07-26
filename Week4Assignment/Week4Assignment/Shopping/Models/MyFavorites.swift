@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum MyFavoritesDummy {
+enum MyFavorites {
     @UserDefault(key: "MyFavorites", defaultValue: [])
     static var items: [String]
     
