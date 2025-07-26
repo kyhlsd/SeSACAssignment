@@ -51,6 +51,8 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
         return label
     }()
     
+    var shoppingItem: ShoppingItem?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -65,7 +67,15 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
         favoriteButton.layer.cornerRadius = favoriteButton.frame.height / 2
     }
     
-    func configureData(with shoppingItem: ShoppingItem) {
+    func configureData() {
+        guard let shoppingItem else {
+            imageView.image = nil
+            mallLabel.text = nil
+            titleLabel.text = nil
+            priceLabel.text = nil
+            return
+        }
+        
         let url = URL(string: shoppingItem.image)
         imageView.kf.setImage(with: url, options: [
             .processor(DownsamplingImageProcessor(size: CGSize(width: 100, height: 100))),
@@ -73,8 +83,7 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
             .cacheOriginalImage
         ])
         
-        let buttonImage = MyFavoritesDummy.isFavorite(itemId: shoppingItem.productId) ? "heart.fill" : "heart"
-        favoriteButton.setImage(UIImage(systemName: buttonImage), for: .normal)
+        setButtonImage(productId: shoppingItem.productId)
         
         mallLabel.text = shoppingItem.mallName
         
@@ -92,6 +101,19 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
         
         let formatter = NumberFormatters.demicalFormatter
         priceLabel.text = formatter.string(from: NSNumber(value: shoppingItem.lprice))
+    }
+    
+    @objc
+    private func favoriteButtonDidTapped() {
+        if let productId = shoppingItem?.productId {
+            MyFavoritesDummy.toggleItemInFavorites(productId: productId)
+            setButtonImage(productId: productId)
+        }
+    }
+    
+    private func setButtonImage(productId: String) {
+        let buttonImage = MyFavoritesDummy.isFavorite(itemId: productId) ? "heart.fill" : "heart"
+        favoriteButton.setImage(UIImage(systemName: buttonImage), for: .normal)
     }
 }
 
@@ -133,6 +155,6 @@ extension ShoppingListCollectionViewCell: ViewDesignProtocol {
     }
     
     func configureView() {
-
+        favoriteButton.addTarget(self, action: #selector(favoriteButtonDidTapped), for: .touchUpInside)
     }
 }

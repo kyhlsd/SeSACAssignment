@@ -71,7 +71,8 @@ extension ShoppingListViewController: UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(cellType: ShoppingListCollectionViewCell.self, for: indexPath)
         if let shoppingResult {
-            cell.configureData(with: shoppingResult.items[indexPath.item])
+            cell.shoppingItem = shoppingResult.items[indexPath.row]
+            cell.configureData()
         }
         return cell
     }
