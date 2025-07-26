@@ -9,6 +9,12 @@ import UIKit
 
 final class SearchShoppingViewController: UIViewController {
 
+    private let searchShoppingView = SearchShoppingView()
+    
+    override func loadView() {
+        self.view = searchShoppingView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
