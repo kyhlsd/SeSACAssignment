@@ -53,22 +53,17 @@ final class SearchMovieViewController: UIViewController {
     private func fetchData(targetDate: String) {
         if isFetching { return }
         
-        let url = MovieAPIHelper.getURL(type: .daily, targetDate: targetDate)
-        
         isFetching = true
-        AF.request(url, method: .get)
-            .validate(statusCode: 200..<300)
-            .responseDecodable(of: BoxOfficeResult.self) { response in
-                switch response.result {
-                case .success(let value):
-                    self.boxOfficeList = value.boxOfficeResult.dailyBoxOfficeList
-                    self.error = nil
-                case .failure(let error):
-                    self.boxOfficeList.removeAll()
-                    self.error = error
-                }
-                self.isFetching = false
-            }
+        
+        MovieAPIManager.shared.fetchData(targetDate: targetDate, successHandler: { value in
+            self.boxOfficeList = value.boxOfficeResult.dailyBoxOfficeList
+            self.error = nil
+            self.isFetching = false
+        }, failureHandler: { error in
+            self.boxOfficeList.removeAll()
+            self.error = error
+            self.isFetching = false
+        })
     }
     
     @objc

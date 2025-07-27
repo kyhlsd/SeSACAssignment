@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Alamofire
 import SnapKit
 
 final class LottoViewController: UIViewController {
@@ -73,22 +72,16 @@ final class LottoViewController: UIViewController {
     private func fetchData(targetRound: Int) {
         if isFetching { return }
         
-        let url = LottoAPIHelper.getURL(targetRound: targetRound)
-        
         isFetching = true
-        AF.request(url, method: .get)
-            .validate(statusCode: 200..<300)
-            .responseDecodable(of: LottoResult.self) { response in
-                switch response.result {
-                case .success(let value):
-                    self.lottoResult = value
-                    self.error = nil
-                case .failure(let error):
-                    self.lottoResult = nil
-                    self.error = error
-                }
-                self.isFetching = false
-            }
+        LottoAPIManager.shared.fetchData(targetRound: targetRound, successHandler: { value in
+            self.lottoResult = value
+            self.error = nil
+            self.isFetching = false
+        }, failureHandler: { error in
+            self.lottoResult = nil
+            self.error = error
+            self.isFetching = false
+        })
     }
     
     private func updateViewsWithRoundNumber(with number: Int) {

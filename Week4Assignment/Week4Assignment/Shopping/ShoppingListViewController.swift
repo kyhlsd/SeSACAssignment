@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Alamofire
 import SkeletonView
 
 final class ShoppingListViewController: UIViewController {
@@ -57,21 +56,14 @@ final class ShoppingListViewController: UIViewController {
     private func fetchData(searchText: String, sortOption: SortOption = .accuracy) {
         showSkeletonView()
         
-        let url = ShoppingAPIHelper.getURL(searchText: searchText, sortOption: sortOption)
-        let headers = ShoppingAPIHelper.headers
-        AF.request(url, method: .get, headers: headers)
-            .validate(statusCode: 200..<300)
-            .responseDecodable(of: ShoppingResult.self) { response in
-                switch response.result {
-                case .success(let value):
-                    self.shoppingResult = value
-                    let totalCount = NumberFormatters.demicalFormatter.string(from: value.total as NSNumber) ?? ""
-                    self.updateViewsAfterFetching(totalCount: totalCount)
-                case .failure(let error):
-                    self.showDefaultAlert(title: "데이터 가져오기 실패", message: error.localizedDescription)
-                    self.updateViewsAfterFetching(totalCount: "0")
-                }
-            }
+        ShoppingAPIManager.shared.fetchData(searchText: searchText, sortOption: sortOption, successHandler: { value in
+            self.shoppingResult = value
+            let totalCount = NumberFormatters.demicalFormatter.string(from: value.total as NSNumber) ?? ""
+            self.updateViewsAfterFetching(totalCount: totalCount)
+        }, failureHandler: { error in
+            self.showDefaultAlert(title: "데이터 가져오기 실패", message: error.localizedDescription)
+            self.updateViewsAfterFetching(totalCount: "0")
+        })
     }
     
     private func updateViewsAfterFetching(totalCount: String) {
