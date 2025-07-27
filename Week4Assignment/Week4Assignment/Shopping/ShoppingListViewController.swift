@@ -65,14 +65,21 @@ final class ShoppingListViewController: UIViewController {
                 switch response.result {
                 case .success(let value):
                     self.shoppingResult = value
-                    self.shoppingListView.collectionView.stopSkeletonAnimation()
-                    self.shoppingListView.collectionView.hideSkeleton()
                     let totalCount = NumberFormatters.demicalFormatter.string(from: value.total as NSNumber) ?? ""
-                    self.shoppingListView.totalCountLabel.text = totalCount + " 개의 검색 결과"
+                    self.updateViewsAfterFetching(totalCount: totalCount)
                 case .failure(let error):
-                    print(error)
+                    self.showDefaultAlert(title: "데이터 가져오기 실패", message: error.localizedDescription)
+                    self.updateViewsAfterFetching(totalCount: "0")
                 }
             }
+    }
+    
+    private func updateViewsAfterFetching(totalCount: String) {
+        self.shoppingListView.collectionView.stopSkeletonAnimation()
+        self.shoppingListView.collectionView.hideSkeleton()
+        shoppingListView.totalCountLabel.text = totalCount + "개의 검색 결과"
+        
+        shoppingListView.emptyLabel.isHidden = !(shoppingResult?.items ?? []).isEmpty
     }
 }
 

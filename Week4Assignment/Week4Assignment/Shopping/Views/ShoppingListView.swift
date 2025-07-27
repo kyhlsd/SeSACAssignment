@@ -40,6 +40,16 @@ final class ShoppingListView: UIView {
         return collectionView
     }()
     
+    let emptyLabel = {
+        let label = UILabel()
+        label.text = "검색 결과가 없습니다."
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.textColor = .white
+        label.textAlignment = .center
+        label.isHidden = true
+        return label
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureViewDesign()
@@ -52,7 +62,7 @@ final class ShoppingListView: UIView {
 
 extension ShoppingListView: ViewDesignProtocol {
     func configureHierarchy() {
-        [collectionView, optionStackView, totalCountLabel].forEach {
+        [collectionView, optionStackView, totalCountLabel, emptyLabel].forEach {
             addSubview($0)
         }
     }
@@ -76,6 +86,10 @@ extension ShoppingListView: ViewDesignProtocol {
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(optionStackView.snp.bottom).offset(12)
             make.horizontalEdges.bottom.equalTo(safeArea)
+        }
+        
+        emptyLabel.snp.makeConstraints { make in
+            make.edges.equalTo(collectionView)
         }
     }
     
