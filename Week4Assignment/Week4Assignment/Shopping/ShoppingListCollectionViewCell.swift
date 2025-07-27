@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import SkeletonView
 import Kingfisher
 
 class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
@@ -59,6 +60,8 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
         configureViewDesign()
         
         favoriteButton.addTarget(self, action: #selector(favoriteButtonDidTapped), for: .touchUpInside)
+        
+        configureSkeleton()
     }
     
     required init?(coder: NSCoder) {
@@ -67,6 +70,19 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
     
     override func draw(_ rect: CGRect) {
         favoriteButton.layer.cornerRadius = favoriteButton.frame.height / 2
+    }
+    
+    private func configureSkeleton() {
+        isSkeletonable = true
+        imageView.isSkeletonable = true
+        favoriteButton.isSkeletonable = true
+        mallLabel.isSkeletonable = true
+        titleLabel.isSkeletonable = true
+        priceLabel.isSkeletonable = true
+        
+        mallLabel.linesCornerRadius = 4
+        titleLabel.linesCornerRadius = 4
+        priceLabel.linesCornerRadius = 4
     }
     
     func configureData() {

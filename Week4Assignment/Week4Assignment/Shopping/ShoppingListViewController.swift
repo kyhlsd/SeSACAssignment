@@ -7,6 +7,7 @@
 
 import UIKit
 import Alamofire
+import SkeletonView
 
 final class ShoppingListViewController: UIViewController {
 
@@ -32,16 +33,30 @@ final class ShoppingListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        shoppingListView.collectionView.delegate = self
-        shoppingListView.collectionView.dataSource = self
-        shoppingListView.optionStackView.delegate = self
+        configureDelegates()
+    
+        shoppingListView.collectionView.isSkeletonable = true
         
         fetchData(searchText: searchText)
         
         navigationItem.title = searchText
     }
     
+    private func configureDelegates() {
+        shoppingListView.collectionView.delegate = self
+        shoppingListView.collectionView.dataSource = self
+        shoppingListView.optionStackView.delegate = self
+    }
+    
+    private func showSkeletonView() {
+        let animation
+        = SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .leftRight)
+        shoppingListView.collectionView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .systemGray2), animation: animation, transition: .crossDissolve(0.5))
+    }
+    
     private func fetchData(searchText: String, sortOption: SortOption = .accuracy) {
+        showSkeletonView()
+        
         let url = ShoppingAPIHelper.getURL(searchText: searchText, sortOption: sortOption)
         let headers = ShoppingAPIHelper.headers
         AF.request(url, method: .get, headers: headers)
@@ -50,7 +65,8 @@ final class ShoppingListViewController: UIViewController {
                 switch response.result {
                 case .success(let value):
                     self.shoppingResult = value
-                    self.shoppingListView.collectionView.reloadData()
+                    self.shoppingListView.collectionView.stopSkeletonAnimation()
+                    self.shoppingListView.collectionView.hideSkeleton()
                     let totalCount = NumberFormatters.demicalFormatter.string(from: value.total as NSNumber) ?? ""
                     self.shoppingListView.totalCountLabel.text = totalCount + " 개의 검색 결과"
                 case .failure(let error):
@@ -83,5 +99,16 @@ extension ShoppingListViewController: UICollectionViewDelegate, UICollectionView
             cell.configureData()
         }
         return cell
+    }
+}
+
+// MARK: SkeletonView
+extension ShoppingListViewController: SkeletonCollectionViewDelegate, SkeletonCollectionViewDataSource {
+    func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> SkeletonView.ReusableCellIdentifier {
+        return ShoppingListCollectionViewCell.identifier
+    }
+    
+    func collectionSkeletonView(_ skeletonView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 6
     }
 }

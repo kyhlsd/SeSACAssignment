@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		15516BE52E320CD7007A32BC /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 15516BE42E320CD7007A32BC /* Alamofire */; };
 		15516D472E334848007A32BC /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 15516D462E334848007A32BC /* Kingfisher */; };
+		155172802E35242C007A32BC /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = 1551727F2E35242C007A32BC /* SkeletonView */; };
 		15D4FA4E2E30B16000AE119E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 15D4FA4D2E30B16000AE119E /* SnapKit */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				155172802E35242C007A32BC /* SkeletonView in Frameworks */,
 				15516D472E334848007A32BC /* Kingfisher in Frameworks */,
 				15D4FA4E2E30B16000AE119E /* SnapKit in Frameworks */,
 				15516BE52E320CD7007A32BC /* Alamofire in Frameworks */,
@@ -90,6 +92,7 @@
 				15D4FA4D2E30B16000AE119E /* SnapKit */,
 				15516BE42E320CD7007A32BC /* Alamofire */,
 				15516D462E334848007A32BC /* Kingfisher */,
+				1551727F2E35242C007A32BC /* SkeletonView */,
 			);
 			productName = Week4Assignment;
 			productReference = 15D4FA252E30A15400AE119E /* Week4Assignment.app */;
@@ -123,6 +126,7 @@
 				15D4FA4C2E30B16000AE119E /* XCRemoteSwiftPackageReference "SnapKit" */,
 				15516BE32E320CD7007A32BC /* XCRemoteSwiftPackageReference "Alamofire" */,
 				15516D452E334848007A32BC /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				1551727E2E35242C007A32BC /* XCRemoteSwiftPackageReference "SkeletonView" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 15D4FA262E30A15400AE119E /* Products */;
@@ -378,6 +382,14 @@
 				minimumVersion = 8.5.0;
 			};
 		};
+		1551727E2E35242C007A32BC /* XCRemoteSwiftPackageReference "SkeletonView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Juanpe/SkeletonView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.31.0;
+			};
+		};
 		15D4FA4C2E30B16000AE119E /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -398,6 +410,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 15516D452E334848007A32BC /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		1551727F2E35242C007A32BC /* SkeletonView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1551727E2E35242C007A32BC /* XCRemoteSwiftPackageReference "SkeletonView" */;
+			productName = SkeletonView;
 		};
 		15D4FA4D2E30B16000AE119E /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;

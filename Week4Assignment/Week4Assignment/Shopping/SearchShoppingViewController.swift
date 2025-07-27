@@ -17,13 +17,20 @@ final class SearchShoppingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        searchShoppingView.searchBar.delegate = self
         
-        navigationItem.title = "영캠러의 쇼핑쇼핑"
-        navigationItem.backButtonTitle = " "
+        configureDelegates()
+        configureNavigationItem()
         
         setTapGesture()
+    }
+    
+    private func configureNavigationItem() {
+        navigationItem.title = "영캠러의 쇼핑쇼핑"
+        navigationItem.backButtonTitle = " "
+    }
+    
+    private func configureDelegates() {
+        searchShoppingView.searchBar.delegate = self
     }
 }
 
