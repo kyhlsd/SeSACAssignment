@@ -57,28 +57,51 @@ final class ShoppingListViewController: UIViewController {
     }
     
     private func fetchData(sortOption: SortOption = .accuracy, start: Int = 1) {
-        showSkeletonView()
-        
+        if start == 1 {
+            showSkeletonView()
+        }
         ShoppingAPIManager.shared.fetchData(searchText: searchText, display: 10, sortOption: sortOption, start: start, successHandler: { value in
-            self.shoppingItems.append(contentsOf: value.items)
+//            self.shoppingItems.append(contentsOf: value.items)
             self.updateViewsAfterFetching(value)
             self.isEnd = value.isEnd
         }, failureHandler: { error in
             self.showDefaultAlert(title: "데이터 가져오기 실패", message: error.localizedDescription)
             self.updateViewsAfterFetching(nil)
             self.isEnd = true
+            self.start = 1
         })
     }
     
     private func updateViewsAfterFetching(_ shoppingResult: ShoppingResult?) {
-        
-        shoppingListView.collectionView.stopSkeletonAnimation()
-        shoppingListView.collectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
-
         let totalCount = NumberFormatters.demicalFormatter.string(from: (shoppingResult?.total ?? 0) as NSNumber) ?? ""
         shoppingListView.totalCountLabel.text = totalCount + "개의 검색 결과"
         
         shoppingListView.emptyLabel.isHidden = !(shoppingResult?.items ?? []).isEmpty
+        
+        guard let shoppingResult else {
+            shoppingItems.removeAll()
+            if start == 1 {
+                shoppingListView.collectionView.stopSkeletonAnimation()
+                shoppingListView.collectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+            } else {
+                shoppingListView.collectionView.reloadData()
+            }
+            return
+        }
+        
+        if start == 1 {
+            shoppingItems = shoppingResult.items
+            shoppingListView.collectionView.stopSkeletonAnimation()
+            shoppingListView.collectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+            shoppingListView.collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
+        } else {
+            let startIndex = shoppingItems.count
+            let endIndex = startIndex + shoppingResult.items.count
+            let indexPaths = (startIndex..<endIndex).map { IndexPath(item: $0, section: 0)}
+            
+            shoppingItems.append(contentsOf: shoppingResult.items)
+            shoppingListView.collectionView.insertItems(at: indexPaths)
+        }
     }
 }
 
@@ -88,6 +111,7 @@ extension ShoppingListViewController: OptionDidSelectDelegate {
         if index != prevIndex {
             shoppingItems.removeAll()
             start = 1
+            isEnd = true
             fetchData(sortOption: SortOption.allCases[index])
             prevIndex = index
         }
@@ -120,7 +144,6 @@ extension ShoppingListViewController: UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.item > shoppingItems.count - 2, !isEnd {
             start += 1
-            print(start)
             fetchData(sortOption: SortOption.allCases[prevIndex], start: start)
         }
     }
