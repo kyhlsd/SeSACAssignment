@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-struct ShoppingAPIManager {
+class ShoppingAPIManager {
     static let shared = ShoppingAPIManager()
     private init() {}
     
@@ -21,11 +21,18 @@ struct ShoppingAPIManager {
         "X-Naver-Client-Secret": (Bundle.main.object(forInfoDictionaryKey: "X_NAVER_CLIENT_SECRET") as? String) ?? "nilSecret"
     ]
     
+    private var currentRequest: DataRequest?
+    
     func fetchData(searchText: String, display: Int = 100, sortOption: SortOption = .accuracy, start: Int = 1, successHandler: @escaping (ShoppingResult) -> (), failureHandler: @escaping (AFError) -> ()) {
+        currentRequest?.cancel()
+        
         let url = getURL(searchText: searchText, display: display, sortOption: sortOption, start: start)
-        AF.request(url, method: .get, headers: headers)
+        
+        currentRequest = AF.request(url, method: .get, headers: headers)
             .validate(statusCode: 200..<300)
-            .responseDecodable(of: ShoppingResult.self) { response in
+            .responseDecodable(of: ShoppingResult.self) { [weak self] response in
+                self?.currentRequest = nil
+                
                 switch response.result {
                 case .success(let value):
                     successHandler(value)

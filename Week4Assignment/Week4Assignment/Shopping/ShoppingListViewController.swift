@@ -46,7 +46,7 @@ final class ShoppingListViewController: UIViewController {
     private func configureDelegates() {
         shoppingListView.collectionView.delegate = self
         shoppingListView.collectionView.dataSource = self
-//        shoppingListView.collectionView.prefetchDataSource = self
+        shoppingListView.collectionView.prefetchDataSource = self
         shoppingListView.optionStackView.delegate = self
     }
     
@@ -61,18 +61,17 @@ final class ShoppingListViewController: UIViewController {
             showSkeletonView()
         }
         ShoppingAPIManager.shared.fetchData(searchText: searchText, display: 10, sortOption: sortOption, start: start, successHandler: { value in
-//            self.shoppingItems.append(contentsOf: value.items)
-            self.updateViewsAfterFetching(value)
+            self.updateAfterFetching(value)
             self.isEnd = value.isEnd
         }, failureHandler: { error in
             self.showDefaultAlert(title: "데이터 가져오기 실패", message: error.localizedDescription)
-            self.updateViewsAfterFetching(nil)
+            self.updateAfterFetching(nil)
             self.isEnd = true
             self.start = 1
         })
     }
     
-    private func updateViewsAfterFetching(_ shoppingResult: ShoppingResult?) {
+    private func updateAfterFetching(_ shoppingResult: ShoppingResult?) {
         let totalCount = NumberFormatters.demicalFormatter.string(from: (shoppingResult?.total ?? 0) as NSNumber) ?? ""
         shoppingListView.totalCountLabel.text = totalCount + "개의 검색 결과"
         
@@ -93,7 +92,9 @@ final class ShoppingListViewController: UIViewController {
             shoppingItems = shoppingResult.items
             shoppingListView.collectionView.stopSkeletonAnimation()
             shoppingListView.collectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
-            shoppingListView.collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
+            if !shoppingItems.isEmpty {
+                shoppingListView.collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
+            }
         } else {
             let startIndex = shoppingItems.count
             let endIndex = startIndex + shoppingResult.items.count
@@ -119,7 +120,7 @@ extension ShoppingListViewController: OptionDidSelectDelegate {
 }
 
 // MARK: CollectionView
-extension ShoppingListViewController: UICollectionViewDelegate, UICollectionViewDataSource/*, UICollectionViewDataSourcePrefetching*/ {
+extension ShoppingListViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDataSourcePrefetching {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return shoppingItems.count
@@ -132,18 +133,20 @@ extension ShoppingListViewController: UICollectionViewDelegate, UICollectionView
         return cell
     }
     
-//    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-//        guard let shoppingResult, let maxItem = indexPaths.map({ $0.item }).max() else { return }
-//        
-//        if maxItem > shoppingResult.items.count - 6, !shoppingResult.isEnd {
-//            print("2")
-//            fetchData(sortOption: SortOption.allCases[prevIndex], start: shoppingResult.start + 1)
-//        }
-//    }
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        guard let maxItem = indexPaths.map({ $0.item }).max() else { return }
+        
+        if maxItem > shoppingItems.count - 6, !isEnd {
+            start += 1
+            isEnd = true
+            fetchData(sortOption: SortOption.allCases[prevIndex], start: start)
+        }
+    }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.item > shoppingItems.count - 2, !isEnd {
             start += 1
+            isEnd = true
             fetchData(sortOption: SortOption.allCases[prevIndex], start: start)
         }
     }
