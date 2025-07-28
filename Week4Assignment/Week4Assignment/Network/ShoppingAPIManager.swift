@@ -23,7 +23,7 @@ class ShoppingAPIManager {
     
     private var currentRequest: DataRequest?
     
-    func fetchData(searchText: String, display: Int = 100, sortOption: SortOption = .accuracy, start: Int = 1, successHandler: @escaping (ShoppingResult) -> (), failureHandler: @escaping (AFError) -> ()) {
+    func fetchData(searchText: String, display: Int = 100, sortOption: SortOption = .accuracy, start: Int = 1, successHandler: @escaping (ShoppingResult) -> (), failureHandler: @escaping (NaverAPIError) -> ()) {
         currentRequest?.cancel()
         
         let url = getURL(searchText: searchText, display: display, sortOption: sortOption, start: start)
@@ -37,7 +37,11 @@ class ShoppingAPIManager {
                 case .success(let value):
                     successHandler(value)
                 case .failure(let error):
-                    failureHandler(error)
+                    if let data = response.data, let naverServerError = try? JSONDecoder().decode(NaverServerError.self, from: data) {
+                        failureHandler(NaverAPIError.server(naverServerError))
+                    } else {
+                        failureHandler(NaverAPIError.network(error))
+                    }
                 }
             }
     }

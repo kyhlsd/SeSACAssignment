@@ -64,6 +64,13 @@ final class ShoppingListViewController: UIViewController {
             self.updateAfterFetching(value)
             self.isEnd = value.isEnd
         }, failureHandler: { error in
+            switch error {
+            case .network(let networkError):
+                self.showDefaultAlert(title: "네트워크 오류", message: networkError.localizedDescription)
+            case .server(let serverError):
+                self.showDefaultAlert(title: "API 오류", message: serverError.errorMessage)
+            }
+            
             self.showDefaultAlert(title: "데이터 가져오기 실패", message: error.localizedDescription)
             self.updateAfterFetching(nil)
             self.isEnd = true
