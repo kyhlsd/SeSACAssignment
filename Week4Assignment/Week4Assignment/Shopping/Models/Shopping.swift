@@ -11,7 +11,7 @@ struct ShoppingResult: Decodable {
     let total: Int
     let start: Int
     let display: Int
-    let items: [ShoppingItem]
+    var items: [ShoppingItem]
 }
 
 struct ShoppingItem: Decodable {
