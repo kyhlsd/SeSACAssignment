@@ -131,7 +131,7 @@ extension ShoppingListViewController: UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let shoppingResult else { return }
         
-        if indexPath.row > shoppingResult.items.count - 6 {
+        if indexPath.row > shoppingResult.items.count - 6, !shoppingResult.isEnd {
             fetchData(sortOption: SortOption.allCases[prevIndex], start: shoppingResult.start + 1)
         }
     }

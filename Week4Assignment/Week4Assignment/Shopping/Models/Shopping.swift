@@ -12,6 +12,10 @@ struct ShoppingResult: Decodable {
     let start: Int
     let display: Int
     var items: [ShoppingItem]
+    
+    var isEnd: Bool {
+        display * start >= total
+    }
 }
 
 struct ShoppingItem: Decodable {
