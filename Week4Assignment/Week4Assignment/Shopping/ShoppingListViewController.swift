@@ -9,13 +9,14 @@ import UIKit
 import SkeletonView
 
 final class ShoppingListViewController: UIViewController {
-
+    
     private let shoppingListView = ShoppingListView()
     
-    private var shoppingResult: ShoppingResult?
+    private var shoppingItems: [ShoppingItem] = []
     private let searchText: String
     private var prevIndex = 0
-    private var prevOffset: CGPoint?
+    private var start = 1
+    private var isEnd = true
     
     init(searchText: String) {
         self.searchText = searchText
@@ -34,7 +35,7 @@ final class ShoppingListViewController: UIViewController {
         super.viewDidLoad()
 
         configureDelegates()
-    
+        
         shoppingListView.collectionView.isSkeletonable = true
         
         fetchData()
@@ -56,35 +57,24 @@ final class ShoppingListViewController: UIViewController {
     }
     
     private func fetchData(sortOption: SortOption = .accuracy, start: Int = 1) {
-        print(#function)
         showSkeletonView()
         
-        ShoppingAPIManager.shared.fetchData(searchText: searchText, sortOption: sortOption, start: start, successHandler: { value in
-            
-            if let _ = self.shoppingResult {
-                self.shoppingResult?.items.append(contentsOf: value.items)
-            } else {
-                self.shoppingResult = value
-            }
-            
+        ShoppingAPIManager.shared.fetchData(searchText: searchText, display: 10, sortOption: sortOption, start: start, successHandler: { value in
+            self.shoppingItems.append(contentsOf: value.items)
             self.updateViewsAfterFetching(value)
+            self.isEnd = value.isEnd
         }, failureHandler: { error in
             self.showDefaultAlert(title: "데이터 가져오기 실패", message: error.localizedDescription)
             self.updateViewsAfterFetching(nil)
+            self.isEnd = true
         })
     }
     
     private func updateViewsAfterFetching(_ shoppingResult: ShoppingResult?) {
+        
         shoppingListView.collectionView.stopSkeletonAnimation()
-        shoppingListView.collectionView.hideSkeleton()
-        
-//        if let shoppingResult {
-//            print(shoppingResult.start)
-//            let itemIndex = (shoppingResult.start - 1) * shoppingResult.display + 1
-//            print(itemIndex)
-//            shoppingListView.collectionView.scrollToItem(at: IndexPath(item: itemIndex, section: 0), at: .top, animated: false)
-//        }
-        
+        shoppingListView.collectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+
         let totalCount = NumberFormatters.demicalFormatter.string(from: (shoppingResult?.total ?? 0) as NSNumber) ?? ""
         shoppingListView.totalCountLabel.text = totalCount + "개의 검색 결과"
         
@@ -96,7 +86,8 @@ final class ShoppingListViewController: UIViewController {
 extension ShoppingListViewController: OptionDidSelectDelegate {
     func didSelectButton(index: Int) {
         if index != prevIndex {
-            shoppingResult = nil
+            shoppingItems.removeAll()
+            start = 1
             fetchData(sortOption: SortOption.allCases[index])
             prevIndex = index
         }
@@ -107,32 +98,30 @@ extension ShoppingListViewController: OptionDidSelectDelegate {
 extension ShoppingListViewController: UICollectionViewDelegate, UICollectionViewDataSource/*, UICollectionViewDataSourcePrefetching*/ {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return shoppingResult?.items.count ?? 0
+        return shoppingItems.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(cellType: ShoppingListCollectionViewCell.self, for: indexPath)
-        if let shoppingResult {
-            cell.shoppingItem = shoppingResult.items[indexPath.row]
-            cell.configureData()
-        }
+        cell.shoppingItem = shoppingItems[indexPath.item]
+        cell.configureData()
         return cell
     }
     
 //    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-//        guard let shoppingResult, let maxRow = indexPaths.map({ $0.row }).max() else { return }
+//        guard let shoppingResult, let maxItem = indexPaths.map({ $0.item }).max() else { return }
 //        
-//        if maxRow > shoppingResult.items.count - 6 {
+//        if maxItem > shoppingResult.items.count - 6, !shoppingResult.isEnd {
 //            print("2")
 //            fetchData(sortOption: SortOption.allCases[prevIndex], start: shoppingResult.start + 1)
 //        }
 //    }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let shoppingResult else { return }
-        
-        if indexPath.row > shoppingResult.items.count - 6, !shoppingResult.isEnd {
-            fetchData(sortOption: SortOption.allCases[prevIndex], start: shoppingResult.start + 1)
+        if indexPath.item > shoppingItems.count - 2, !isEnd {
+            start += 1
+            print(start)
+            fetchData(sortOption: SortOption.allCases[prevIndex], start: start)
         }
     }
 }
