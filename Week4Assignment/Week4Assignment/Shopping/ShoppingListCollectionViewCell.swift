@@ -24,8 +24,8 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
     private let favoriteButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "heart"), for: .normal)
-        button.tintColor = .black
-        button.backgroundColor = .white
+        button.tintColor = .systemGray2
+        button.backgroundColor = .systemGray2
         button.clipsToBounds = true
         return button
     }()
@@ -75,7 +75,7 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
     private func configureSkeleton() {
         isSkeletonable = true
         imageView.isSkeletonable = true
-        favoriteButton.isSkeletonable = true
+//        favoriteButton.isSkeletonable = true
         mallLabel.isSkeletonable = true
         titleLabel.isSkeletonable = true
         priceLabel.isSkeletonable = true
@@ -132,6 +132,8 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
     private func setButtonImage(productId: String) {
         let buttonImage = MyFavorites.isFavorite(itemId: productId) ? "heart.fill" : "heart"
         favoriteButton.setImage(UIImage(systemName: buttonImage), for: .normal)
+        favoriteButton.tintColor = .black
+        favoriteButton.backgroundColor = .white
     }
 }
 
