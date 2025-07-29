@@ -72,6 +72,15 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
         favoriteButton.layer.cornerRadius = favoriteButton.frame.height / 2
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        imageView.image = nil
+        mallLabel.text = nil
+        titleLabel.text = nil
+        priceLabel.text = nil
+    }
+    
     private func configureSkeleton() {
         isSkeletonable = true
         imageView.isSkeletonable = true
@@ -87,10 +96,6 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
     
     func configureData() {
         guard let shoppingItem else {
-            imageView.image = nil
-            mallLabel.text = nil
-            titleLabel.text = nil
-            priceLabel.text = nil
             return
         }
         
