@@ -23,7 +23,7 @@ class RecommendedCollectionViewCell: UICollectionViewCell, Identifying {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
         label.textColor = .systemGray4
-        label.numberOfLines = 2
+        label.backgroundColor = .black
         return label
     }()
     
@@ -31,6 +31,7 @@ class RecommendedCollectionViewCell: UICollectionViewCell, Identifying {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14, weight: .semibold)
         label.textColor = .white
+        label.backgroundColor = .green
         return label
     }()
     
@@ -96,15 +97,15 @@ extension RecommendedCollectionViewCell: ViewDesignProtocol {
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(4)
             make.horizontalEdges.equalTo(imageView).inset(4)
+            make.height.equalTo(16)
         }
         
         priceLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom)
             make.horizontalEdges.equalTo(titleLabel)
-            make.bottom.lessThanOrEqualToSuperview()
             make.height.equalTo(18)
         }
     }
     
-    func configureView() { contentView.backgroundColor = .yellow }
+    func configureView() { }
 }

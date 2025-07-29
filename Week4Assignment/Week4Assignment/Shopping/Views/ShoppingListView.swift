@@ -58,7 +58,7 @@ final class ShoppingListView: UIView {
         layout.sectionInset = UIEdgeInsets(top: 0, left: 12, bottom: 12, right: 12)
         
         let cellWidth = 80.0
-        layout.itemSize = CGSize(width: cellWidth, height: cellWidth + 36)
+        layout.itemSize = CGSize(width: cellWidth, height: cellWidth + 38)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(cellType: RecommendedCollectionViewCell.self)

@@ -12,7 +12,8 @@ final class ShoppingListViewController: UIViewController {
     
     private let shoppingListView = ShoppingListView()
     
-    private var shoppingItems: [ShoppingItem] = []
+    private var searchedItems: [ShoppingItem] = []
+    private var recommendedItems: [ShoppingItem] = []
     private let searchText: String
     private var prevIndex = 0
     private var start = 1
@@ -37,8 +38,10 @@ final class ShoppingListViewController: UIViewController {
         configureDelegates()
         
         shoppingListView.searchedCollectionView.isSkeletonable = true
+        shoppingListView.recommendedCollectionView.isSkeletonable = true
         
-        fetchData()
+        fetchDataWithSearchText()
+        showRecommendedSkeletonView()
         
         navigationItem.title = searchText
     }
@@ -54,15 +57,21 @@ final class ShoppingListViewController: UIViewController {
         shoppingListView.optionStackView.delegate = self
     }
     
-    private func showSkeletonView() {
+    private func showSearchedSkeletonView() {
         let animation
         = SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .leftRight)
         shoppingListView.searchedCollectionView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .systemGray2), animation: animation, transition: .crossDissolve(0.5))
     }
     
-    private func fetchData(sortOption: SortOption = .accuracy, start: Int = 1) {
+    private func showRecommendedSkeletonView() {
+        let animation
+        = SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .leftRight)
+        shoppingListView.recommendedCollectionView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .systemGray2), animation: animation, transition: .crossDissolve(0.5))
+    }
+    
+    private func fetchDataWithSearchText(sortOption: SortOption = .accuracy, start: Int = 1) {
         if start == 1 {
-            showSkeletonView()
+            showSearchedSkeletonView()
         }
         
         let url = ShoppingRouter.getItems(searchText: searchText, display: 10, sortOption: sortOption, start: start)
@@ -96,7 +105,7 @@ final class ShoppingListViewController: UIViewController {
         shoppingListView.emptyLabel.isHidden = !(shoppingResult?.items ?? []).isEmpty
         
         guard let shoppingResult else {
-            shoppingItems.removeAll()
+            searchedItems.removeAll()
             if start == 1 {
                 shoppingListView.searchedCollectionView.stopSkeletonAnimation()
                 shoppingListView.searchedCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
@@ -107,18 +116,18 @@ final class ShoppingListViewController: UIViewController {
         }
         
         if start == 1 {
-            shoppingItems = shoppingResult.items
+            searchedItems = shoppingResult.items
             shoppingListView.searchedCollectionView.stopSkeletonAnimation()
             shoppingListView.searchedCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
-            if !shoppingItems.isEmpty {
+            if !searchedItems.isEmpty {
                 shoppingListView.searchedCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
             }
         } else {
-            let startIndex = shoppingItems.count
+            let startIndex = searchedItems.count
             let endIndex = startIndex + shoppingResult.items.count
             let indexPaths = (startIndex..<endIndex).map { IndexPath(item: $0, section: 0)}
             
-            shoppingItems.append(contentsOf: shoppingResult.items)
+            searchedItems.append(contentsOf: shoppingResult.items)
             shoppingListView.searchedCollectionView.insertItems(at: indexPaths)
         }
     }
@@ -128,10 +137,10 @@ final class ShoppingListViewController: UIViewController {
 extension ShoppingListViewController: OptionDidSelectDelegate {
     func didSelectButton(index: Int) {
         if index != prevIndex {
-            shoppingItems.removeAll()
+            searchedItems.removeAll()
             start = 1
             isEnd = true
-            fetchData(sortOption: SortOption.allCases[index])
+            fetchDataWithSearchText(sortOption: SortOption.allCases[index])
             prevIndex = index
         }
     }
@@ -142,16 +151,16 @@ extension ShoppingListViewController: UICollectionViewDelegate, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == shoppingListView.searchedCollectionView {
-            return shoppingItems.count
+            return searchedItems.count
         } else {
-            return 10
+            return recommendedItems.count
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == shoppingListView.searchedCollectionView {
             let cell = collectionView.dequeueReusableCell(cellType: SearchedCollectionViewCell.self, for: indexPath)
-            cell.shoppingItem = shoppingItems[indexPath.item]
+            cell.shoppingItem = searchedItems[indexPath.item]
             cell.configureData()
             return cell
         } else {
@@ -164,10 +173,10 @@ extension ShoppingListViewController: UICollectionViewDelegate, UICollectionView
         if collectionView == shoppingListView.searchedCollectionView {
             guard let maxItem = indexPaths.map({ $0.item }).max() else { return }
             
-            if maxItem > shoppingItems.count - 6, !isEnd {
+            if maxItem > searchedItems.count - 6, !isEnd {
                 start += 1
                 isEnd = true
-                fetchData(sortOption: SortOption.allCases[prevIndex], start: start)
+                fetchDataWithSearchText(sortOption: SortOption.allCases[prevIndex], start: start)
             }
         }
     }
@@ -179,10 +188,10 @@ extension ShoppingListViewController: UICollectionViewDelegate, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if collectionView == shoppingListView.searchedCollectionView {
-            if indexPath.item > shoppingItems.count - 2, !isEnd {
+            if indexPath.item > searchedItems.count - 2, !isEnd {
                 start += 1
                 isEnd = true
-                fetchData(sortOption: SortOption.allCases[prevIndex], start: start)
+                fetchDataWithSearchText(sortOption: SortOption.allCases[prevIndex], start: start)
             }
         }
     }
