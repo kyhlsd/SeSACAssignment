@@ -23,7 +23,6 @@ class RecommendedCollectionViewCell: UICollectionViewCell, Identifying {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
         label.textColor = .systemGray4
-        label.backgroundColor = .black
         return label
     }()
     
@@ -31,7 +30,6 @@ class RecommendedCollectionViewCell: UICollectionViewCell, Identifying {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14, weight: .semibold)
         label.textColor = .white
-        label.backgroundColor = .green
         return label
     }()
     

@@ -42,6 +42,7 @@ final class ShoppingListViewController: UIViewController {
         
         fetchDataWithSearchText()
         showRecommendedSkeletonView()
+        fetchDataWithRecommended()
         
         navigationItem.title = searchText
     }
@@ -96,6 +97,18 @@ final class ShoppingListViewController: UIViewController {
             self.isEnd = true
             self.start = 1
         }
+    }
+    
+    private func fetchDataWithRecommended() {
+        showRecommendedSkeletonView()
+        
+        let url = ShoppingRouter.getItems(searchText: "북극곰", display: 10, sortOption: .accuracy, start: 1)
+        
+        NetworkManager.shared.fetchData(url: url, type: ShoppingResult.self) { value in
+            self.recommendedItems = value.items
+            self.shoppingListView.recommendedCollectionView.stopSkeletonAnimation()
+            self.shoppingListView.recommendedCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+        } failureHandler: { _ in }
     }
     
     private func updateAfterFetching(_ shoppingResult: ShoppingResult?) {
@@ -165,6 +178,7 @@ extension ShoppingListViewController: UICollectionViewDelegate, UICollectionView
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(cellType: RecommendedCollectionViewCell.self, for: indexPath)
+            cell.configureData(with: recommendedItems[indexPath.item])
             return cell
         }
     }

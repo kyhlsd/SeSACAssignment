@@ -13,18 +13,20 @@ final class NetworkManager {
     
     private init() {}
     
-    private var currentRequest: DataRequest?
+//    private var currentRequest: DataRequest?
     
     func fetchData<T: Decodable>(url: URLRequestConvertible, type: T.Type, successHandler: @escaping (T) -> Void, failureHandler: @escaping (APIError) -> Void) {
-        currentRequest?.cancel()
+//        currentRequest?.cancel()
         
-        currentRequest = AF.request(url)
+//        currentRequest = AF.request(url)
+        AF.request(url)
             .validate(statusCode: 200..<300)
             .responseDecodable(of: type) { response in
                 switch response.result {
                 case .success(let value):
                     successHandler(value)
                 case .failure(let error):
+                    print(error.localizedDescription)
                     if let data = response.data {
                         failureHandler(APIError.server(data))
                     } else {
