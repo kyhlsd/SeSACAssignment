@@ -22,7 +22,7 @@ final class ShoppingListView: UIView {
         return optionStackView
     }()
     
-    let collectionView = {
+    let searchedCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 12
@@ -34,7 +34,7 @@ final class ShoppingListView: UIView {
         layout.itemSize = CGSize(width: width, height: width + 80)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(cellType: ShoppingListCollectionViewCell.self)
+        collectionView.register(cellType: SearchedCollectionViewCell.self)
         collectionView.backgroundColor = .clear
         
         return collectionView
@@ -50,6 +50,22 @@ final class ShoppingListView: UIView {
         return label
     }()
     
+    let recommendedCollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 12
+        layout.minimumLineSpacing = 12
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 12, bottom: 12, right: 12)
+        
+        let cellWidth = 80.0
+        layout.itemSize = CGSize(width: cellWidth, height: cellWidth + 36)
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.register(cellType: RecommendedCollectionViewCell.self)
+        collectionView.backgroundColor = .clear
+        return collectionView
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureViewDesign()
@@ -62,7 +78,7 @@ final class ShoppingListView: UIView {
 
 extension ShoppingListView: ViewDesignProtocol {
     func configureHierarchy() {
-        [collectionView, optionStackView, totalCountLabel, emptyLabel].forEach {
+        [searchedCollectionView, optionStackView, totalCountLabel, emptyLabel, recommendedCollectionView].forEach {
             addSubview($0)
         }
     }
@@ -83,13 +99,19 @@ extension ShoppingListView: ViewDesignProtocol {
             make.height.equalTo(36)
         }
         
-        collectionView.snp.makeConstraints { make in
+        searchedCollectionView.snp.makeConstraints { make in
             make.top.equalTo(optionStackView.snp.bottom).offset(12)
-            make.horizontalEdges.bottom.equalTo(safeArea)
+            make.horizontalEdges.equalTo(safeArea)
         }
         
         emptyLabel.snp.makeConstraints { make in
-            make.edges.equalTo(collectionView)
+            make.edges.equalTo(searchedCollectionView)
+        }
+        
+        recommendedCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(searchedCollectionView.snp.bottom).offset(12)
+            make.horizontalEdges.bottom.equalTo(safeArea)
+            make.height.equalTo(140)
         }
     }
     

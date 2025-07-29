@@ -23,7 +23,7 @@ extension Router {
         var url = try baseURL.asURL()
         if let paths { url = url.appendingPathComponent(paths) }
         url = url.appending(queryItems: queryItems)
-        print(url)
+        
         var urlRequest = URLRequest(url: url)
         urlRequest.method = method
         urlRequest.headers = headers

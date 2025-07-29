@@ -1,5 +1,5 @@
 //
-//  ShoppingListCollectionViewCell.swift
+//  SearchedCollectionViewCell.swift
 //  Week4Assignment
 //
 //  Created by 김영훈 on 7/25/25.
@@ -10,7 +10,7 @@ import SnapKit
 import SkeletonView
 import Kingfisher
 
-class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
+class SearchedCollectionViewCell: UICollectionViewCell, Identifying {
     
     private let imageView = {
         let imageView = UIImageView()
@@ -110,20 +110,11 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
         
         mallLabel.text = shoppingItem.mallName
         
-        let title = shoppingItem.title
-        guard let data = title.data(using: .utf8) else { return }
-        let options: [NSAttributedString.DocumentReadingOptionKey: Any] = [
-            .documentType: NSAttributedString.DocumentType.html,
-            .characterEncoding: String.Encoding.utf8.rawValue,
-        ]
-        
         DispatchQueue.main.async {
-            guard let attributedString = try? NSAttributedString(data: data, options: options, documentAttributes: nil) else { return }
-            self.titleLabel.text = attributedString.string
+            self.titleLabel.text = shoppingItem.title.htmlDecodedString
         }
         
-        let formatter = NumberFormatters.demicalFormatter
-        priceLabel.text = formatter.string(from: NSNumber(value: shoppingItem.lprice))
+        priceLabel.text = shoppingItem.lprice.formatted()
     }
     
     @objc
@@ -142,7 +133,7 @@ class ShoppingListCollectionViewCell: UICollectionViewCell, Identifying {
     }
 }
 
-extension ShoppingListCollectionViewCell: ViewDesignProtocol {
+extension SearchedCollectionViewCell: ViewDesignProtocol {
     func configureHierarchy() {
         [imageView, favoriteButton, mallLabel, titleLabel, priceLabel].forEach {
             contentView.addSubview($0)

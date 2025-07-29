@@ -36,7 +36,7 @@ final class ShoppingListViewController: UIViewController {
 
         configureDelegates()
         
-        shoppingListView.collectionView.isSkeletonable = true
+        shoppingListView.searchedCollectionView.isSkeletonable = true
         
         fetchData()
         
@@ -44,16 +44,20 @@ final class ShoppingListViewController: UIViewController {
     }
     
     private func configureDelegates() {
-        shoppingListView.collectionView.delegate = self
-        shoppingListView.collectionView.dataSource = self
-        shoppingListView.collectionView.prefetchDataSource = self
+        shoppingListView.searchedCollectionView.delegate = self
+        shoppingListView.searchedCollectionView.dataSource = self
+        shoppingListView.searchedCollectionView.prefetchDataSource = self
+        
+        shoppingListView.recommendedCollectionView.delegate = self
+        shoppingListView.recommendedCollectionView.dataSource = self
+        
         shoppingListView.optionStackView.delegate = self
     }
     
     private func showSkeletonView() {
         let animation
         = SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .leftRight)
-        shoppingListView.collectionView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .systemGray2), animation: animation, transition: .crossDissolve(0.5))
+        shoppingListView.searchedCollectionView.showAnimatedGradientSkeleton(usingGradient: .init(baseColor: .systemGray2), animation: animation, transition: .crossDissolve(0.5))
     }
     
     private func fetchData(sortOption: SortOption = .accuracy, start: Int = 1) {
@@ -86,7 +90,7 @@ final class ShoppingListViewController: UIViewController {
     }
     
     private func updateAfterFetching(_ shoppingResult: ShoppingResult?) {
-        let totalCount = NumberFormatters.demicalFormatter.string(from: (shoppingResult?.total ?? 0) as NSNumber) ?? ""
+        let totalCount = shoppingResult?.total.formatted() ?? "0"
         shoppingListView.totalCountLabel.text = totalCount + "개의 검색 결과"
         
         shoppingListView.emptyLabel.isHidden = !(shoppingResult?.items ?? []).isEmpty
@@ -94,20 +98,20 @@ final class ShoppingListViewController: UIViewController {
         guard let shoppingResult else {
             shoppingItems.removeAll()
             if start == 1 {
-                shoppingListView.collectionView.stopSkeletonAnimation()
-                shoppingListView.collectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+                shoppingListView.searchedCollectionView.stopSkeletonAnimation()
+                shoppingListView.searchedCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
             } else {
-                shoppingListView.collectionView.reloadData()
+                shoppingListView.searchedCollectionView.reloadData()
             }
             return
         }
         
         if start == 1 {
             shoppingItems = shoppingResult.items
-            shoppingListView.collectionView.stopSkeletonAnimation()
-            shoppingListView.collectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
+            shoppingListView.searchedCollectionView.stopSkeletonAnimation()
+            shoppingListView.searchedCollectionView.hideSkeleton(reloadDataAfter: true, transition: .crossDissolve(0.5))
             if !shoppingItems.isEmpty {
-                shoppingListView.collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
+                shoppingListView.searchedCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
             }
         } else {
             let startIndex = shoppingItems.count
@@ -115,7 +119,7 @@ final class ShoppingListViewController: UIViewController {
             let indexPaths = (startIndex..<endIndex).map { IndexPath(item: $0, section: 0)}
             
             shoppingItems.append(contentsOf: shoppingResult.items)
-            shoppingListView.collectionView.insertItems(at: indexPaths)
+            shoppingListView.searchedCollectionView.insertItems(at: indexPaths)
         }
     }
 }
@@ -137,35 +141,49 @@ extension ShoppingListViewController: OptionDidSelectDelegate {
 extension ShoppingListViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDataSourcePrefetching {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return shoppingItems.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(cellType: ShoppingListCollectionViewCell.self, for: indexPath)
-        cell.shoppingItem = shoppingItems[indexPath.item]
-        cell.configureData()
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        guard let maxItem = indexPaths.map({ $0.item }).max() else { return }
-        
-        if maxItem > shoppingItems.count - 6, !isEnd {
-            start += 1
-            isEnd = true
-            fetchData(sortOption: SortOption.allCases[prevIndex], start: start)
+        if collectionView == shoppingListView.searchedCollectionView {
+            return shoppingItems.count
+        } else {
+            return 10
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if collectionView == shoppingListView.searchedCollectionView {
+            let cell = collectionView.dequeueReusableCell(cellType: SearchedCollectionViewCell.self, for: indexPath)
+            cell.shoppingItem = shoppingItems[indexPath.item]
+            cell.configureData()
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(cellType: RecommendedCollectionViewCell.self, for: indexPath)
+            return cell
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        if collectionView == shoppingListView.searchedCollectionView {
+            guard let maxItem = indexPaths.map({ $0.item }).max() else { return }
+            
+            if maxItem > shoppingItems.count - 6, !isEnd {
+                start += 1
+                isEnd = true
+                fetchData(sortOption: SortOption.allCases[prevIndex], start: start)
+            }
+        }
+    }
+    
+    // TODO: CancelPrefetching
 //    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
 //        <#code#>
 //    }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.item > shoppingItems.count - 2, !isEnd {
-            start += 1
-            isEnd = true
-            fetchData(sortOption: SortOption.allCases[prevIndex], start: start)
+        if collectionView == shoppingListView.searchedCollectionView {
+            if indexPath.item > shoppingItems.count - 2, !isEnd {
+                start += 1
+                isEnd = true
+                fetchData(sortOption: SortOption.allCases[prevIndex], start: start)
+            }
         }
     }
 }
@@ -173,10 +191,18 @@ extension ShoppingListViewController: UICollectionViewDelegate, UICollectionView
 // MARK: SkeletonView
 extension ShoppingListViewController: SkeletonCollectionViewDelegate, SkeletonCollectionViewDataSource {
     func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> SkeletonView.ReusableCellIdentifier {
-        return ShoppingListCollectionViewCell.identifier
+        if skeletonView == shoppingListView.searchedCollectionView {
+            return SearchedCollectionViewCell.identifier
+        } else {
+            return RecommendedCollectionViewCell.identifier
+        }
     }
     
     func collectionSkeletonView(_ skeletonView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 6
+        if skeletonView == shoppingListView.searchedCollectionView {
+            return 4
+        } else {
+            return 5
+        }
     }
 }
