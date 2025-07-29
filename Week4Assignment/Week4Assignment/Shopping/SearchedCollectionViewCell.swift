@@ -75,6 +75,7 @@ class SearchedCollectionViewCell: UICollectionViewCell, Identifying {
     override func prepareForReuse() {
         super.prepareForReuse()
         
+        shoppingItem = nil
         imageView.image = nil
         mallLabel.text = nil
         titleLabel.text = nil
