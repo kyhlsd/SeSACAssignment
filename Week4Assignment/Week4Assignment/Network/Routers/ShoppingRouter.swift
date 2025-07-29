@@ -18,7 +18,10 @@ enum ShoppingRouter: Router {
     }
     
     var method: HTTPMethod {
-        return .get
+        switch self {
+        case .getItems(_, _, _, _):
+            return .get
+        }
     }
     
     var paths: String? {
@@ -49,19 +52,5 @@ enum ShoppingRouter: Router {
     
     var parameters: Parameters? {
         return nil
-    }
-    
-    func asURLRequest() throws -> URLRequest {
-        var url = try baseURL.asURL()
-        if let paths { url = url.appendingPathComponent(paths) }
-        url = url.appending(queryItems: queryItems)
-
-        var urlRequest = URLRequest(url: url)
-        urlRequest.method = method
-        urlRequest.headers = headers
-        if let parameters {
-            urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
-        }
-        return urlRequest
     }
 }

@@ -73,15 +73,16 @@ final class LottoViewController: UIViewController {
         if isFetching { return }
         
         isFetching = true
-        LottoAPIManager.shared.fetchData(targetRound: targetRound, successHandler: { value in
+        let url = LottoRouter.getItem(targetRound: targetRound)
+        NetworkManager.shared.fetchData(url: url, type: LottoResult.self) { value in
             self.lottoResult = value
             self.error = nil
             self.isFetching = false
-        }, failureHandler: { error in
+        } failureHandler: { error in
             self.lottoResult = nil
             self.error = error
             self.isFetching = false
-        })
+        }
     }
     
     private func updateViewsWithRoundNumber(with number: Int) {

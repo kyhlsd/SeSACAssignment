@@ -157,6 +157,10 @@ extension ShoppingListViewController: UICollectionViewDelegate, UICollectionView
         }
     }
     
+//    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+//        <#code#>
+//    }
+    
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.item > shoppingItems.count - 2, !isEnd {
             start += 1

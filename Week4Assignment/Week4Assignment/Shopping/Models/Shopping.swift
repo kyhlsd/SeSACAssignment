@@ -39,7 +39,7 @@ struct ShoppingItem: Decodable {
         self.image = try container.decode(String.self, forKey: .image)
         self.productId = try container.decode(String.self, forKey: .productId)
         self.mallName = try container.decode(String.self, forKey: .mallName)
-        
+       // container.decodeIfPresent(<#T##type: Bool.Type##Bool.Type#>, forKey: <#T##KeyedDecodingContainer<CodingKeys>.Key#>)
         let lpriceString = try container.decode(String.self, forKey: .lprice)
         self.lprice = Int(lpriceString) ?? -1
     }

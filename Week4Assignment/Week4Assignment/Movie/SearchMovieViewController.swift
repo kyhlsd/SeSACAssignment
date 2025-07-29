@@ -55,15 +55,28 @@ final class SearchMovieViewController: UIViewController {
         
         isFetching = true
         
-        MovieAPIManager.shared.fetchData(targetDate: targetDate, successHandler: { value in
+        let url = MovieRouter.getDailyItems(targetDate: targetDate)
+        NetworkManager.shared.fetchData(url: url, type: BoxOfficeResult.self) { value in
             self.boxOfficeList = value.boxOfficeResult.dailyBoxOfficeList
             self.error = nil
             self.isFetching = false
-        }, failureHandler: { error in
+        } failureHandler: { error in
+            switch error {
+            case .network(let networkError):
+                self.showDefaultAlert(title: "네트워크 오류", message: networkError.localizedDescription)
+            case .server(let serverError):
+                do {
+                    let serverError = try JSONDecoder().decode(MovieServerError.self, from: serverError)
+                    self.showDefaultAlert(title: "데이터 가져오기 실패", message: serverError.faultInfo.message)
+                } catch {
+                    self.showDefaultAlert(title: "데이터 가져오기 실패", message: error.localizedDescription)
+                }
+            }
+            
             self.boxOfficeList.removeAll()
             self.error = error
             self.isFetching = false
-        })
+        }
     }
     
     @objc
