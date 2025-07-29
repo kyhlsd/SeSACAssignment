@@ -60,38 +60,29 @@ final class ShoppingListViewController: UIViewController {
         if start == 1 {
             showSkeletonView()
         }
-//        ShoppingAPIService.shared.fetchData(searchText: searchText, display: 10, sortOption: sortOption, start: start, successHandler: { value in
-//            self.updateAfterFetching(value)
-//            self.isEnd = value.isEnd
-//        }, failureHandler: { error in
-//            switch error {
-//            case .network(let networkError):
-//                self.showDefaultAlert(title: "네트워크 오류", message: networkError.localizedDescription)
-//            case .server(let serverError):
-//                self.showDefaultAlert(title: "API 오류", message: serverError.errorMessage)
-//            }
-//            
-//            self.showDefaultAlert(title: "데이터 가져오기 실패", message: error.localizedDescription)
-//            self.updateAfterFetching(nil)
-//            self.isEnd = true
-//            self.start = 1
-//        })
-        ShoppingAPIManager.shared.fetchData(searchText: searchText, display: 10, sortOption: sortOption, start: start, successHandler: { value in
+        
+        let url = ShoppingRouter.getItems(searchText: searchText, display: 10, sortOption: sortOption, start: start)
+        
+        NetworkManager.shared.fetchData(url: url, type: ShoppingResult.self) { value in
             self.updateAfterFetching(value)
             self.isEnd = value.isEnd
-        }, failureHandler: { error in
+        } failureHandler: { error in
             switch error {
             case .network(let networkError):
                 self.showDefaultAlert(title: "네트워크 오류", message: networkError.localizedDescription)
             case .server(let serverError):
-                self.showDefaultAlert(title: "API 오류", message: serverError.errorMessage)
+                do {
+                    let serverError = try JSONDecoder().decode(NaverServerError.self, from: serverError)
+                    self.showDefaultAlert(title: "데이터 가져오기 실패", message: serverError.errorMessage)
+                } catch {
+                    self.showDefaultAlert(title: "데이터 가져오기 실패", message: error.localizedDescription)
+                }
             }
             
-            self.showDefaultAlert(title: "데이터 가져오기 실패", message: error.localizedDescription)
             self.updateAfterFetching(nil)
             self.isEnd = true
             self.start = 1
-        })
+        }
     }
     
     private func updateAfterFetching(_ shoppingResult: ShoppingResult?) {
