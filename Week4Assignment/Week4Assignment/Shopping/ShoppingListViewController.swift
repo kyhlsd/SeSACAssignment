@@ -7,6 +7,7 @@
 
 import UIKit
 import SkeletonView
+import Kingfisher
 
 final class ShoppingListViewController: UIViewController {
     
@@ -185,24 +186,30 @@ extension ShoppingListViewController: UICollectionViewDelegate, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         if collectionView == shoppingListView.searchedCollectionView {
-            guard let maxItem = indexPaths.map({ $0.item }).max() else { return }
-            
-            if maxItem > searchedItems.count - 6, !isEnd {
-                start += 1
-                isEnd = true
-                fetchDataWithSearchText(sortOption: SortOption.allCases[prevIndex], start: start)
+            for indexPath in indexPaths {
+                if let url = URL(string: searchedItems[indexPath.item].image) {
+                    ImageDownloader.default.downloadImage(with: url, options: [.cacheOriginalImage])
+                }
             }
         }
     }
     
     // TODO: CancelPrefetching
 //    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
-//        <#code#>
+//        if collectionView == shoppingListView.searchedCollectionView {
+//            for indexPath in indexPaths {
+//                if let _ = URL(string: searchedItems[indexPath.item].image) {
+//                    ImageCache.default.removeImage(forKey: searchedItems[indexPath.item].image) {
+//                        print("remove")
+//                    }
+//                }
+//            }
+//        }
 //    }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if collectionView == shoppingListView.searchedCollectionView {
-            if indexPath.item > searchedItems.count - 2, !isEnd {
+            if indexPath.item > searchedItems.count - 6, !isEnd {
                 start += 1
                 isEnd = true
                 fetchDataWithSearchText(sortOption: SortOption.allCases[prevIndex], start: start)
