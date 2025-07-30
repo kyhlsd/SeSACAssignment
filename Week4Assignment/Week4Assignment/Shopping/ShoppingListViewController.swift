@@ -196,7 +196,8 @@ extension ShoppingListViewController: UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
         if collectionView == shoppingListView.searchedCollectionView {
             for indexPath in indexPaths {
-                if let _ = URL(string: searchedItems[indexPath.item].image) {
+                if let url = URL(string: searchedItems[indexPath.item].image) {
+                    ImageDownloader.default.cancel(url: url)
                     ImageCache.default.removeImage(forKey: searchedItems[indexPath.item].image)
                 }
             }
