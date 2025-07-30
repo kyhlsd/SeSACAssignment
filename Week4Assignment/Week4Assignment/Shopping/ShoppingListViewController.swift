@@ -151,7 +151,6 @@ final class ShoppingListViewController: UIViewController {
 extension ShoppingListViewController: OptionDidSelectDelegate {
     func didSelectButton(index: Int) {
         if index != prevIndex {
-            searchedItems.removeAll()
             start = 1
             isEnd = true
             fetchDataWithSearchText(sortOption: SortOption.allCases[index])
@@ -194,18 +193,15 @@ extension ShoppingListViewController: UICollectionViewDelegate, UICollectionView
         }
     }
     
-    // TODO: CancelPrefetching
-//    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
-//        if collectionView == shoppingListView.searchedCollectionView {
-//            for indexPath in indexPaths {
-//                if let _ = URL(string: searchedItems[indexPath.item].image) {
-//                    ImageCache.default.removeImage(forKey: searchedItems[indexPath.item].image) {
-//                        print("remove")
-//                    }
-//                }
-//            }
-//        }
-//    }
+    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        if collectionView == shoppingListView.searchedCollectionView {
+            for indexPath in indexPaths {
+                if let _ = URL(string: searchedItems[indexPath.item].image) {
+                    ImageCache.default.removeImage(forKey: searchedItems[indexPath.item].image)
+                }
+            }
+        }
+    }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if collectionView == shoppingListView.searchedCollectionView {
