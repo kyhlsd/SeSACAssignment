@@ -142,7 +142,8 @@ final class ShoppingListViewController: UIViewController {
             let indexPaths = (startIndex..<endIndex).map { IndexPath(item: $0, section: 0)}
             
             searchedItems.append(contentsOf: shoppingResult.items)
-            shoppingListView.searchedCollectionView.insertItems(at: indexPaths)
+//            shoppingListView.searchedCollectionView.insertItems(at: indexPaths)
+            shoppingListView.searchedCollectionView.reloadData()
         }
     }
 }
