@@ -10,7 +10,8 @@ import Foundation
 enum InputValidationError: Error {
     case emptyText
     case nonNumeric
-    case invalidRange(min: Double, minAllowsEqual: Bool = true, max: Double, maxAllowsEqual: Bool = true)
+    case nonInteger
+    case invalidRange(min: any Comparable, minAllowsEqual: Bool = true, max: any Comparable, maxAllowsEqual: Bool = true)
     
     var errorMessage: String {
         switch self {
@@ -18,10 +19,12 @@ enum InputValidationError: Error {
             return "빈 값을 입력할 수 없습니다."
         case .nonNumeric:
             return "숫자만 입력할 수 있습니다."
+        case .nonInteger:
+            return "정수만 입력할 수 있습니다."
         case .invalidRange(let min, let minAllowsEqual, let max, let maxAllowsEqual):
             let minWord = minAllowsEqual ? "이상" : "초과"
             let maxWord = maxAllowsEqual ? "이하" : "미만"
-            let message = min.formatted() + minWord + " " + max.formatted() + maxWord + " 수만 입력 가능합니다."
+            let message = "\(min)\(minWord) \(max)\(maxWord)만 입력 가능합니다."
             return message
         }
     }
@@ -37,12 +40,17 @@ enum InputValidationHelper {
         return trimmed
     }
     
-    static func getNumber(_ text: String) throws(InputValidationError) -> Double {
+    static func getNumberFromText(_ text: String) throws(InputValidationError) -> Double {
         guard let number = Double(text) else { throw .nonNumeric }
         return number
     }
     
-    static func validateRange(_ number: Double, min: Double, minAllowsEqual: Bool = true, max: Double, maxAllowsEqual: Bool = true) throws(InputValidationError) {
+    static func getIntegerFromText(_ text: String) throws(InputValidationError) -> Int {
+        guard let integer = Int(text) else { throw .nonInteger }
+        return integer
+    }
+    
+    static func validateRange<T: Comparable>(_ number: T, min: T, minAllowsEqual: Bool = true, max: T, maxAllowsEqual: Bool = true) throws(InputValidationError) {
         
         if number < min {
             if number != min || !minAllowsEqual {
@@ -56,31 +64,4 @@ enum InputValidationHelper {
             }
         }
     }
-    
-//    static func validateIsNumeric(_ text: String?) throws {
-//        guard let text else { throw TextValidateError.emptyText }
-//        
-//        
-//    }
-    
-//    static func validateTypeForNumeric<T: Numeric>(_ text: String?, type: T.Type) throws {
-//        guard let text else { throw TextValidateError.emptyText }
-//        
-//        switch type {
-//        case is Int.Type:
-//            print("yes")
-//        default:
-//            print("no")
-//        }
-//    }
-    
-//    static func validateRange<T: Numeric>(_ text: String?, min: T, max: T) throws {
-//        guard let text else { throw TextValidateError.emptyText }
-//        
-//        if T.self == Int.self {
-//            print("yes")
-//        } else {
-//            print("no")
-//        }
-//    }
 }

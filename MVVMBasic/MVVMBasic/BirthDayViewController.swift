@@ -53,6 +53,7 @@ class BirthDayViewController: UIViewController {
         let label = UILabel()
         label.text = "여기에 결과를 보여주세요"
         label.textAlignment = .center
+        label.numberOfLines = 2
         return label
     }()
     
@@ -129,6 +130,76 @@ class BirthDayViewController: UIViewController {
     }
     
     @objc func resultButtonTapped() {
-        view.endEditing(true)
+        let calendar = Calendar.current
+        let today = Date()
+        let currentYear = calendar.component(.year, from: today)
+        let currentMonth = calendar.component(.month, from: today)
+        let currentDay = calendar.component(.day, from: today)
+        
+        var wrongField = "연도는 "
+        do {
+            let year = try getValidInteger(yearTextField.text, min: 1900, max: currentYear)
+            
+            wrongField = (year == currentYear) ? "해당 연도에서 달은 " : "달은 "
+            let maxMonth = (year == currentYear) ? currentMonth : 12
+            let month = try getValidInteger(monthTextField.text, min: 1, max: maxMonth)
+            
+            wrongField = (year == currentYear && month == currentMonth) ? "해당 연도와 달에서 일은 " : "일은 "
+            let maxDay = (year == currentYear && month == currentMonth) ? currentDay : getMaxDay(year: year, month: month)
+            let day = try getValidInteger(dayTextField.text, min: 1, max: maxDay)
+            
+            let dateDifference = getDateDifference(year: year, month: month, day: day)
+            if dateDifference == 0 {
+                resultLabel.text = "D-Day입니다."
+            } else {
+                resultLabel.text = "D+\(dateDifference)일입니다."
+            }
+            view.endEditing(true)
+        } catch {
+            let message = wrongField + error.errorMessage
+            resultLabel.text = message
+        }
+    }
+    
+    private func getValidInteger(_ text: String?, min: Int, max: Int) throws(InputValidationError) -> Int {
+        let trimmed = try InputValidationHelper.getTrimmedText(text)
+        let number = try InputValidationHelper.getIntegerFromText(trimmed)
+        try InputValidationHelper.validateRange(number, min: min, max: max)
+        return number
+    }
+    
+    private func getMaxDay(year: Int, month: Int) -> Int {
+        switch month {
+        case 1,3,5,7,8,10,12:
+            return 31
+        case 4,6,9,11:
+            return 30
+        case 2:
+            return isLeapYear(year: year) ? 29 : 28
+        default:
+            return -1
+        }
+    }
+    
+    private func isLeapYear(year: Int) -> Bool {
+        if year % 4 == 0 {
+            if year % 100 == 0 {
+                return year % 400 == 0
+            } else {
+                return true
+            }
+        } else {
+            return false
+        }
+    }
+    
+    private func getDateDifference(year: Int, month: Int, day: Int) -> Int {
+        var result = String(year)
+        result += String(format: "%02d", month)
+        result += String(format: "%02d", day)
+        
+        guard let date = Formatters.DateFormatters.yyyyMMddFormatter.date(from: result) else { return -1 }
+        let component = Calendar.current.dateComponents([.day], from: date, to: Date())
+        return component.day ?? -1
     }
 }

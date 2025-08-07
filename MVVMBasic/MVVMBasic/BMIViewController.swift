@@ -101,7 +101,7 @@ class BMIViewController: UIViewController {
     
     private func getValidNumber(_ text: String?, min: Double, max: Double) throws(InputValidationError) -> Double {
         let trimmed = try InputValidationHelper.getTrimmedText(text)
-        let number = try InputValidationHelper.getNumber(trimmed)
+        let number = try InputValidationHelper.getNumberFromText(trimmed)
         try InputValidationHelper.validateRange(number, min: min, max: max)
         return number
     }

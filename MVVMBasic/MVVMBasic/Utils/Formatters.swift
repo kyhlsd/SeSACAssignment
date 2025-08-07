@@ -17,4 +17,11 @@ enum Formatters {
             return formatter
         }()
     }
+    enum DateFormatters {
+        static let yyyyMMddFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyyMMdd"
+            return formatter
+        }()
+    }
 }
