@@ -80,22 +80,12 @@ class BMIViewController: UIViewController {
     }
     
     @objc func resultButtonTapped() {
-        var wrongField = "키는 "
-        do {
-            let height = try getValidNumber(heightTextField.text, min: 100, max: 300) / 100
-            wrongField = "몸무게는 "
-            let weight = try getValidNumber(weightTextField.text, min: 20, max: 250)
-            
-            let bmi = getBMI(height: height, weight: weight)
-            
-            let formatted = Formatters.NumberFormatters.twoDemicalFormatter.string(from: NSNumber(value: bmi)) ?? ""
-            resultLabel.text = "BMI : " + formatted
-            
+        getBMI(height: heightTextField.text, weight: weightTextField.text) { value in
+            resultLabel.text = "BMI : " + value.formatted()
             view.endEditing(true)
-        } catch {
-            let message = wrongField + error.errorMessage
-            resultLabel.text = message
-            showDefaultAlert(title: "입력 오류", message: message)
+        } failureHandler: { errorMessage in
+            resultLabel.text = errorMessage
+            showDefaultAlert(title: "입력 오류", message: errorMessage)
         }
     }
     
@@ -106,8 +96,19 @@ class BMIViewController: UIViewController {
         return number
     }
     
-    // height : m , weight : kg 기준
-    private func getBMI(height: Double, weight: Double) -> Double {
-        return weight / (height * height)
+    private func getBMI(height: String?, weight: String?, successHandler: (Double) -> Void, failureHandler: (String) -> Void) {
+        var wrongField = "키는 "
+        do {
+            // height : m , weight : kg 기준
+            let height = try getValidNumber(height, min: 100, max: 300) / 100
+            wrongField = "몸무게는 "
+            let weight = try getValidNumber(weight, min: 20, max: 250)
+            
+            let bmi = weight / (height * height)
+            successHandler(bmi)
+        } catch {
+            let message = wrongField + error.errorMessage
+            failureHandler(message)
+        }
     }
 }

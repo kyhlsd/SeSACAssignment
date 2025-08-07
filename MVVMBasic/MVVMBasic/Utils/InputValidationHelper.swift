@@ -12,6 +12,7 @@ enum InputValidationError: Error {
     case nonNumeric
     case nonInteger
     case invalidRange(min: any Comparable, minAllowsEqual: Bool = true, max: any Comparable, maxAllowsEqual: Bool = true)
+    case unknown
     
     var errorMessage: String {
         switch self {
@@ -26,6 +27,8 @@ enum InputValidationError: Error {
             let maxWord = maxAllowsEqual ? "이하" : "미만"
             let message = "\(min)\(minWord) \(max)\(maxWord)만 입력 가능합니다."
             return message
+        case .unknown:
+            return "알 수 없는 오류가 발생했습니다."
         }
     }
 }
@@ -63,5 +66,9 @@ enum InputValidationHelper {
                 throw .invalidRange(min: min, minAllowsEqual: minAllowsEqual, max: max, maxAllowsEqual: maxAllowsEqual)
             }
         }
+    }
+    
+    static func generateUnkwnonError() throws(InputValidationError) {
+        throw .unknown
     }
 }

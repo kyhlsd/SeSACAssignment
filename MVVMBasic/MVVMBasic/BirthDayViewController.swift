@@ -130,34 +130,17 @@ class BirthDayViewController: UIViewController {
     }
     
     @objc func resultButtonTapped() {
-        let calendar = Calendar.current
-        let today = Date()
-        let currentYear = calendar.component(.year, from: today)
-        let currentMonth = calendar.component(.month, from: today)
-        let currentDay = calendar.component(.day, from: today)
-        
-        var wrongField = "연도는 "
-        do {
-            let year = try getValidInteger(yearTextField.text, min: 1900, max: currentYear)
+        validateBirthday(year: yearTextField.text, month: monthTextField.text, day: dayTextField.text) { value in
+            let dateDifference = getDateDifference(from: value, to: Date())
             
-            wrongField = (year == currentYear) ? "해당 연도에서 달은 " : "달은 "
-            let maxMonth = (year == currentYear) ? currentMonth : 12
-            let month = try getValidInteger(monthTextField.text, min: 1, max: maxMonth)
-            
-            wrongField = (year == currentYear && month == currentMonth) ? "해당 연도와 달에서 일은 " : "일은 "
-            let maxDay = (year == currentYear && month == currentMonth) ? currentDay : getMaxDay(year: year, month: month)
-            let day = try getValidInteger(dayTextField.text, min: 1, max: maxDay)
-            
-            let dateDifference = getDateDifference(year: year, month: month, day: day)
             if dateDifference == 0 {
                 resultLabel.text = "D-Day입니다."
             } else {
                 resultLabel.text = "D+\(dateDifference)일입니다."
             }
             view.endEditing(true)
-        } catch {
-            let message = wrongField + error.errorMessage
-            resultLabel.text = message
+        } failureHandler: { errorMessage in
+            resultLabel.text = errorMessage
         }
     }
     
@@ -193,13 +176,42 @@ class BirthDayViewController: UIViewController {
         }
     }
     
-    private func getDateDifference(year: Int, month: Int, day: Int) -> Int {
-        var result = String(year)
-        result += String(format: "%02d", month)
-        result += String(format: "%02d", day)
+    private func getDateDifference(from firstDate: Date, to secondDate: Date) -> Int {
+        let component = Calendar.current.dateComponents([.day], from: firstDate, to: secondDate)
+        return component.day ?? 9999999
+    }
+    
+    private func validateBirthday(year: String?, month: String?, day: String?, successHandler: (Date) -> Void, failureHandler: (String) -> Void) {
+        let calendar = Calendar.current
+        let today = Date()
+        let currentYear = calendar.component(.year, from: today)
+        let currentMonth = calendar.component(.month, from: today)
+        let currentDay = calendar.component(.day, from: today)
         
-        guard let date = Formatters.DateFormatters.yyyyMMddFormatter.date(from: result) else { return -1 }
-        let component = Calendar.current.dateComponents([.day], from: date, to: Date())
-        return component.day ?? -1
+        var wrongField = "연도는 "
+        do {
+            let year = try getValidInteger(yearTextField.text, min: 1900, max: currentYear)
+            
+            wrongField = (year == currentYear) ? "해당 연도에서 달은 " : "달은 "
+            let maxMonth = (year == currentYear) ? currentMonth : 12
+            let month = try getValidInteger(monthTextField.text, min: 1, max: maxMonth)
+            
+            wrongField = (year == currentYear && month == currentMonth) ? "해당 연도와 달에서 일은 " : "일은 "
+            let maxDay = (year == currentYear && month == currentMonth) ? currentDay : getMaxDay(year: year, month: month)
+            let day = try getValidInteger(dayTextField.text, min: 1, max: maxDay)
+            
+            var dateString = String(year)
+            dateString += String(format: "%02d", month)
+            dateString += String(format: "%02d", day)
+            
+            guard let date = Formatters.DateFormatters.yyyyMMddFormatter.date(from: dateString) else {
+                throw InputValidationError.unknown
+            }
+            
+            successHandler(date)
+        } catch let error as InputValidationError {
+            let errorMessage = wrongField + error.errorMessage
+            failureHandler(errorMessage)
+        } catch { }
     }
 }

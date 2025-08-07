@@ -8,15 +8,6 @@
 import Foundation
 
 enum Formatters {
-    enum NumberFormatters {
-        static let twoDemicalFormatter = {
-           let formatter = NumberFormatter()
-            formatter.numberStyle = .decimal
-            formatter.minimumFractionDigits = 2
-            formatter.maximumFractionDigits = 2
-            return formatter
-        }()
-    }
     enum DateFormatters {
         static let yyyyMMddFormatter = {
             let formatter = DateFormatter()
