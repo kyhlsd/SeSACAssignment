@@ -67,6 +67,17 @@ class AgeViewController: UIViewController {
     }
     
     @objc func resultButtonTapped() {
-        view.endEditing(true)
+        do {
+            try validateText(textField.text)
+            label.text = "입력 가능한 수 입니다."
+            view.endEditing(true)
+        } catch {
+            label.text = error.errorMessage
+        }
+    }
+    
+    private func validateText(_ text: String?) throws(TextValidateError) {
+        try TextValidateHelper.validateIsEmpty(text)
+        try TextValidateHelper.validateRange(text, min: 1, max: 100)
     }
 }
