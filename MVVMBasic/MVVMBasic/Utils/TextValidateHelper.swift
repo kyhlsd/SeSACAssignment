@@ -20,11 +20,11 @@ enum TextValidateError: Error {
         case .emptyText:
             return "텍스트가 비었습니다."
         case .nonNumeric:
-            return "숫자만 입력할 수 있습니다."
+            return "텍스트는 숫자만 입력할 수 있습니다."
         case .invalidRange(let min, let minAllowsEqual, let max, let maxAllowsEqual):
             let minWord = minAllowsEqual ? "이상" : "초과"
             let maxWord = maxAllowsEqual ? "이하" : "미만"
-            let message = min.formatted() + minWord + " " + max.formatted() + maxWord + " 수만 입력 가능합니다."
+            let message = "텍스트는 " + min.formatted() + minWord + " " + max.formatted() + maxWord + " 수만 입력 가능합니다."
             return message
         }
     }
@@ -37,6 +37,13 @@ enum TextValidateHelper {
         return text.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
+    static func getNumber(_ text: String?) throws(TextValidateError) -> Double {
+        let trimmed = try getTrimmedText(text)
+        
+        guard let number = Double(trimmed) else { throw .nonNumeric }
+        return number
+    }
+    
     static func validateIsEmpty(_ text: String?) throws(TextValidateError) {
         let trimmed = try getTrimmedText(text)
         if trimmed.isEmpty { throw .emptyText }
@@ -44,9 +51,7 @@ enum TextValidateHelper {
     
     static func validateRange(_ text: String?, min: Double, minAllowsEqual: Bool = true, max: Double, maxAllowsEqual: Bool = true) throws(TextValidateError) {
         
-        let trimmed = try getTrimmedText(text)
-        
-        guard let number = Double(trimmed) else { throw .nonNumeric }
+        let number = try getNumber(text)
         
         if number < min {
             if number != min || !minAllowsEqual {
