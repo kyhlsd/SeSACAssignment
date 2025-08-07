@@ -80,13 +80,17 @@ class BMIViewController: UIViewController {
     }
     
     @objc func resultButtonTapped() {
-        var wrongField = "키 "
+        var wrongField = "키는 "
         do {
-            try validateText(heightTextField.text, min: 100, max: 300)
-            wrongField = "몸무게 "
-            try validateText(weightTextField.text, min: 20, max: 250)
+            let height = try getValidNumber(heightTextField.text, min: 100, max: 300) / 100
+            wrongField = "몸무게는 "
+            let weight = try getValidNumber(weightTextField.text, min: 20, max: 250)
             
-            resultLabel.text = getBMIString(heightString: heightTextField.text, weightString: weightTextField.text)
+            let bmi = getBMI(height: height, weight: weight)
+            
+            let formatted = Formatters.NumberFormatters.twoDemicalFormatter.string(from: NSNumber(value: bmi)) ?? ""
+            resultLabel.text = "BMI : " + formatted
+            
             view.endEditing(true)
         } catch {
             let message = wrongField + error.errorMessage
@@ -95,16 +99,15 @@ class BMIViewController: UIViewController {
         }
     }
     
-    private func validateText(_ text: String?, min: Double, max: Double) throws(TextValidateError) {
-        try TextValidateHelper.validateIsEmpty(text)
-        try TextValidateHelper.validateRange(text, min: min, max: max)
+    private func getValidNumber(_ text: String?, min: Double, max: Double) throws(InputValidationError) -> Double {
+        let trimmed = try InputValidationHelper.getTrimmedText(text)
+        let number = try InputValidationHelper.getNumber(trimmed)
+        try InputValidationHelper.validateRange(number, min: min, max: max)
+        return number
     }
     
-    private func getBMIString(heightString: String?, weightString: String?) -> String {
-        guard let heightString, let weightString, let height = Double(heightString), let weight = Double(weightString) else { return "검증이 잘못되었습니다."}
-        
-        let bmi = weight / ((height / 100) * (height / 100))
-        let formatted = Formatters.NumberFormatters.twoDemicalFormatter.string(from: NSNumber(value: bmi)) ?? ""
-        return "BMI: " + formatted
+    // height : m , weight : kg 기준
+    private func getBMI(height: Double, weight: Double) -> Double {
+        return weight / (height * height)
     }
 }

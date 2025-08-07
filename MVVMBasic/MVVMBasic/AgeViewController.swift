@@ -72,12 +72,13 @@ class AgeViewController: UIViewController {
             label.text = "입력 가능한 수 입니다."
             view.endEditing(true)
         } catch {
-            label.text = error.errorMessage
+            label.text = "나이는 " + error.errorMessage
         }
     }
     
-    private func validateText(_ text: String?) throws(TextValidateError) {
-        try TextValidateHelper.validateIsEmpty(text)
-        try TextValidateHelper.validateRange(text, min: 1, max: 100)
+    private func validateText(_ text: String?) throws(InputValidationError) {
+        let trimmed = try InputValidationHelper.getTrimmedText(text)
+        let number = try InputValidationHelper.getNumber(trimmed)
+        try InputValidationHelper.validateRange(number, min: 1, max: 100)
     }
 }

@@ -7,51 +7,42 @@
 
 import Foundation
 
-enum TextValidateError: Error {
-    case nilText
+enum InputValidationError: Error {
     case emptyText
     case nonNumeric
     case invalidRange(min: Double, minAllowsEqual: Bool = true, max: Double, maxAllowsEqual: Bool = true)
     
     var errorMessage: String {
         switch self {
-        case .nilText:
-            return "텍스트가 nil 입니다."
         case .emptyText:
-            return "텍스트가 비었습니다."
+            return "빈 값을 입력할 수 없습니다."
         case .nonNumeric:
-            return "텍스트는 숫자만 입력할 수 있습니다."
+            return "숫자만 입력할 수 있습니다."
         case .invalidRange(let min, let minAllowsEqual, let max, let maxAllowsEqual):
             let minWord = minAllowsEqual ? "이상" : "초과"
             let maxWord = maxAllowsEqual ? "이하" : "미만"
-            let message = "텍스트는 " + min.formatted() + minWord + " " + max.formatted() + maxWord + " 수만 입력 가능합니다."
+            let message = min.formatted() + minWord + " " + max.formatted() + maxWord + " 수만 입력 가능합니다."
             return message
         }
     }
 }
 
-enum TextValidateHelper {
-    static func getTrimmedText(_ text: String?) throws(TextValidateError) -> String {
-        guard let text else { throw .nilText }
+enum InputValidationHelper {
+    static func getTrimmedText(_ text: String?) throws(InputValidationError) -> String {
+        guard let text else { throw .emptyText }
         
-        return text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty { throw .emptyText }
+        
+        return trimmed
     }
     
-    static func getNumber(_ text: String?) throws(TextValidateError) -> Double {
-        let trimmed = try getTrimmedText(text)
-        
-        guard let number = Double(trimmed) else { throw .nonNumeric }
+    static func getNumber(_ text: String) throws(InputValidationError) -> Double {
+        guard let number = Double(text) else { throw .nonNumeric }
         return number
     }
     
-    static func validateIsEmpty(_ text: String?) throws(TextValidateError) {
-        let trimmed = try getTrimmedText(text)
-        if trimmed.isEmpty { throw .emptyText }
-    }
-    
-    static func validateRange(_ text: String?, min: Double, minAllowsEqual: Bool = true, max: Double, maxAllowsEqual: Bool = true) throws(TextValidateError) {
-        
-        let number = try getNumber(text)
+    static func validateRange(_ number: Double, min: Double, minAllowsEqual: Bool = true, max: Double, maxAllowsEqual: Bool = true) throws(InputValidationError) {
         
         if number < min {
             if number != min || !minAllowsEqual {
