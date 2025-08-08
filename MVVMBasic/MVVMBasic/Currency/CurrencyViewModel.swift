@@ -17,20 +17,24 @@ final class CurrencyViewModel {
     var updateView: ((String) -> Void)?
     
     private let exchangeRate = 1350.0
-    
-    private var message = "" {
+    private var convertedAmount = 0.0 {
         didSet {
-            updateView?(message)
+            updateView?(String(format: "%.2f USD (약 $%.2f)", convertedAmount, convertedAmount))
+        }
+    }
+    
+    private var errorMessage = "" {
+        didSet {
+            updateView?(errorMessage)
         }
     }
     
     private func calculateExchange() {
         do {
             let amount = try getValidAmountFromText()
-            let convertedAmount = amount / exchangeRate
-            message = String(format: "%.2f USD (약 $%.2f)", convertedAmount, convertedAmount)
+            convertedAmount = amount / exchangeRate
         } catch {
-            message = "올바른 금액을 입력해주세요."
+            errorMessage = "올바른 금액을 입력해주세요."
         }
     }
     
