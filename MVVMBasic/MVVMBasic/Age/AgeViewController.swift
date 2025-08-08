@@ -28,8 +28,20 @@ class AgeViewController: UIViewController {
         return label
     }()
     
+    private let viewModel = AgeViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        viewModel.succuessHandler = { [weak self] in
+            self?.label.text = "입력 가능한 수 입니다."
+            self?.view.endEditing(true)
+        }
+        
+        viewModel.failureHandler = { [weak self] errorMessage in
+            self?.label.text = errorMessage
+        }
+        
         configureHierarchy()
         configureLayout()
         
@@ -67,18 +79,6 @@ class AgeViewController: UIViewController {
     }
     
     @objc func resultButtonTapped() {
-        do {
-            try validateText(textField.text)
-            label.text = "입력 가능한 수 입니다."
-            view.endEditing(true)
-        } catch {
-            label.text = "나이는 " + error.errorMessage
-        }
-    }
-    
-    private func validateText(_ text: String?) throws(InputValidationError) {
-        let trimmed = try InputValidationHelper.getTrimmedText(text)
-        let number = try InputValidationHelper.convertTypeFromText(trimmed, type: Int.self)
-        try InputValidationHelper.validateRange(number, min: 1, max: 100)
+        viewModel.inputText = textField.text
     }
 }
