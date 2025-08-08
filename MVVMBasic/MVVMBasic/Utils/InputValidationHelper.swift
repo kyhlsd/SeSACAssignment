@@ -47,7 +47,7 @@ enum InputValidationHelper {
         return trimmed
     }
     
-    static func convertTypeFromText<T: LosslessStringConvertible>(_ text: String, type: T.Type) throws(InputValidationError) -> T {
+    static func convertTypeFromText<T: LosslessStringConvertible>(_ text: String, type: T.Type = T.self) throws(InputValidationError) -> T {
         guard let converted = T(text) else { throw .invalidType(type: type) }
         return converted
     }
