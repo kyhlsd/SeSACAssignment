@@ -57,8 +57,15 @@ class BirthDayViewController: UIViewController {
         return label
     }()
     
+    private let viewModel = BirthDayViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        viewModel.updateView = { [weak self] resultString in
+            self?.resultLabel.text = resultString
+        }
+        
         configureHierarchy()
         configureLayout()
         
@@ -130,88 +137,6 @@ class BirthDayViewController: UIViewController {
     }
     
     @objc func resultButtonTapped() {
-        validateBirthday(year: yearTextField.text, month: monthTextField.text, day: dayTextField.text) { value in
-            let dateDifference = getDateDifference(from: value, to: Date())
-            
-            if dateDifference == 0 {
-                resultLabel.text = "D-Day입니다."
-            } else {
-                resultLabel.text = "D+\(dateDifference)일입니다."
-            }
-            view.endEditing(true)
-        } failureHandler: { errorMessage in
-            resultLabel.text = errorMessage
-        }
-    }
-    
-    private func getValidInteger(_ text: String?, min: Int, max: Int) throws(InputValidationError) -> Int {
-        let trimmed = try InputValidationHelper.getTrimmedText(text)
-        let number = try InputValidationHelper.convertTypeFromText(trimmed, type: Int.self)
-        try InputValidationHelper.validateRange(number, min: min, max: max)
-        return number
-    }
-    
-    private func getMaxDay(year: Int, month: Int) -> Int {
-        switch month {
-        case 1,3,5,7,8,10,12:
-            return 31
-        case 4,6,9,11:
-            return 30
-        case 2:
-            return isLeapYear(year: year) ? 29 : 28
-        default:
-            return -1
-        }
-    }
-    
-    private func isLeapYear(year: Int) -> Bool {
-        if year % 4 == 0 {
-            if year % 100 == 0 {
-                return year % 400 == 0
-            } else {
-                return true
-            }
-        } else {
-            return false
-        }
-    }
-    
-    private func getDateDifference(from firstDate: Date, to secondDate: Date) -> Int {
-        let component = Calendar.current.dateComponents([.day], from: firstDate, to: secondDate)
-        return component.day ?? 9999999
-    }
-    
-    private func validateBirthday(year: String?, month: String?, day: String?, successHandler: (Date) -> Void, failureHandler: (String) -> Void) {
-        let calendar = Calendar.current
-        let today = Date()
-        let currentYear = calendar.component(.year, from: today)
-        let currentMonth = calendar.component(.month, from: today)
-        let currentDay = calendar.component(.day, from: today)
-        
-        var wrongField = "연도는 "
-        do {
-            let year = try getValidInteger(yearTextField.text, min: 1900, max: currentYear)
-            
-            wrongField = (year == currentYear) ? "해당 연도에서 달은 " : "달은 "
-            let maxMonth = (year == currentYear) ? currentMonth : 12
-            let month = try getValidInteger(monthTextField.text, min: 1, max: maxMonth)
-            
-            wrongField = (year == currentYear && month == currentMonth) ? "해당 연도와 달에서 일은 " : "일은 "
-            let maxDay = (year == currentYear && month == currentMonth) ? currentDay : getMaxDay(year: year, month: month)
-            let day = try getValidInteger(dayTextField.text, min: 1, max: maxDay)
-            
-            var dateString = String(year)
-            dateString += String(format: "%02d", month)
-            dateString += String(format: "%02d", day)
-            
-            guard let date = Formatters.DateFormatters.yyyyMMddFormatter.date(from: dateString) else {
-                throw InputValidationError.unknown
-            }
-            
-            successHandler(date)
-        } catch let error as InputValidationError {
-            let errorMessage = wrongField + error.errorMessage
-            failureHandler(errorMessage)
-        } catch { }
+        viewModel.inputTexts = BirthDayInputs(year: yearTextField.text, month: monthTextField.text, day: dayTextField.text)
     }
 }
