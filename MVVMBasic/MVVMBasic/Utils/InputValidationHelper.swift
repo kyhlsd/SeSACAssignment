@@ -9,8 +9,7 @@ import Foundation
 
 enum InputValidationError: Error {
     case emptyText
-    case nonNumeric
-    case nonInteger
+    case invalidType(type: LosslessStringConvertible.Type)
     case invalidRange(min: any Comparable, minAllowsEqual: Bool = true, max: any Comparable, maxAllowsEqual: Bool = true)
     case unknown
     
@@ -18,10 +17,15 @@ enum InputValidationError: Error {
         switch self {
         case .emptyText:
             return "빈 값을 입력할 수 없습니다."
-        case .nonNumeric:
-            return "숫자만 입력할 수 있습니다."
-        case .nonInteger:
-            return "정수만 입력할 수 있습니다."
+        case .invalidType(let type):
+            switch type {
+            case is Double.Type:
+                return "숫자만 입력할 수 있습니다."
+            case is Int.Type:
+                return "정수만 입력할 수 있습니다."
+            default:
+                return "잘못된 타입입니다."
+            }
         case .invalidRange(let min, let minAllowsEqual, let max, let maxAllowsEqual):
             let minWord = minAllowsEqual ? "이상" : "초과"
             let maxWord = maxAllowsEqual ? "이하" : "미만"
@@ -43,14 +47,9 @@ enum InputValidationHelper {
         return trimmed
     }
     
-    static func getNumberFromText(_ text: String) throws(InputValidationError) -> Double {
-        guard let number = Double(text) else { throw .nonNumeric }
-        return number
-    }
-    
-    static func getIntegerFromText(_ text: String) throws(InputValidationError) -> Int {
-        guard let integer = Int(text) else { throw .nonInteger }
-        return integer
+    static func convertTypeFromText<T: LosslessStringConvertible>(_ text: String, type: T.Type) throws(InputValidationError) -> T {
+        guard let converted = T(text) else { throw .invalidType(type: type) }
+        return converted
     }
     
     static func validateRange<T: Comparable>(_ number: T, min: T, minAllowsEqual: Bool = true, max: T, maxAllowsEqual: Bool = true) throws(InputValidationError) {
@@ -66,9 +65,5 @@ enum InputValidationHelper {
                 throw .invalidRange(min: min, minAllowsEqual: minAllowsEqual, max: max, maxAllowsEqual: maxAllowsEqual)
             }
         }
-    }
-    
-    static func generateUnkwnonError() throws(InputValidationError) {
-        throw .unknown
     }
 }

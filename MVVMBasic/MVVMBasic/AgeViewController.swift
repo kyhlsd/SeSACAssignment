@@ -78,7 +78,7 @@ class AgeViewController: UIViewController {
     
     private func validateText(_ text: String?) throws(InputValidationError) {
         let trimmed = try InputValidationHelper.getTrimmedText(text)
-        let number = try InputValidationHelper.getIntegerFromText(trimmed)
+        let number = try InputValidationHelper.convertTypeFromText(trimmed, type: Int.self)
         try InputValidationHelper.validateRange(number, min: 1, max: 100)
     }
 }

@@ -146,7 +146,7 @@ class BirthDayViewController: UIViewController {
     
     private func getValidInteger(_ text: String?, min: Int, max: Int) throws(InputValidationError) -> Int {
         let trimmed = try InputValidationHelper.getTrimmedText(text)
-        let number = try InputValidationHelper.getIntegerFromText(trimmed)
+        let number = try InputValidationHelper.convertTypeFromText(trimmed, type: Int.self)
         try InputValidationHelper.validateRange(number, min: min, max: max)
         return number
     }
