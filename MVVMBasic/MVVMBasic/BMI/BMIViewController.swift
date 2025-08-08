@@ -34,8 +34,21 @@ class BMIViewController: UIViewController {
         return label
     }()
     
+    private let viewModel = BMIViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        viewModel.succuessHandler = { [weak self] value in
+            self?.resultLabel.text = "BMI : " + value.formatted()
+            self?.view.endEditing(true)
+        }
+        
+        viewModel.failureHandler = { [weak self] errorMessage in
+            self?.resultLabel.text = errorMessage
+            self?.showDefaultAlert(title: "입력 오류", message: errorMessage)
+        }
+        
         configureHierarchy()
         configureLayout()
         
@@ -80,35 +93,6 @@ class BMIViewController: UIViewController {
     }
     
     @objc func resultButtonTapped() {
-        getBMI(height: heightTextField.text, weight: weightTextField.text) { value in
-            resultLabel.text = "BMI : " + value.formatted()
-            view.endEditing(true)
-        } failureHandler: { errorMessage in
-            resultLabel.text = errorMessage
-            showDefaultAlert(title: "입력 오류", message: errorMessage)
-        }
-    }
-    
-    private func getValidNumber(_ text: String?, min: Double, max: Double) throws(InputValidationError) -> Double {
-        let trimmed = try InputValidationHelper.getTrimmedText(text)
-        let number = try InputValidationHelper.convertTypeFromText(trimmed, type: Double.self)
-        try InputValidationHelper.validateRange(number, min: min, max: max)
-        return number
-    }
-    
-    private func getBMI(height: String?, weight: String?, successHandler: (Double) -> Void, failureHandler: (String) -> Void) {
-        var wrongField = "키는 "
-        do {
-            // height : m , weight : kg 기준
-            let height = try getValidNumber(height, min: 100, max: 300) / 100
-            wrongField = "몸무게는 "
-            let weight = try getValidNumber(weight, min: 20, max: 250)
-            
-            let bmi = weight / (height * height)
-            successHandler(bmi)
-        } catch {
-            let message = wrongField + error.errorMessage
-            failureHandler(message)
-        }
+        viewModel.inputTexts = PhysicalInputs(height: heightTextField.text, weight: weightTextField.text)
     }
 }
