@@ -52,7 +52,7 @@ final class MBTIViewController: UIViewController {
         return button
     }()
     
-    private let mbtiCases = MBTI.allCases
+    private let viewModel = MBTIViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,6 +61,7 @@ final class MBTIViewController: UIViewController {
         setupConstraints()
         setupActions()
         setupDelegates()
+        setupBindings()
     }
     
     override func viewDidLayoutSubviews() {
@@ -133,6 +134,12 @@ final class MBTIViewController: UIViewController {
         mbtiCollectionView.dataSource = self
     }
     
+    private func setupBindings() {
+        viewModel.mbti.bind { [weak self] _ in
+            self?.mbtiCollectionView.reloadData()
+        }
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
@@ -148,15 +155,15 @@ final class MBTIViewController: UIViewController {
 
 extension MBTIViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        mbtiCases.count
+        viewModel.mbtiCases.count
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        mbtiCases[section].count
+        viewModel.mbtiCases[section].count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(cellType: MBTICollectionViewCell.self, for: indexPath)
-        cell.configureCell(mbtiCases[indexPath.section][indexPath.item], isSelected: false)
+        cell.configureCell(viewModel.mbtiCases[indexPath.section][indexPath.item], isSelected: viewModel.getIsSelected(indexPath: indexPath))
         return cell
     }
     
@@ -164,10 +171,14 @@ extension MBTIViewController: UICollectionViewDelegate, UICollectionViewDataSour
         switch section {
         case 0:
             return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 4)
-        case mbtiCases.count - 1:
+        case viewModel.mbtiCases.count - 1:
             return UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
         default:
             return UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 4)
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        viewModel.selectMBTI(indexPath: indexPath)
     }
 }
