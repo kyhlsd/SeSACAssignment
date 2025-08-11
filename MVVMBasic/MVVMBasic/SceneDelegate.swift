@@ -19,12 +19,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let tabBarController = UITabBarController()
         
-        let nav = UINavigationController(rootViewController: OnboardingViewController())
-        nav.view.backgroundColor = .white
-        nav.navigationBar.tintColor = .black
-        nav.tabBarItem = UITabBarItem(title: "MBTI", image: UIImage(systemName: "person"), tag: 0)
-        let mapVC = MapViewController()
-        mapVC.tabBarItem = UITabBarItem(title: "Map", image: UIImage(systemName: "map"), tag: 1)
+        let mbtiNav = UINavigationController(rootViewController: OnboardingViewController())
+        mbtiNav.view.backgroundColor = .white
+        mbtiNav.navigationBar.tintColor = .black
+        mbtiNav.tabBarItem = UITabBarItem(title: "MBTI", image: UIImage(systemName: "person"), tag: 0)
+        let mapNav = UINavigationController(rootViewController: MapViewController())
+        mapNav.view.backgroundColor = .white
+        mapNav.tabBarItem = UITabBarItem(title: "Map", image: UIImage(systemName: "map"), tag: 1)
         let ageVC = AgeViewController()
         ageVC.tabBarItem = UITabBarItem(title: "나이", image: UIImage(systemName: "person.fill"), tag: 2)
         let bmiVC = BMIViewController()
@@ -36,7 +37,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let currencyVC = CurrencyViewController()
         currencyVC.tabBarItem = UITabBarItem(title: "환율", image: UIImage(systemName: "dollarsign.circle"), tag: 6)
         
-        tabBarController.viewControllers = [nav, mapVC, ageVC, bmiVC, birthDayVC, wordCounterVC, currencyVC]
+        tabBarController.viewControllers = [mbtiNav, mapNav, ageVC, bmiVC, birthDayVC, wordCounterVC, currencyVC]
         tabBarController.tabBar.tintColor = .systemBlue
         tabBarController.tabBar.unselectedItemTintColor = .systemGray
         

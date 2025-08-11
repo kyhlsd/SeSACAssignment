@@ -13,11 +13,14 @@ class MapViewController: UIViewController {
      
     private let mapView = MKMapView()
      
+    private let viewModel = MapViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupMapView()
-        addSeoulStationAnnotation()
+        setupBindings()
+//        addSeoulStationAnnotation()
     }
      
     private func setupUI() {
@@ -42,22 +45,42 @@ class MapViewController: UIViewController {
         mapView.mapType = .standard
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .none
-         
-        let seoulStationCoordinate = CLLocationCoordinate2D(latitude: 37.5547, longitude: 126.9706)
+    }
+    
+    private func setupBindings() {
+        viewModel.centerRegion.bind { [weak self] region in
+            self?.updateAnnotations()
+            self?.setRegion(region)
+        }
+    }
+    
+//    private func addSeoulStationAnnotation() {
+//        let annotation = MKPointAnnotation()
+//        annotation.coordinate = CLLocationCoordinate2D(latitude: 37.5547, longitude: 126.9706)
+//        annotation.title = "서울역"
+//        annotation.subtitle = "대한민국 서울특별시"
+//        mapView.addAnnotation(annotation)
+//    }
+    
+    private func setRegion(_ centerRegion: CenterRegion) {
+        let coordinate = CLLocationCoordinate2D(latitude: centerRegion.latitude, longitude: centerRegion.longitude)
         let region = MKCoordinateRegion(
-            center: seoulStationCoordinate,
-            latitudinalMeters: 2000,
-            longitudinalMeters: 2000
+            center: coordinate,
+            latitudinalMeters: centerRegion.latitudinalMeters,
+            longitudinalMeters: centerRegion.longitudinalMeters
         )
         mapView.setRegion(region, animated: true)
     }
     
-    private func addSeoulStationAnnotation() {
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = CLLocationCoordinate2D(latitude: 37.5547, longitude: 126.9706)
-        annotation.title = "서울역"
-        annotation.subtitle = "대한민국 서울특별시"
-        mapView.addAnnotation(annotation)
+    private func updateAnnotations() {
+        mapView.removeAnnotations(mapView.annotations)
+        viewModel.selectedList.value.forEach { restaurant in
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = CLLocationCoordinate2D(latitude: restaurant.latitude, longitude: restaurant.longitude)
+            annotation.title = restaurant.name
+            annotation.subtitle = restaurant.address
+            mapView.addAnnotation(annotation)
+        }
     }
      
     @objc private func rightBarButtonTapped() {
@@ -67,25 +90,17 @@ class MapViewController: UIViewController {
             preferredStyle: .actionSheet
         )
         
-        let alert1Action = UIAlertAction(title: "얼럿 1", style: .default) { _ in
-            print("얼럿 1이 선택되었습니다.")
-        }
-        
-        let alert2Action = UIAlertAction(title: "얼럿 2", style: .default) { _ in
-            print("얼럿 2가 선택되었습니다.")
-        }
-        
-        let alert3Action = UIAlertAction(title: "얼럿 3", style: .default) { _ in
-            print("얼럿 3이 선택되었습니다.")
+        viewModel.options.forEach { option in
+            let alertAction = UIAlertAction(title: option, style: .default) { [weak self] _ in
+                self?.viewModel.selectOption(option)
+            }
+            alertController.addAction(alertAction)
         }
         
         let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
             print("취소가 선택되었습니다.")
         }
         
-        alertController.addAction(alert1Action)
-        alertController.addAction(alert2Action)
-        alertController.addAction(alert3Action)
         alertController.addAction(cancelAction)
          
         present(alertController, animated: true, completion: nil)
