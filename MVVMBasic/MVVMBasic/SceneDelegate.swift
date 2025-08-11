@@ -18,18 +18,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: scene)
         
         let tabBarController = UITabBarController()
+        
+        let nav = UINavigationController(rootViewController: OnboardingViewController())
+        nav.view.backgroundColor = .white
+        nav.navigationBar.tintColor = .black
+        nav.tabBarItem = UITabBarItem(title: "MBTI", image: UIImage(systemName: "person"), tag: 0)
         let ageVC = AgeViewController()
-        ageVC.tabBarItem = UITabBarItem(title: "나이", image: UIImage(systemName: "person.fill"), tag: 0)
+        ageVC.tabBarItem = UITabBarItem(title: "나이", image: UIImage(systemName: "person.fill"), tag: 1)
         let bmiVC = BMIViewController()
-        bmiVC.tabBarItem = UITabBarItem(title: "BMI", image: UIImage(systemName: "waveform.path.ecg"), tag: 1)
+        bmiVC.tabBarItem = UITabBarItem(title: "BMI", image: UIImage(systemName: "waveform.path.ecg"), tag: 2)
         let birthDayVC = BirthDayViewController()
-        birthDayVC.tabBarItem = UITabBarItem(title: "생년월일", image: UIImage(systemName: "calendar"), tag: 2)
+        birthDayVC.tabBarItem = UITabBarItem(title: "생년월일", image: UIImage(systemName: "calendar"), tag: 3)
         let wordCounterVC = WordCounterViewController()
-        wordCounterVC.tabBarItem = UITabBarItem(title: "글자수", image: UIImage(systemName: "text.quote"), tag: 3)
+        wordCounterVC.tabBarItem = UITabBarItem(title: "글자수", image: UIImage(systemName: "text.quote"), tag: 4)
         let currencyVC = CurrencyViewController()
         currencyVC.tabBarItem = UITabBarItem(title: "환율", image: UIImage(systemName: "dollarsign.circle"), tag: 5)
         
-        tabBarController.viewControllers = [ageVC, bmiVC, birthDayVC, wordCounterVC, currencyVC]
+        tabBarController.viewControllers = [nav, ageVC, bmiVC, birthDayVC, wordCounterVC, currencyVC]
         tabBarController.tabBar.tintColor = .systemBlue
         tabBarController.tabBar.unselectedItemTintColor = .systemGray
         
