@@ -8,32 +8,21 @@
 import Foundation
 
 final class AgeViewModel {
-    var inputText: String? {
-        didSet {
-            setAge()
-        }
-    }
+    var inputText = Observable("")
+    var age = Observable(0)
+    var errorMessage = Observable("")
     
-    var succuessHandler: (() -> Void)?
-    var failureHandler: ((String) -> Void)?
-    
-    private var age: Int = 0 {
-        didSet {
-            succuessHandler?()
-        }
-    }
-    
-    private var errorMessage = "" {
-        didSet {
-            failureHandler?(errorMessage)
+    init() {
+        inputText.bind { _ in
+            self.setAge()
         }
     }
     
     private func setAge() {
         do {
-            age = try getValidAge(inputText)
+            age.value = try getValidAge(inputText.value)
         } catch {
-            errorMessage = "나이는 " + error.errorMessage
+            errorMessage.value = "나이는 " + error.errorMessage
         }
     }
     

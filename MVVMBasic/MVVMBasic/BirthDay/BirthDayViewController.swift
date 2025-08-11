@@ -62,8 +62,12 @@ class BirthDayViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.updateView = { [weak self] resultString in
+        viewModel.dateDifferenceText.bind { [weak self] resultString in
             self?.resultLabel.text = resultString
+        }
+        
+        viewModel.errorMessage.bind { [weak self] errorMessage in
+            self?.resultLabel.text = errorMessage
         }
         
         configureHierarchy()
@@ -137,6 +141,6 @@ class BirthDayViewController: UIViewController {
     }
     
     @objc func resultButtonTapped() {
-        viewModel.inputTexts = BirthDayInputs(year: yearTextField.text, month: monthTextField.text, day: dayTextField.text)
+        viewModel.inputTexts.value = BirthDayInputs(year: yearTextField.text, month: monthTextField.text, day: dayTextField.text)
     }
 }

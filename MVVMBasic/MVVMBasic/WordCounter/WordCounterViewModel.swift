@@ -8,21 +8,17 @@
 import Foundation
 
 final class WordCounterViewModel {
-    var inputText: String? {
-        didSet {
-            calculateCount()
-        }
-    }
     
-    var updateView: ((Int) -> Void)?
+    var inputText = Observable("")
+    var textCount = Observable(0)
     
-    private var textCount = 0 {
-        didSet {
-            updateView?(textCount)
+    init() {
+        inputText.bind { _ in
+            self.calculateCount()
         }
     }
     
     private func calculateCount() {
-        textCount = (inputText ?? "").count
+        textCount.value = inputText.value.count
     }
 }

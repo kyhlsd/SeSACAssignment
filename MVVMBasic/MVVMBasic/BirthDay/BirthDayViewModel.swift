@@ -8,25 +8,19 @@
 import Foundation
 
 final class BirthDayViewModel {
-    var inputTexts = BirthDayInputs(year: nil, month: nil, day: nil) {
-        didSet {
-            validateBirthday(year: inputTexts.year, month: inputTexts.month, day: inputTexts.day)
+    var inputTexts = Observable(BirthDayInputs(year: nil, month: nil, day: nil))
+    private var birthDay = Observable(Date())
+    var dateDifferenceText = Observable("")
+    var errorMessage = Observable("")
+    
+    init() {
+        inputTexts.bind { _ in
+            self.validateBirthday()
         }
-    }
-    
-    var updateView: ((String) -> Void)?
-    
-    private var birthDay = Date() {
-        didSet {
-            let difference = getDateDifference(from: birthDay, to: Date())
-            let resultString = getDDayText(difference: difference)
-            updateView?(resultString)
-        }
-    }
-    
-    private var errorMessage = "" {
-        didSet {
-            updateView?(errorMessage)
+        birthDay.bind { date in
+            let difference = self.getDateDifference(from: date, to: Date())
+            let resultString = self.getDDayText(difference: difference)
+            self.dateDifferenceText.value = resultString
         }
     }
     
@@ -75,7 +69,7 @@ final class BirthDayViewModel {
         }
     }
     
-    private func validateBirthday(year: String?, month: String?, day: String?) {
+    private func validateBirthday() {
         let calendar = Calendar.current
         let today = Date()
         let currentYear = calendar.component(.year, from: today)
@@ -84,15 +78,15 @@ final class BirthDayViewModel {
         
         var wrongField = "연도는 "
         do {
-            let year = try getValidInteger(year, min: 1900, max: currentYear)
+            let year = try getValidInteger(inputTexts.value.year, min: 1900, max: currentYear)
             
             wrongField = (year == currentYear) ? "해당 연도에서 달은 " : "달은 "
             let maxMonth = (year == currentYear) ? currentMonth : 12
-            let month = try getValidInteger(month, min: 1, max: maxMonth)
+            let month = try getValidInteger(inputTexts.value.month, min: 1, max: maxMonth)
             
             wrongField = (year == currentYear && month == currentMonth) ? "해당 연도와 달에서 일은 " : "일은 "
             let maxDay = (year == currentYear && month == currentMonth) ? currentDay : getMaxDay(year: year, month: month)
-            let day = try getValidInteger(day, min: 1, max: maxDay)
+            let day = try getValidInteger(inputTexts.value.day, min: 1, max: maxDay)
             
             var dateString = String(year)
             dateString += String(format: "%02d", month)
@@ -102,9 +96,9 @@ final class BirthDayViewModel {
                 throw InputValidationError.unknown
             }
             
-            birthDay = date
+            birthDay.value = date
         } catch let error as InputValidationError {
-            errorMessage = wrongField + error.errorMessage
+            errorMessage.value = wrongField + error.errorMessage
         } catch { }
     }
 }

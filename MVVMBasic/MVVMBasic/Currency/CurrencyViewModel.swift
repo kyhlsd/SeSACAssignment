@@ -8,38 +8,29 @@
 import Foundation
 
 final class CurrencyViewModel {
-    var inputText: String? {
-        didSet {
-            calculateExchange()
-        }
-    }
-
-    var updateView: ((String) -> Void)?
+    var inputText = Observable("")
+    var convertedAmount = Observable(0.0)
+    var errorMessage = Observable("")
     
     private let exchangeRate = 1350.0
-    private var convertedAmount = 0.0 {
-        didSet {
-            updateView?(String(format: "%.2f USD (약 $%.2f)", convertedAmount, convertedAmount))
-        }
-    }
     
-    private var errorMessage = "" {
-        didSet {
-            updateView?(errorMessage)
+    init() {
+        inputText.bind { _ in
+            self.calculateExchange()
         }
     }
     
     private func calculateExchange() {
         do {
             let amount = try getValidAmountFromText()
-            convertedAmount = amount / exchangeRate
+            convertedAmount.value = amount / exchangeRate
         } catch {
-            errorMessage = "올바른 금액을 입력해주세요."
+            errorMessage.value = "올바른 금액을 입력해주세요."
         }
     }
     
     private func getValidAmountFromText() throws(InputValidationError) -> Double {
-        let trimmed = try InputValidationHelper.getTrimmedText(inputText)
+        let trimmed = try InputValidationHelper.getTrimmedText(inputText.value)
         let amount = try InputValidationHelper.convertTypeFromText(trimmed, type: Double.self)
         return amount
     }

@@ -33,12 +33,12 @@ class AgeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.succuessHandler = { [weak self] in
+        viewModel.age.bind { [weak self] _ in
             self?.label.text = "입력 가능한 수 입니다."
             self?.view.endEditing(true)
         }
         
-        viewModel.failureHandler = { [weak self] errorMessage in
+        viewModel.errorMessage.bind { [weak self] errorMessage in
             self?.label.text = errorMessage
         }
         
@@ -79,6 +79,7 @@ class AgeViewController: UIViewController {
     }
     
     @objc func resultButtonTapped() {
-        viewModel.inputText = textField.text
+        guard let text = textField.text else { return }
+        viewModel.inputText.value = text
     }
 }

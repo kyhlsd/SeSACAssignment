@@ -51,8 +51,12 @@ class CurrencyViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.updateView = { [weak self] message in
-            self?.resultLabel.text = message
+        viewModel.convertedAmount.bind { [weak self] value in
+            self?.resultLabel.text = String(format: "%.2f USD (약 $%.2f)", value, value)
+        }
+        
+        viewModel.errorMessage.bind { [weak self] errorMessage in
+            self?.resultLabel.text = errorMessage
         }
         
         setupUI()
@@ -101,6 +105,7 @@ class CurrencyViewController: UIViewController {
     }
      
     @objc private func convertButtonTapped() {
-        viewModel.inputText = amountTextField.text
+        guard let text = amountTextField.text else { return }
+        viewModel.inputText.value = text
     }
 }

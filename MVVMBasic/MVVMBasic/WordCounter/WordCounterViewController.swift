@@ -34,7 +34,7 @@ class WordCounterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.updateView = { [weak self] count in
+        viewModel.textCount.bind { [weak self] count in
             self?.countLabel.text = "현재까지 \(count)글자 작성중"
         }
         
@@ -76,6 +76,7 @@ class WordCounterViewController: UIViewController {
  
 extension WordCounterViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        viewModel.inputText = textView.text
+        guard let text = textView.text else { return }
+        viewModel.inputText.value = text
     }
 }

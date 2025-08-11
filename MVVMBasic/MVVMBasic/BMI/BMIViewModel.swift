@@ -9,24 +9,14 @@ import Foundation
 
 final class BMIViewModel {
     
-    var inputTexts = PhysicalInputs(height: nil, weight: nil) {
-        didSet {
-            calculateBMI(height: inputTexts.height, weight: inputTexts.weight)
-        }
-    }
+    var inputTexts = Observable(PhysicalInputs(height: nil, weight: nil))
+    var bmi = Observable(0.0)
+    var errorMessage = Observable("")
+    var isInitial = true
     
-    var succuessHandler: ((Double) -> Void)?
-    var failureHandler: ((String) -> Void)?
-    
-    private var bmi = 0.0 {
-        didSet {
-            succuessHandler?(bmi)
-        }
-    }
-    
-    private var errorMessage = "" {
-        didSet {
-            failureHandler?(errorMessage)
+    init() {
+        inputTexts.bind { _ in
+            self.calculateBMI()
         }
     }
     
@@ -37,17 +27,17 @@ final class BMIViewModel {
         return number
     }
     
-    private func calculateBMI(height: String?, weight: String?) {
+    private func calculateBMI() {
         var wrongField = "키는 "
         do {
             // height : m , weight : kg 기준
-            let height = try getValidNumber(height, min: 100, max: 300) / 100
+            let height = try getValidNumber(inputTexts.value.height, min: 100, max: 300) / 100
             wrongField = "몸무게는 "
-            let weight = try getValidNumber(weight, min: 20, max: 250)
+            let weight = try getValidNumber(inputTexts.value.weight, min: 20, max: 250)
             
-            bmi = weight / (height * height)
+            bmi.value = weight / (height * height)
         } catch {
-            errorMessage = wrongField + error.errorMessage
+            errorMessage.value = wrongField + error.errorMessage
         }
     }
     

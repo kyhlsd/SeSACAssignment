@@ -39,14 +39,18 @@ class BMIViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.succuessHandler = { [weak self] value in
+        viewModel.bmi.bind { [weak self] value in
             self?.resultLabel.text = "BMI : " + value.formatted()
             self?.view.endEditing(true)
         }
         
-        viewModel.failureHandler = { [weak self] errorMessage in
-            self?.resultLabel.text = errorMessage
-            self?.showDefaultAlert(title: "입력 오류", message: errorMessage)
+        viewModel.errorMessage.bind { [weak self] errorMessage in
+            if self?.viewModel.isInitial == false {
+                self?.resultLabel.text = errorMessage
+                self?.showDefaultAlert(title: "입력 오류", message: errorMessage)
+            } else {
+                self?.viewModel.isInitial = false
+            }
         }
         
         configureHierarchy()
@@ -93,6 +97,6 @@ class BMIViewController: UIViewController {
     }
     
     @objc func resultButtonTapped() {
-        viewModel.inputTexts = PhysicalInputs(height: heightTextField.text, weight: weightTextField.text)
+        viewModel.inputTexts.value = PhysicalInputs(height: heightTextField.text, weight: weightTextField.text)
     }
 }
