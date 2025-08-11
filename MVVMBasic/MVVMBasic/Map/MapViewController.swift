@@ -113,8 +113,8 @@ extension MapViewController: MKMapViewDelegate {
         guard let annotation = view.annotation else { return }
         
         print("어노테이션이 선택되었습니다.")
-        print("제목: \(annotation.title ?? "제목 없음")")
-        print("부제목: \(annotation.subtitle ?? "부제목 없음")")
+        print("제목: \((annotation.title ?? "제목 없음") ?? "제목 없음")")
+        print("부제목: \((annotation.subtitle ?? "부제목 없음") ?? "부제목 없음")")
         print("좌표: \(annotation.coordinate.latitude), \(annotation.coordinate.longitude)")
         
         // 선택된 어노테이션으로 지도 중심 이동
