@@ -23,18 +23,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         nav.view.backgroundColor = .white
         nav.navigationBar.tintColor = .black
         nav.tabBarItem = UITabBarItem(title: "MBTI", image: UIImage(systemName: "person"), tag: 0)
+        let mapVC = MapViewController()
+        mapVC.tabBarItem = UITabBarItem(title: "Map", image: UIImage(systemName: "map"), tag: 1)
         let ageVC = AgeViewController()
-        ageVC.tabBarItem = UITabBarItem(title: "나이", image: UIImage(systemName: "person.fill"), tag: 1)
+        ageVC.tabBarItem = UITabBarItem(title: "나이", image: UIImage(systemName: "person.fill"), tag: 2)
         let bmiVC = BMIViewController()
-        bmiVC.tabBarItem = UITabBarItem(title: "BMI", image: UIImage(systemName: "waveform.path.ecg"), tag: 2)
+        bmiVC.tabBarItem = UITabBarItem(title: "BMI", image: UIImage(systemName: "waveform.path.ecg"), tag: 3)
         let birthDayVC = BirthDayViewController()
-        birthDayVC.tabBarItem = UITabBarItem(title: "생년월일", image: UIImage(systemName: "calendar"), tag: 3)
+        birthDayVC.tabBarItem = UITabBarItem(title: "생년월일", image: UIImage(systemName: "calendar"), tag: 4)
         let wordCounterVC = WordCounterViewController()
-        wordCounterVC.tabBarItem = UITabBarItem(title: "글자수", image: UIImage(systemName: "text.quote"), tag: 4)
+        wordCounterVC.tabBarItem = UITabBarItem(title: "글자수", image: UIImage(systemName: "text.quote"), tag: 5)
         let currencyVC = CurrencyViewController()
-        currencyVC.tabBarItem = UITabBarItem(title: "환율", image: UIImage(systemName: "dollarsign.circle"), tag: 5)
+        currencyVC.tabBarItem = UITabBarItem(title: "환율", image: UIImage(systemName: "dollarsign.circle"), tag: 6)
         
-        tabBarController.viewControllers = [nav, ageVC, bmiVC, birthDayVC, wordCounterVC, currencyVC]
+        tabBarController.viewControllers = [nav, mapVC, ageVC, bmiVC, birthDayVC, wordCounterVC, currencyVC]
         tabBarController.tabBar.tintColor = .systemBlue
         tabBarController.tabBar.unselectedItemTintColor = .systemGray
         
