@@ -12,7 +12,7 @@ final class OnboardingViewController: UIViewController {
 
     private let button = {
         let button = UIButton()
-        button.setTitle("Onboarding", for: .normal)
+        button.setTitle("Set Profile", for: .normal)
         button.backgroundColor = .enabledButton
         return button
     }()
@@ -37,6 +37,6 @@ final class OnboardingViewController: UIViewController {
     
     @objc
     private func pushSettingVC() {
-        navigationController?.pushViewController(MBTIViewController(), animated: true)
+        navigationController?.pushViewController(ProfileSettingViewController(), animated: true)
     }
 }

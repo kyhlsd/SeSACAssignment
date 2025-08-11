@@ -1,5 +1,5 @@
 //
-//  MBTIViewController.swift
+//  ProfileSettingViewController.swift
 //  MVVMBasic
 //
 //  Created by 김영훈 on 8/11/25.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class MBTIViewController: UIViewController {
+final class ProfileSettingViewController: UIViewController {
     
     private let profileImageButton = BadgeLayerButton(mainImage: UIImage(systemName: "person"), badgeImage: UIImage(systemName: "camera.circle.fill"), color: .enabledButton, borderWidth: 6, badgeSize: 32)
     
@@ -52,7 +52,7 @@ final class MBTIViewController: UIViewController {
         return button
     }()
     
-    private let viewModel = MBTIViewModel()
+    private let viewModel = ProfileSettingViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -125,6 +125,7 @@ final class MBTIViewController: UIViewController {
     }
     
     private func setupActions() {
+        nicknameTextField.addTarget(self, action: #selector(nicknameTextFieldEditingChanged), for: .editingChanged)
         profileImageButton.addTarget(self, action: #selector(profileImageButtonTapped), for: .touchUpInside)
         completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
     }
@@ -135,6 +136,16 @@ final class MBTIViewController: UIViewController {
     }
     
     private func setupBindings() {
+        viewModel.isEnableComplete.bind { [weak self] isEnabled in
+            self?.completeButton.isEnabled = isEnabled
+            self?.completeButton.backgroundColor = isEnabled ? .enabledButton : .disabledButton
+        }
+        viewModel.nicknameStatusText.bind { [weak self] text in
+            self?.nicknameStatusLabel.text = text
+        }
+        viewModel.isEnableNickname.bind { [weak self] isEnabled in
+            self?.nicknameStatusLabel.textColor = isEnabled ? .enabledButton : .systemRed
+        }
         viewModel.mbti.bind { [weak self] _ in
             self?.mbtiCollectionView.reloadData()
         }
@@ -144,16 +155,22 @@ final class MBTIViewController: UIViewController {
         view.endEditing(true)
     }
     
+    @objc private func nicknameTextFieldEditingChanged(_ sender: UITextField) {
+        viewModel.inputNickname.value = sender.text ?? ""
+    }
+    
     @objc private func profileImageButtonTapped() {
         
     }
     
     @objc private func completeButtonTapped() {
-        
+        let nickname = viewModel.validNickname
+        let mbti = viewModel.mbti.value.reduce("", +)
+        showDefaultAlert(title: "프로필 설정 성공", message: "닉네임: \(nickname))\nMBTI: \(mbti)")
     }
 }
 
-extension MBTIViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension ProfileSettingViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         viewModel.mbtiCases.count
     }
