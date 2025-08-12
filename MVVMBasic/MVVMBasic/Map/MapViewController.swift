@@ -45,12 +45,12 @@ class MapViewController: UIViewController {
         mapView.mapType = .standard
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .none
+        setRegion(viewModel.centerLocation)
     }
     
     private func setupBindings() {
-        viewModel.centerRegion.bind { [weak self] region in
+        viewModel.selectedList.bind { [weak self] location in
             self?.updateAnnotations()
-            self?.setRegion(region)
         }
     }
     
@@ -62,12 +62,12 @@ class MapViewController: UIViewController {
 //        mapView.addAnnotation(annotation)
 //    }
     
-    private func setRegion(_ centerRegion: CenterRegion) {
-        let coordinate = CLLocationCoordinate2D(latitude: centerRegion.latitude, longitude: centerRegion.longitude)
+    private func setRegion(_ location: Location) {
+        let coordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
         let region = MKCoordinateRegion(
             center: coordinate,
-            latitudinalMeters: centerRegion.latitudinalMeters,
-            longitudinalMeters: centerRegion.longitudinalMeters
+            latitudinalMeters: 2000,
+            longitudinalMeters: 2000
         )
         mapView.setRegion(region, animated: true)
     }

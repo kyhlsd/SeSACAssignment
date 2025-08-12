@@ -7,11 +7,10 @@
 
 import Foundation
 
-struct CenterRegion {
+struct Location {
     let latitude: Double
     let longitude: Double
-    let latitudinalMeters: Double
-    let longitudinalMeters: Double
     
-    static let seoulStation = CenterRegion(latitude: 37.5547, longitude: 126.9706, latitudinalMeters: 2000, longitudinalMeters: 2000)
+    static let seoulStation = Location(latitude: 37.5547, longitude: 126.9706)
+    static let sesac = Location(latitude: 37.5177, longitude: 126.8857)
 }
