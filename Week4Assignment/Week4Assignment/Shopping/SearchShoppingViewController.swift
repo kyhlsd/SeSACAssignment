@@ -10,6 +10,7 @@ import UIKit
 final class SearchShoppingViewController: UIViewController {
 
     private let searchShoppingView = SearchShoppingView()
+    private let viewModel = SearchShoppingViewModel()
     
     override func loadView() {
         self.view = searchShoppingView
@@ -21,7 +22,16 @@ final class SearchShoppingViewController: UIViewController {
         configureDelegates()
         configureNavigationItem()
         
-        setTapGesture()
+        configureBindings()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        searchShoppingView.searchBar.becomeFirstResponder()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
     }
     
     private func configureNavigationItem() {
@@ -32,30 +42,22 @@ final class SearchShoppingViewController: UIViewController {
     private func configureDelegates() {
         searchShoppingView.searchBar.delegate = self
     }
-}
-
-extension SearchShoppingViewController: UISearchBarDelegate {
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let searchText = searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+    
+    private func configureBindings() {
+        viewModel.outputSearchTrigger.bind { [weak self] text in
+            let viewController = ShoppingListViewController(searchText: text)
+            self?.navigationController?.pushViewController(viewController, animated: true)
+        }
         
-        if searchText.count >= 2 {
-            let viewController = ShoppingListViewController(searchText: searchText)
-            navigationController?.pushViewController(viewController, animated: true)
-        } else {
-            showDefaultAlert(title: "검색 오류", message: "검색어를 2자 이상 입력해주세요.")
+        viewModel.outputAlertTrigger.bind { [weak self] title, message in
+            self?.showDefaultAlert(title: title, message: message)
         }
     }
 }
 
-extension SearchShoppingViewController: UseKeyboardProtocol {
-    func setTapGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc
-    func dismissKeyboard() {
-        view.endEditing(true)
+extension SearchShoppingViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        viewModel.inputSearchBarText.value = searchBar.text
     }
 }
 
