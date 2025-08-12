@@ -14,6 +14,8 @@ final class ShoppingListViewModel {
     let inputViewDidLoadTrigger = Observable(())
     let inputOptionTappedTrigger = Observable(0)
     let inputPagingTrigger = Observable(0)
+    let inputImageDownloadTrigger = Observable([IndexPath]())
+    let inputImageRemoveTrigger = Observable([IndexPath]())
     
     let outputSearchedItems = Observable([ShoppingItem]())
     let outputRecommendedItems = Observable([ShoppingItem]())
@@ -23,7 +25,7 @@ final class ShoppingListViewModel {
     let outputListCount = Observable(0)
     let outputScrollToTopTrigger = Observable(())
     
-    let outputError = Observable(APIError.server(.empty))
+    let outputErrorMessage = Observable("")
     
     private var prevIndex = 0
     private var start = 1
@@ -45,6 +47,15 @@ final class ShoppingListViewModel {
         
         inputPagingTrigger.bind { index in
             self.fetchNextPage(index)
+        }
+        
+        inputImageDownloadTrigger.bind { indexPaths in
+            self.downloadImages(indexPaths: indexPaths)
+        }
+        
+        inputImageRemoveTrigger.bind { indexPaths in
+            self.cancelDownloadImages(indexPaths: indexPaths)
+            self.removeImages(indexPaths: indexPaths)
         }
     }
     
@@ -69,6 +80,9 @@ final class ShoppingListViewModel {
     private func fetchDataWithSearchText(sortOption: SortOption = .accuracy, start: Int = 1) {
         if start == 1 {
             outputSearchSkeletonTrigger.value = true
+            if !outputSearchedItems.value.isEmpty {
+                self.outputScrollToTopTrigger.value = ()
+            }
         }
         
         let url = ShoppingRouter.getItems(searchText: searchText, display: 10, sortOption: sortOption, start: start)
@@ -77,9 +91,6 @@ final class ShoppingListViewModel {
             if start == 1 {
                 self.outputSearchedItems.value = value.items
                 self.outputSearchSkeletonTrigger.value = false
-                if !value.items.isEmpty {
-                    self.outputScrollToTopTrigger.value = ()
-                }
             } else {
                 self.outputSearchedItems.value.append(contentsOf: value.items)
             }
@@ -88,9 +99,20 @@ final class ShoppingListViewModel {
         } failureHandler: { error in
             if start == 1 {
                 self.outputSearchSkeletonTrigger.value = false
+                self.outputListCount.value = 0
+                self.outputSearchedItems.value.removeAll()
             }
-            self.outputError.value = error
-            self.outputListCount.value = 0
+            switch error {
+            case .network(let networkError):
+                self.outputErrorMessage.value = networkError.localizedDescription
+            case .server(let serverError):
+                do {
+                    let serverError = try JSONDecoder().decode(NaverServerError.self, from: serverError)
+                    self.outputErrorMessage.value = serverError.errorMessage
+                } catch {
+                    self.outputErrorMessage.value = error.localizedDescription
+                }
+            }
             self.isEnd = true
             self.start = 1
         }
@@ -105,8 +127,36 @@ final class ShoppingListViewModel {
             self.outputRecommendedItems.value = value.items
             self.outputRecommendedSkeletonTrigger.value = false
         } failureHandler: { error in
-            self.outputError.value = error
+            switch error {
+            case .network(let networkError):
+                self.outputErrorMessage.value = networkError.localizedDescription
+            case .server(let serverError):
+                do {
+                    let serverError = try JSONDecoder().decode(NaverServerError.self, from: serverError)
+                    self.outputErrorMessage.value = serverError.errorMessage
+                } catch {
+                    self.outputErrorMessage.value = error.localizedDescription
+                }
+            }
             self.outputRecommendedSkeletonTrigger.value = false
+        }
+    }
+    
+    private func downloadImages(indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            ImageCacheHelper.shared.download(with: outputSearchedItems.value[indexPath.item].image)
+        }
+    }
+    
+    private func cancelDownloadImages(indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            ImageCacheHelper.shared.cancel(with: outputSearchedItems.value[indexPath.item].image)
+        }
+    }
+    
+    private func removeImages(indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            ImageCacheHelper.shared.remove(forKey: outputSearchedItems.value[indexPath.item].image)
         }
     }
 }

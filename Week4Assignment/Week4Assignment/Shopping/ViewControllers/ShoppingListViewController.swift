@@ -86,6 +86,10 @@ final class ShoppingListViewController: UIViewController {
         viewModel.outputListCount.bind { count in
             self.shoppingListView.totalCountLabel.text = count.formatted() + "개의 검색 결과"
         }
+        
+        viewModel.outputErrorMessage.bind { message in
+            self.showDefaultAlert(title: "데이터 가져오기 실패", message: message)
+        }
     }
     
     private func showSearchSkeletonView() {
@@ -144,22 +148,13 @@ extension ShoppingListViewController: UICollectionViewDelegate, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         if collectionView == shoppingListView.searchedCollectionView {
-            for indexPath in indexPaths {
-                if let url = URL(string: viewModel.outputSearchedItems.value[indexPath.item].image) {
-                    ImageDownloader.default.downloadImage(with: url, options: [.cacheOriginalImage])
-                }
-            }
+            viewModel.inputImageDownloadTrigger.value = indexPaths
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
         if collectionView == shoppingListView.searchedCollectionView {
-            for indexPath in indexPaths {
-                if let url = URL(string: viewModel.outputSearchedItems.value[indexPath.item].image) {
-                    ImageDownloader.default.cancel(url: url)
-                    ImageCache.default.removeImage(forKey: viewModel.outputSearchedItems.value[indexPath.item].image)
-                }
-            }
+            viewModel.inputImageRemoveTrigger.value = indexPaths
         }
     }
     

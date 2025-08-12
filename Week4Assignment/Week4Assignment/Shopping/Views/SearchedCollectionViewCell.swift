@@ -24,9 +24,10 @@ class SearchedCollectionViewCell: UICollectionViewCell, Identifying {
     private let favoriteButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "heart"), for: .normal)
-        button.tintColor = .systemGray2
-        button.backgroundColor = .systemGray2
+        button.tintColor = .black
+        button.backgroundColor = .white
         button.clipsToBounds = true
+        button.isHidden = true
         return button
     }()
     
@@ -80,6 +81,7 @@ class SearchedCollectionViewCell: UICollectionViewCell, Identifying {
         mallLabel.text = nil
         titleLabel.text = nil
         priceLabel.text = nil
+        favoriteButton.isHidden = true
     }
     
     private func configureSkeleton() {
@@ -129,8 +131,7 @@ class SearchedCollectionViewCell: UICollectionViewCell, Identifying {
     private func setButtonImage(productId: String) {
         let buttonImage = MyFavorites.isFavorite(itemId: productId) ? "heart.fill" : "heart"
         favoriteButton.setImage(UIImage(systemName: buttonImage), for: .normal)
-        favoriteButton.tintColor = .black
-        favoriteButton.backgroundColor = .white
+        favoriteButton.isHidden = false
     }
 }
 
