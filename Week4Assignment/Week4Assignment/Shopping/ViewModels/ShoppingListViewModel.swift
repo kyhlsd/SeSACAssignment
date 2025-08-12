@@ -9,7 +9,7 @@ import Foundation
 
 final class ShoppingListViewModel {
     
-    let searchText: String
+    var searchText = ""
     
     let inputViewDidLoadTrigger = Observable(())
     let inputOptionTappedTrigger = Observable(0)
@@ -33,8 +33,7 @@ final class ShoppingListViewModel {
     
     private let recommendWord = "북극곰"
     
-    init(searchText: String) {
-        self.searchText = searchText
+    init() {
         
         inputViewDidLoadTrigger.bind { _ in
             self.fetchDataWithSearchText()

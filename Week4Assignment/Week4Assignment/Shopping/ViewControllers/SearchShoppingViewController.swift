@@ -45,7 +45,8 @@ final class SearchShoppingViewController: UIViewController {
     
     private func configureBindings() {
         viewModel.outputSearchTrigger.bind { [weak self] text in
-            let viewController = ShoppingListViewController(searchText: text)
+            let viewController = ShoppingListViewController()
+            viewController.viewModel.searchText = text
             self?.navigationController?.pushViewController(viewController, animated: true)
         }
         

@@ -12,16 +12,7 @@ import Kingfisher
 final class ShoppingListViewController: UIViewController {
     
     private let shoppingListView = ShoppingListView()
-    private let viewModel: ShoppingListViewModel
-    
-    init(searchText: String) {
-        self.viewModel = ShoppingListViewModel(searchText: searchText)
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    let viewModel = ShoppingListViewModel()
     
     override func loadView() {
         self.view = shoppingListView
