@@ -20,8 +20,8 @@ final class Observable<T> {
         self.value = value
     }
     
-    func bind(action: @escaping (T) -> Void) {
-        action(value)
+    func bind(isLazy: Bool = true, action: @escaping (T) -> Void) {
+        if !isLazy { action(value) }
         self.action = action
     }
 }

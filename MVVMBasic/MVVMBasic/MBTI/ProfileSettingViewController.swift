@@ -10,7 +10,7 @@ import SnapKit
 
 final class ProfileSettingViewController: UIViewController {
     
-    private let profileImageButton = BadgeLayerButton(mainImage: UIImage(systemName: "person"), badgeImage: UIImage(systemName: "camera.circle.fill"), color: .enabledButton, borderWidth: 6, badgeSize: 32)
+    private let profileImageButton = BadgeLayerButton(mainImage: UIImage(systemName: "person"), badgeImage: UIImage(systemName: "camera.circle.fill")?.withConfiguration(UIImage.SymbolConfiguration(paletteColors: [.white, .enabledButton])), color: .enabledButton, borderWidth: 6, badgeSize: 32)
     
     private let nicknameTextField = {
         let textField = UITextField()
@@ -136,7 +136,7 @@ final class ProfileSettingViewController: UIViewController {
     }
     
     private func setupBindings() {
-        viewModel.isEnableComplete.bind { [weak self] isEnabled in
+        viewModel.isEnableComplete.bind(isLazy: false) { [weak self] isEnabled in
             self?.completeButton.isEnabled = isEnabled
             self?.completeButton.backgroundColor = isEnabled ? .enabledButton : .disabledButton
         }
@@ -166,7 +166,7 @@ final class ProfileSettingViewController: UIViewController {
     @objc private func completeButtonTapped() {
         let nickname = viewModel.validNickname
         let mbti = viewModel.mbti.value.reduce("", +)
-        showDefaultAlert(title: "프로필 설정 성공", message: "닉네임: \(nickname))\nMBTI: \(mbti)")
+        showDefaultAlert(title: "프로필 설정 성공", message: "닉네임: \(nickname)\nMBTI: \(mbti)")
     }
 }
 

@@ -16,7 +16,7 @@ final class MapViewModel {
     private(set) var selectedOption = Observable(3)
     
     init() {        
-        selectedOption.bind { index in
+        selectedOption.bind(isLazy: false) { index in
             if index == self.options.count - 1 {
                 self.selectedList.value = self.totalList
             } else {

@@ -64,8 +64,6 @@ final class BadgeLayerButton: UIButton {
     
     private func setupBadgeImageView() {
         badgeImageView.image = badgeImage
-        badgeImageView.backgroundColor = .white
-        badgeImageView.tintColor = color
         badgeImageView.layer.cornerRadius = badgeSize / 2
         badgeImageView.clipsToBounds = true
     }

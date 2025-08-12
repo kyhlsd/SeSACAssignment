@@ -49,7 +49,7 @@ class MapViewController: UIViewController {
     }
     
     private func setupBindings() {
-        viewModel.selectedList.bind { [weak self] location in
+        viewModel.selectedList.bind(isLazy: false) { [weak self] location in
             self?.updateAnnotations()
         }
     }
