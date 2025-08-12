@@ -1,5 +1,5 @@
 //
-//  CenterRegion.swift
+//  Location.swift
 //  MVVMBasic
 //
 //  Created by 김영훈 on 8/12/25.
