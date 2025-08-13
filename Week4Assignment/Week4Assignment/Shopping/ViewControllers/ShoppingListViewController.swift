@@ -7,7 +7,6 @@
 
 import UIKit
 import SkeletonView
-import Kingfisher
 
 final class ShoppingListViewController: UIViewController {
     
@@ -28,7 +27,7 @@ final class ShoppingListViewController: UIViewController {
         
         configureBindings()
         
-        viewModel.inputViewDidLoadTrigger.value = ()
+        viewModel.input.viewDidLoadTrigger.value = ()
         
         navigationItem.title = viewModel.searchText
     }
@@ -45,41 +44,41 @@ final class ShoppingListViewController: UIViewController {
     }
     
     private func configureBindings() {
-        viewModel.outputSearchSkeletonTrigger.bind { visible in
+        viewModel.output.searchSkeletonTrigger.bind { [weak self] visible in
             if visible {
-                self.showSearchSkeletonView()
+                self?.showSearchSkeletonView()
             } else {
-                self.hideSearchSkeletonView()
+                self?.hideSearchSkeletonView()
             }
         }
         
-        viewModel.outputRecommendedSkeletonTrigger.bind { visible in
+        viewModel.output.recommendedSkeletonTrigger.bind { [weak self] visible in
             if visible {
-                self.showRecommendedSkeletonView()
+                self?.showRecommendedSkeletonView()
             } else {
-                self.hideRecommendedSkeletonView()
+                self?.hideRecommendedSkeletonView()
             }
         }
         
-        viewModel.outputSearchedItems.bind { value in
-            self.shoppingListView.searchedCollectionView.reloadData()
-            self.shoppingListView.emptyLabel.isHidden = !(value.isEmpty)
+        viewModel.output.searchedItems.bind { [weak self] value in
+            self?.shoppingListView.searchedCollectionView.reloadData()
+            self?.shoppingListView.emptyLabel.isHidden = !(value.isEmpty)
         }
         
-        viewModel.outputRecommendedItems.bind { _ in
-            self.shoppingListView.recommendedCollectionView.reloadData()
+        viewModel.output.recommendedItems.bind { [weak self] _ in
+            self?.shoppingListView.recommendedCollectionView.reloadData()
         }
         
-        viewModel.outputScrollToTopTrigger.bind { _ in
-            self.shoppingListView.searchedCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
+        viewModel.output.scrollToTopTrigger.bind { [weak self] _ in
+            self?.shoppingListView.searchedCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
         }
         
-        viewModel.outputListCount.bind { count in
-            self.shoppingListView.totalCountLabel.text = count.formatted() + "개의 검색 결과"
+        viewModel.output.totalCount.bind { [weak self] count in
+            self?.shoppingListView.totalCountLabel.text = count.formatted() + "개의 검색 결과"
         }
         
-        viewModel.outputErrorMessage.bind { message in
-            self.showDefaultAlert(title: "데이터 가져오기 실패", message: message)
+        viewModel.output.errorMessage.bind { [weak self] message in
+            self?.showDefaultAlert(title: "데이터 가져오기 실패", message: message)
         }
     }
     
@@ -109,7 +108,7 @@ final class ShoppingListViewController: UIViewController {
 // MARK: OptionStackView
 extension ShoppingListViewController: OptionDidSelectDelegate {
     func didSelectButton(index: Int) {
-        viewModel.inputOptionTappedTrigger.value = index
+        viewModel.input.optionTappedTrigger.value = index
     }
 }
 
@@ -118,40 +117,40 @@ extension ShoppingListViewController: UICollectionViewDelegate, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == shoppingListView.searchedCollectionView {
-            return viewModel.outputSearchedItems.value.count
+            return viewModel.output.searchedItems.value.count
         } else {
-            return viewModel.outputRecommendedItems.value.count
+            return viewModel.output.recommendedItems.value.count
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == shoppingListView.searchedCollectionView {
             let cell = collectionView.dequeueReusableCell(cellType: SearchedCollectionViewCell.self, for: indexPath)
-            cell.shoppingItem = viewModel.outputSearchedItems.value[indexPath.item]
+            cell.shoppingItem = viewModel.output.searchedItems.value[indexPath.item]
             cell.configureData()
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(cellType: RecommendedCollectionViewCell.self, for: indexPath)
-            cell.configureData(with: viewModel.outputRecommendedItems.value[indexPath.item])
+            cell.configureData(with: viewModel.output.recommendedItems.value[indexPath.item])
             return cell
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         if collectionView == shoppingListView.searchedCollectionView {
-            viewModel.inputImageDownloadTrigger.value = indexPaths
+            viewModel.input.imageDownloadTrigger.value = indexPaths
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
         if collectionView == shoppingListView.searchedCollectionView {
-            viewModel.inputImageRemoveTrigger.value = indexPaths
+            viewModel.input.imageRemoveTrigger.value = indexPaths
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if collectionView == shoppingListView.searchedCollectionView {
-            viewModel.inputPagingTrigger.value = indexPath.item
+            viewModel.input.pagingTrigger.value = indexPath.item
         }
     }
 }

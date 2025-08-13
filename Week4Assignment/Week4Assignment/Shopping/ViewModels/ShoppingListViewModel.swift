@@ -11,21 +11,26 @@ final class ShoppingListViewModel {
     
     var searchText = ""
     
-    let inputViewDidLoadTrigger = Observable(())
-    let inputOptionTappedTrigger = Observable(0)
-    let inputPagingTrigger = Observable(0)
-    let inputImageDownloadTrigger = Observable([IndexPath]())
-    let inputImageRemoveTrigger = Observable([IndexPath]())
+    var input: Input
+    var output: Output
     
-    let outputSearchedItems = Observable([ShoppingItem]())
-    let outputRecommendedItems = Observable([ShoppingItem]())
+    struct Input {
+        let viewDidLoadTrigger = Observable(())
+        let optionTappedTrigger = Observable(0)
+        let pagingTrigger = Observable(0)
+        let imageDownloadTrigger = Observable([IndexPath]())
+        let imageRemoveTrigger = Observable([IndexPath]())
+    }
     
-    let outputSearchSkeletonTrigger = Observable(false)
-    let outputRecommendedSkeletonTrigger = Observable(false)
-    let outputListCount = Observable(0)
-    let outputScrollToTopTrigger = Observable(())
-    
-    let outputErrorMessage = Observable("")
+    struct Output {
+        let searchedItems = Observable([ShoppingItem]())
+        let recommendedItems = Observable([ShoppingItem]())
+        let searchSkeletonTrigger = Observable(false)
+        let recommendedSkeletonTrigger = Observable(false)
+        let totalCount = Observable(0)
+        let scrollToTopTrigger = Observable(())
+        let errorMessage = Observable("")
+    }
     
     private var prevIndex = 0
     private var start = 1
@@ -34,32 +39,34 @@ final class ShoppingListViewModel {
     private let recommendWord = "북극곰"
     
     init() {
+        input = Input()
+        output = Output()
         
-        inputViewDidLoadTrigger.bind { _ in
+        input.viewDidLoadTrigger.bind { _ in
             self.fetchDataWithSearchText()
             self.fetchDataWithRecommended()
         }
         
-        inputOptionTappedTrigger.bind { _ in
+        input.optionTappedTrigger.bind { _ in
             self.changeSortOption()
         }
         
-        inputPagingTrigger.bind { index in
+        input.pagingTrigger.bind { index in
             self.fetchNextPage(index)
         }
         
-        inputImageDownloadTrigger.bind { indexPaths in
+        input.imageDownloadTrigger.bind { indexPaths in
             self.downloadImages(indexPaths: indexPaths)
         }
         
-        inputImageRemoveTrigger.bind { indexPaths in
+        input.imageRemoveTrigger.bind { indexPaths in
             self.cancelDownloadImages(indexPaths: indexPaths)
             self.removeImages(indexPaths: indexPaths)
         }
     }
     
     private func fetchNextPage(_ index: Int) {
-        if index == outputSearchedItems.value.count - 6, !isEnd {
+        if index == output.searchedItems.value.count - 6, !isEnd {
             start += 1
             isEnd = true
             fetchDataWithSearchText(sortOption: SortOption.allCases[prevIndex], start: start)
@@ -67,7 +74,7 @@ final class ShoppingListViewModel {
     }
     
     private func changeSortOption() {
-        let index = inputOptionTappedTrigger.value
+        let index = input.optionTappedTrigger.value
         if index != prevIndex {
             start = 1
             isEnd = true
@@ -78,9 +85,9 @@ final class ShoppingListViewModel {
     
     private func fetchDataWithSearchText(sortOption: SortOption = .accuracy, start: Int = 1) {
         if start == 1 {
-            outputSearchSkeletonTrigger.value = true
-            if !outputSearchedItems.value.isEmpty {
-                self.outputScrollToTopTrigger.value = ()
+            output.searchSkeletonTrigger.value = true
+            if !output.searchedItems.value.isEmpty {
+                self.output.scrollToTopTrigger.value = ()
             }
         }
         
@@ -88,28 +95,28 @@ final class ShoppingListViewModel {
         
         NetworkManager.shared.fetchData(url: url, type: ShoppingResult.self) { value in
             if start == 1 {
-                self.outputSearchedItems.value = value.items
-                self.outputSearchSkeletonTrigger.value = false
+                self.output.searchedItems.value = value.items
+                self.output.searchSkeletonTrigger.value = false
             } else {
-                self.outputSearchedItems.value.append(contentsOf: value.items)
+                self.output.searchedItems.value.append(contentsOf: value.items)
             }
-            self.outputListCount.value = value.total
+            self.output.totalCount.value = value.total
             self.isEnd = value.isEnd
         } failureHandler: { error in
             if start == 1 {
-                self.outputSearchSkeletonTrigger.value = false
-                self.outputListCount.value = 0
-                self.outputSearchedItems.value.removeAll()
+                self.output.searchSkeletonTrigger.value = false
+                self.output.totalCount.value = 0
+                self.output.searchedItems.value.removeAll()
             }
             switch error {
             case .network(let networkError):
-                self.outputErrorMessage.value = networkError.localizedDescription
+                self.output.errorMessage.value = networkError.localizedDescription
             case .server(let serverError):
                 do {
                     let serverError = try JSONDecoder().decode(NaverServerError.self, from: serverError)
-                    self.outputErrorMessage.value = serverError.errorMessage
+                    self.output.errorMessage.value = serverError.errorMessage
                 } catch {
-                    self.outputErrorMessage.value = error.localizedDescription
+                    self.output.errorMessage.value = error.localizedDescription
                 }
             }
             self.isEnd = true
@@ -118,44 +125,44 @@ final class ShoppingListViewModel {
     }
     
     private func fetchDataWithRecommended() {
-        outputRecommendedSkeletonTrigger.value = true
+        output.recommendedSkeletonTrigger.value = true
         
         let url = ShoppingRouter.getItems(searchText: recommendWord, display: 10, sortOption: .accuracy, start: 1)
         
         NetworkManager.shared.fetchData(url: url, type: ShoppingResult.self) { value in
-            self.outputRecommendedItems.value = value.items
-            self.outputRecommendedSkeletonTrigger.value = false
+            self.output.recommendedItems.value = value.items
+            self.output.recommendedSkeletonTrigger.value = false
         } failureHandler: { error in
             switch error {
             case .network(let networkError):
-                self.outputErrorMessage.value = networkError.localizedDescription
+                self.output.errorMessage.value = networkError.localizedDescription
             case .server(let serverError):
                 do {
                     let serverError = try JSONDecoder().decode(NaverServerError.self, from: serverError)
-                    self.outputErrorMessage.value = serverError.errorMessage
+                    self.output.errorMessage.value = serverError.errorMessage
                 } catch {
-                    self.outputErrorMessage.value = error.localizedDescription
+                    self.output.errorMessage.value = error.localizedDescription
                 }
             }
-            self.outputRecommendedSkeletonTrigger.value = false
+            self.output.recommendedSkeletonTrigger.value = false
         }
     }
     
     private func downloadImages(indexPaths: [IndexPath]) {
         for indexPath in indexPaths {
-            ImageCacheHelper.shared.download(with: outputSearchedItems.value[indexPath.item].image)
+            ImageCacheManager.shared.download(with: output.searchedItems.value[indexPath.item].image)
         }
     }
     
     private func cancelDownloadImages(indexPaths: [IndexPath]) {
         for indexPath in indexPaths {
-            ImageCacheHelper.shared.cancel(with: outputSearchedItems.value[indexPath.item].image)
+            ImageCacheManager.shared.cancel(with: output.searchedItems.value[indexPath.item].image)
         }
     }
     
     private func removeImages(indexPaths: [IndexPath]) {
         for indexPath in indexPaths {
-            ImageCacheHelper.shared.remove(forKey: outputSearchedItems.value[indexPath.item].image)
+            ImageCacheManager.shared.remove(forKey: output.searchedItems.value[indexPath.item].image)
         }
     }
 }

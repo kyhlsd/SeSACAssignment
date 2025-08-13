@@ -1,5 +1,5 @@
 //
-//  ImageDownloaderHelper.swift
+//  ImageCacheManager.swift
 //  Week4Assignment
 //
 //  Created by 김영훈 on 8/13/25.
@@ -8,8 +8,8 @@
 import Foundation
 import Kingfisher
 
-final class ImageCacheHelper {
-    static let shared = ImageCacheHelper()
+final class ImageCacheManager {
+    static let shared = ImageCacheManager()
     private init() {}
     
     func download(with url: String) {
