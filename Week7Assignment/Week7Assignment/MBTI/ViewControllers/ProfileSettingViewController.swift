@@ -10,7 +10,7 @@ import SnapKit
 
 final class ProfileSettingViewController: UIViewController {
     
-    private let profileImageButton = BadgeLayerButton(mainImage: UIImage(systemName: "person"), badgeImage: UIImage(systemName: "camera.circle.fill")?.withConfiguration(UIImage.SymbolConfiguration(paletteColors: [.white, .enabledButton])), color: .enabledButton, borderWidth: 6, badgeSize: 32)
+    private let profileImageButton = BadgeLayerButton(mainImage: nil, badgeImage: UIImage(systemName: "camera.circle.fill")?.withConfiguration(UIImage.SymbolConfiguration(paletteColors: [.white, .enabledButton])), color: .enabledButton, borderWidth: 6, badgeSize: 32)
     
     private let nicknameTextField = {
         let textField = UITextField()
@@ -154,6 +154,10 @@ final class ProfileSettingViewController: UIViewController {
         viewModel.output.alertTrigger.bind { [weak self] title, message in
             self?.showDefaultAlert(title: title, message: message)
         }
+        
+        viewModel.output.profileImage.bind(isLazy: false) { [weak self] image in
+            self?.profileImageButton.mainImageView.image = UIImage(named: image)
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -166,6 +170,7 @@ final class ProfileSettingViewController: UIViewController {
     
     @objc private func profileImageButtonTapped() {
         let viewController = ProfileImageViewController()
+        viewController.viewModel.output.selectedImage.value = viewModel.output.profileImage.value
         navigationController?.pushViewController(viewController, animated: true)
     }
     

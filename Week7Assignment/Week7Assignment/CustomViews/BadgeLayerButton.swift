@@ -9,18 +9,16 @@ import UIKit
 import SnapKit
 
 final class BadgeLayerButton: UIButton {
-    private let mainImageView = UIImageView()
-    private let badgeImageView = UIImageView()
+    let mainImageView = UIImageView()
+    let badgeImageView = UIImageView()
     
-    private let mainImage: UIImage?
-    private let badgeImage: UIImage?
     private let color: UIColor
     private let borderWidth: CGFloat
     private let badgeSize: CGFloat
     
     init(mainImage: UIImage?, badgeImage: UIImage?, color: UIColor, borderWidth: CGFloat, badgeSize: CGFloat) {
-        self.mainImage = mainImage
-        self.badgeImage = badgeImage
+        self.mainImageView.image = mainImage
+        self.badgeImageView.image = badgeImage
         self.color = color
         self.borderWidth = borderWidth
         self.badgeSize = badgeSize
@@ -55,7 +53,6 @@ final class BadgeLayerButton: UIButton {
     }
     
     private func setupMainImageView() {
-        mainImageView.image = mainImage
         mainImageView.contentMode = .scaleAspectFit
         mainImageView.layer.borderColor = color.cgColor
         mainImageView.layer.borderWidth = borderWidth
@@ -63,7 +60,6 @@ final class BadgeLayerButton: UIButton {
     }
     
     private func setupBadgeImageView() {
-        badgeImageView.image = badgeImage
         badgeImageView.layer.cornerRadius = badgeSize / 2
         badgeImageView.clipsToBounds = true
     }

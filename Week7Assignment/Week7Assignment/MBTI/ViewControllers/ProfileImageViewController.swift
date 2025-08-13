@@ -11,7 +11,7 @@ import SnapKit
 final class ProfileImageViewController: UIViewController {
 
     private let profileImageButton = {
-        let button = BadgeLayerButton(mainImage: UIImage(systemName: "person"), badgeImage: UIImage(systemName: "camera.circle.fill")?.withConfiguration(UIImage.SymbolConfiguration(paletteColors: [.white, .enabledButton])), color: .enabledButton, borderWidth: 6, badgeSize: 32)
+        let button = BadgeLayerButton(mainImage: nil, badgeImage: UIImage(systemName: "camera.circle.fill")?.withConfiguration(UIImage.SymbolConfiguration(paletteColors: [.white, .enabledButton])), color: .enabledButton, borderWidth: 6, badgeSize: 32)
         button.isEnabled = false
         return button
     }()
@@ -29,7 +29,7 @@ final class ProfileImageViewController: UIViewController {
         return collectionView
     }()
     
-    private let viewModel = ProfileImageViewModel()
+    let viewModel = ProfileImageViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,7 +73,10 @@ final class ProfileImageViewController: UIViewController {
     }
     
     private func setupBindings() {
-        
+        viewModel.output.selectedImage.bind(isLazy: false) { [weak self] image in
+            self?.profileImageButton.mainImageView.image = UIImage(named: image)
+            self?.imageCollectionView.reloadData()
+        }
     }
 }
 
@@ -84,7 +87,11 @@ extension ProfileImageViewController: UICollectionViewDelegate, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(cellType: ProfileImageCollectionViewCell.self, for: indexPath)
-        cell.configureData(viewModel.images[indexPath.item])
+        cell.configureData(viewModel.images[indexPath.item], isSelected: viewModel.getIsSelected(index: indexPath.row))
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        viewModel.input.imageSelectTrigger.value = indexPath.item
     }
 }

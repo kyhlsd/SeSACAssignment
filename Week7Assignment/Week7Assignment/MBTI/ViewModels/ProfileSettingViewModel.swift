@@ -24,6 +24,7 @@ final class ProfileSettingViewModel {
         let mbti = Observable(["", "", "", ""])
         let isEnableComplete = Observable(false)
         let alertTrigger = Observable(("", ""))
+        let profileImage = Observable("person\(Int.random(in: 0..<12))")
     }
     
     private var validNickname = ""

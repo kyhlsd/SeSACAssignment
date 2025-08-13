@@ -32,8 +32,18 @@ final class ProfileImageCollectionViewCell: UICollectionViewCell, Identifying {
         imageView.layer.cornerRadius = imageView.frame.height / 2
     }
     
-    func configureData(_ image: String) {
+    func configureData(_ image: String, isSelected: Bool = false) {
         imageView.image = UIImage(named: image)
+        
+        if isSelected {
+            imageView.layer.borderColor = UIColor.enabledButton.cgColor
+            imageView.layer.borderWidth = 4
+            imageView.alpha = 1
+        } else {
+            imageView.layer.borderColor = UIColor.disabledButton.cgColor
+            imageView.layer.borderWidth = 2
+            imageView.alpha = 0.5
+        }
     }
     
     private func setupUI() {
