@@ -78,7 +78,7 @@ final class ShoppingListViewController: UIViewController {
         }
         
         viewModel.output.errorMessage.bind { [weak self] message in
-            self?.showDefaultAlert(title: "데이터 가져오기 실패", message: message)
+            self?.showDefaultAlert(title: "데이터 가져오기 실패", message: message, isDark: true)
         }
     }
     

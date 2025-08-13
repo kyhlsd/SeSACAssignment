@@ -8,9 +8,9 @@
 import UIKit
 
 extension UIViewController {
-    func showDefaultAlert(title: String, message: String) {
+    func showDefaultAlert(title: String, message: String, isDark: Bool = false) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.overrideUserInterfaceStyle = .dark
+        alert.overrideUserInterfaceStyle = isDark ? .dark : .unspecified
         alert.addAction(UIAlertAction(title: "확인", style: .default))
         present(alert, animated: true)
     }

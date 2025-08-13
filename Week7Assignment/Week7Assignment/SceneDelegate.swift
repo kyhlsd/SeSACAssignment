@@ -26,6 +26,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         shoppingNav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         shoppingNav.tabBarItem = UITabBarItem(title: "Shopping", image: UIImage(systemName: "cart"), tag: 0)
         
+        let mbtiNav = UINavigationController(rootViewController: OnboardingViewController())
+        mbtiNav.view.backgroundColor = .white
+        mbtiNav.navigationBar.tintColor = .black
+        mbtiNav.tabBarItem = UITabBarItem(title: "MBTI", image: UIImage(systemName: "person"), tag: 1)
+        
         let tabBarController = UITabBarController()
         let appearance = UITabBarAppearance()
         appearance.shadowColor = .lightGray
@@ -33,7 +38,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         tabBarController.tabBar.scrollEdgeAppearance = appearance
         tabBarController.tabBar.tintColor = .systemBlue
         tabBarController.tabBar.unselectedItemTintColor = .systemGray
-        tabBarController.viewControllers = [shoppingNav]
+        tabBarController.viewControllers = [shoppingNav, mbtiNav]
         
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()

@@ -51,7 +51,7 @@ final class SearchShoppingViewController: UIViewController {
         }
         
         viewModel.outputAlertTrigger.bind { [weak self] title, message in
-            self?.showDefaultAlert(title: title, message: message)
+            self?.showDefaultAlert(title: title, message: message, isDark: true)
         }
     }
 }
