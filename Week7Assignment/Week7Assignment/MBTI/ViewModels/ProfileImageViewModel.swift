@@ -28,16 +28,19 @@ final class ProfileImageViewModel {
         return list
     }()
     
+    weak var delegate: ProfileImageTransferDelegate?
+    
     init() {
         input = Input()
         output = Output()
         
         input.imageSelectTrigger.bind { index in
             self.output.selectedImage.value = self.images[index]
+            self.delegate?.setProfileImage(image: self.images[index])
         }
     }
     
     func getIsSelected(index: Int) -> Bool {
-        return output.selectedImage.value == "person\(index)"
+        return output.selectedImage.value == images[index]
     }
 }

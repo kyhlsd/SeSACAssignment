@@ -171,6 +171,7 @@ final class ProfileSettingViewController: UIViewController {
     @objc private func profileImageButtonTapped() {
         let viewController = ProfileImageViewController()
         viewController.viewModel.output.selectedImage.value = viewModel.output.profileImage.value
+        viewController.viewModel.delegate = viewModel
         navigationController?.pushViewController(viewController, animated: true)
     }
     

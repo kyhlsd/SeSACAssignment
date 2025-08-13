@@ -7,6 +7,11 @@
 
 import Foundation
 
+protocol ProfileImageTransferDelegate: AnyObject {
+    func setProfileImage(image: String)
+}
+
+
 final class ProfileSettingViewModel {
     
     var input: Input
@@ -91,5 +96,11 @@ final class ProfileSettingViewModel {
     
     func getIsSelected(indexPath: IndexPath) -> Bool {
         return output.mbti.value[indexPath.section] == mbtiCases[indexPath.section][indexPath.item]
+    }
+}
+
+extension ProfileSettingViewModel: ProfileImageTransferDelegate {
+    func setProfileImage(image: String) {
+        output.profileImage.value = image
     }
 }
