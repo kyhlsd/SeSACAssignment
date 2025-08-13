@@ -74,6 +74,7 @@ final class ProfileSettingViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .white
         navigationItem.title = "PROFILE SETTING"
+        navigationItem.backButtonTitle = " "
         
         [profileImageButton, nicknameTextField, nicknameStatusLabel, mbtiLabel, mbtiCollectionView, completeButton].forEach {
             view.addSubview($0)
@@ -164,7 +165,8 @@ final class ProfileSettingViewController: UIViewController {
     }
     
     @objc private func profileImageButtonTapped() {
-        
+        let viewController = ProfileImageViewController()
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     @objc private func completeButtonTapped() {
