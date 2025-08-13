@@ -136,18 +136,22 @@ final class ProfileSettingViewController: UIViewController {
     }
     
     private func setupBindings() {
-        viewModel.isEnableComplete.bind(isLazy: false) { [weak self] isEnabled in
+        viewModel.output.isEnableComplete.bind(isLazy: false) { [weak self] isEnabled in
             self?.completeButton.isEnabled = isEnabled
             self?.completeButton.backgroundColor = isEnabled ? .enabledButton : .disabledButton
         }
-        viewModel.nicknameStatusText.bind { [weak self] text in
+        viewModel.output.nicknameStatusText.bind { [weak self] text in
             self?.nicknameStatusLabel.text = text
         }
-        viewModel.isEnableNickname.bind { [weak self] isEnabled in
+        viewModel.output.isEnableNickname.bind { [weak self] isEnabled in
             self?.nicknameStatusLabel.textColor = isEnabled ? .enabledButton : .systemRed
         }
-        viewModel.mbti.bind { [weak self] _ in
+        viewModel.output.mbti.bind { [weak self] _ in
             self?.mbtiCollectionView.reloadData()
+        }
+        
+        viewModel.output.alertTrigger.bind { [weak self] title, message in
+            self?.showDefaultAlert(title: title, message: message)
         }
     }
     
@@ -156,7 +160,7 @@ final class ProfileSettingViewController: UIViewController {
     }
     
     @objc private func nicknameTextFieldEditingChanged(_ sender: UITextField) {
-        viewModel.inputNickname.value = sender.text ?? ""
+        viewModel.input.nickname.value = sender.text
     }
     
     @objc private func profileImageButtonTapped() {
@@ -164,9 +168,7 @@ final class ProfileSettingViewController: UIViewController {
     }
     
     @objc private func completeButtonTapped() {
-        let nickname = viewModel.validNickname
-        let mbti = viewModel.mbti.value.reduce("", +)
-        showDefaultAlert(title: "프로필 설정 성공", message: "닉네임: \(nickname)\nMBTI: \(mbti)")
+        viewModel.input.completeButtonTrigger.value = ()
     }
 }
 
@@ -196,6 +198,6 @@ extension ProfileSettingViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        viewModel.selectMBTI(indexPath: indexPath)
+        viewModel.input.selectMBTITrigger.value = indexPath
     }
 }

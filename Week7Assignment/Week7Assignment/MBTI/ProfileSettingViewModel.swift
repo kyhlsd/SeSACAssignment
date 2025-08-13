@@ -8,67 +8,87 @@
 import Foundation
 
 final class ProfileSettingViewModel {
-    var inputNickname = Observable("")
-    private(set) var nicknameStatusText = Observable(" ")
-    private(set) var isEnableNickname = Observable(false)
-    private(set) var validNickname = ""
     
-    let mbti = Observable(["", "", "", ""])
-    private var isAllSelected = Observable(false)
+    var input: Input
+    var output: Output
+    
+    struct Input {
+        let nickname = Observable<String?>(nil)
+        let completeButtonTrigger = Observable(())
+        let selectMBTITrigger = Observable<IndexPath?>(nil)
+    }
+    
+    struct Output {
+        let nicknameStatusText = Observable(" ")
+        let isEnableNickname = Observable(false)
+        let mbti = Observable(["", "", "", ""])
+        let isEnableComplete = Observable(false)
+        let alertTrigger = Observable(("", ""))
+    }
+    
+    private var validNickname = ""
+    private var mbtiAllSelected = false
     let mbtiCases = MBTI.allCases
     
-    private(set) var isEnableComplete = Observable(false)
-    
     init() {
-        inputNickname.bind { _ in
+        input = Input()
+        output = Output()
+        
+        input.nickname.bind { _ in
             self.validateNickname()
         }
-        isAllSelected.bind { _ in
-            self.updateIsEnableComplete()
+        
+        input.completeButtonTrigger.bind { _ in
+            let mbtiString = self.output.mbti.value.reduce("", +)
+            self.output.alertTrigger.value = ("프로필 설정 성공", "닉네임: \(self.validNickname)\nMBTI: \(mbtiString)")
+        }
+        
+        input.selectMBTITrigger.bind { indexPath in
+            guard let indexPath else { return }
+            
+            self.output.mbti.value[indexPath.section] = self.mbtiCases[indexPath.section][indexPath.item]
+            self.updateIsAllSelected()
         }
     }
     
     private func updateIsEnableComplete() {
-        isEnableComplete.value = isEnableNickname.value && isAllSelected.value
+        output.isEnableComplete.value = output.isEnableNickname.value && mbtiAllSelected
     }
     
     private func validateNickname() {
         do {
-            let trimmed = try InputValidationHelper.getTrimmedText(inputNickname.value)
+            let trimmed = try InputValidationHelper.getTrimmedText(input.nickname.value)
             try InputValidationHelper.validateRange(trimmed.count, min: 2, minAllowsEqual: true, max: 10, maxAllowsEqual: false)
             try InputValidationHelper.validateContainNumber(trimmed)
             try InputValidationHelper.validateSpecialChar(trimmed, specialChars: ["@", "#", "$", "%"])
-            nicknameStatusText.value = "사용할 수 있는 닉네임이에요."
-            isEnableNickname.value = true
+            output.nicknameStatusText.value = "사용할 수 있는 닉네임이에요."
+            output.isEnableNickname.value = true
             validNickname = trimmed
         } catch let error as InputValidationError {
             var errorMessage = error.errorMessage
             if errorMessage == InputValidationError.emptyText.errorMessage { errorMessage = " " }
-            nicknameStatusText.value = errorMessage
-            isEnableNickname.value = false
+            output.nicknameStatusText.value = errorMessage
+            output.isEnableNickname.value = false
         } catch {
-            nicknameStatusText.value = error.localizedDescription
-            isEnableNickname.value = false
+            output.nicknameStatusText.value = error.localizedDescription
+            output.isEnableNickname.value = false
         }
         updateIsEnableComplete()
     }
     
-    func getIsSelected(indexPath: IndexPath) -> Bool {
-        return mbti.value[indexPath.section] == mbtiCases[indexPath.section][indexPath.item]
-    }
-    
-    func selectMBTI(indexPath: IndexPath) {
-        mbti.value[indexPath.section] = mbtiCases[indexPath.section][indexPath.item]
-        updateIsAllSelected()
-    }
-    
     private func updateIsAllSelected() {
-        for item in mbti.value {
+        for item in output.mbti.value {
             if item.isEmpty {
-                isAllSelected.value = false
+                mbtiAllSelected = false
+                updateIsEnableComplete()
                 return
             }
         }
-        isAllSelected.value = true
+        mbtiAllSelected = true
+        updateIsEnableComplete()
+    }
+    
+    func getIsSelected(indexPath: IndexPath) -> Bool {
+        return output.mbti.value[indexPath.section] == mbtiCases[indexPath.section][indexPath.item]
     }
 }
