@@ -19,8 +19,8 @@ final class ProfileSettingViewModel {
     
     struct Input {
         let nickname = Observable<String?>(nil)
-        let completeButtonTrigger = Observable(())
         let selectMBTITrigger = Observable<IndexPath?>(nil)
+        let completeButtonTrigger = Observable(())
     }
     
     struct Output {
@@ -28,11 +28,11 @@ final class ProfileSettingViewModel {
         let isEnableNickname = Observable(false)
         let mbti = Observable(["", "", "", ""])
         let isEnableComplete = Observable(false)
-        let alertTrigger = Observable(("", ""))
         let profileImage = Observable("person\(Int.random(in: 0..<12))")
+        let convertRootVCTrigger = Observable<Profile?>(nil)
     }
     
-    private var validNickname = ""
+    var validNickname = ""
     private var mbtiAllSelected = false
     let mbtiCases = MBTI.allCases
     
@@ -44,16 +44,15 @@ final class ProfileSettingViewModel {
             self.validateNickname()
         }
         
-        input.completeButtonTrigger.bind { _ in
-            let mbtiString = self.output.mbti.value.reduce("", +)
-            self.output.alertTrigger.value = ("프로필 설정 성공", "닉네임: \(self.validNickname)\nMBTI: \(mbtiString)")
-        }
-        
         input.selectMBTITrigger.bind { indexPath in
             guard let indexPath else { return }
             
             self.output.mbti.value[indexPath.section] = self.mbtiCases[indexPath.section][indexPath.item]
             self.updateIsAllSelected()
+        }
+        
+        input.completeButtonTrigger.bind { _ in
+            self.makeProfile()
         }
     }
     
@@ -92,6 +91,23 @@ final class ProfileSettingViewModel {
         }
         mbtiAllSelected = true
         updateIsEnableComplete()
+    }
+    
+    private func makeProfile() {
+        guard let nickname = input.nickname.value else { return }
+        let profileImage = output.profileImage.value
+        
+        let first = MBTI.First(rawValue: output.mbti.value[0])
+        let second = MBTI.Second(rawValue: output.mbti.value[1])
+        let third = MBTI.Third(rawValue: output.mbti.value[2])
+        let fourth = MBTI.Fourth(rawValue: output.mbti.value[3])
+        
+        guard let first, let second, let third, let fourth else { return }
+        let mbti = MBTI(first: first, second: second, third: third, fourth: fourth)
+        
+        let profile = Profile(nickname: nickname, mbti: mbti, image: profileImage)
+        
+        output.convertRootVCTrigger.value = profile
     }
     
     func getIsSelected(indexPath: IndexPath) -> Bool {

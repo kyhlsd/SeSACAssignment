@@ -10,8 +10,12 @@ import Foundation
 struct MBTI {
     let first: First
     let second: Second
-    let thrid: Third
+    let third: Third
     let fourth: Fourth
+    
+    var mbtiString: String {
+        return first.rawValue + second.rawValue + third.rawValue + fourth.rawValue
+    }
     
     static let allCases = {
         let first = MBTI.First.allCases.map { $0.rawValue }
@@ -37,4 +41,6 @@ struct MBTI {
         case j = "J"
         case p = "P"
     }
+    
+    static let ISFP = MBTI(first: .i, second: .s, third: .f, fourth: .p)
 }

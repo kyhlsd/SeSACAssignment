@@ -151,12 +151,14 @@ final class ProfileSettingViewController: UIViewController {
             self?.mbtiCollectionView.reloadData()
         }
         
-        viewModel.output.alertTrigger.bind { [weak self] title, message in
-            self?.showDefaultAlert(title: title, message: message)
-        }
-        
         viewModel.output.profileImage.bind(isLazy: false) { [weak self] image in
             self?.profileImageButton.mainImageView.image = UIImage(named: image)
+        }
+        
+        viewModel.output.convertRootVCTrigger.bind { [weak self] profile in
+            let viewController = MainViewController()
+            viewController.viewModel.input.profile.value = profile
+            self?.navigationController?.setViewControllers([viewController], animated: true)
         }
     }
     
