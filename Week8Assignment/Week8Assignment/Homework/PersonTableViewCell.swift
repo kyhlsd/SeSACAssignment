@@ -7,6 +7,8 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
+import RxSwift
 
 final class PersonTableViewCell: UITableViewCell {
     
@@ -38,6 +40,8 @@ final class PersonTableViewCell: UITableViewCell {
         return button
     }()
       
+    private var disposeBag = DisposeBag()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -48,8 +52,31 @@ final class PersonTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-     
     
+    override func prepareForReuse() {
+        profileImageView.image = nil
+        disposeBag = DisposeBag()
+    }
+    
+    func configureData(with person: Person, buttonTapped: @escaping () -> Void) {
+        let url = URL(string: person.profileImage)
+        profileImageView.kf.setImage(with: url) { [weak self] result in
+            switch result {
+            case .success(_): break
+            case .failure(_):
+                self?.profileImageView.image = UIImage(systemName: "photo")
+            }
+        }
+        
+        usernameLabel.text = person.name
+        
+        detailButton.rx.tap
+            .bind { _ in
+                buttonTapped()
+            }
+            .disposed(by: disposeBag)
+    }
+
     private func configure() {
         contentView.addSubview(usernameLabel)
         contentView.addSubview(profileImageView)

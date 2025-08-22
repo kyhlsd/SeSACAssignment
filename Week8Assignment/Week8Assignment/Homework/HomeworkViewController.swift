@@ -7,17 +7,16 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 struct Person: Identifiable {
     let id = UUID()
     let name: String
     let email: String
     let profileImage: String
-}
-
-class HomeworkViewController: UIViewController {
     
-    let sampleUsers: [Person] = [
+    static let dummy = [
         Person(name: "Steven", email: "steven.brown@example.com", profileImage: "https://randomuser.me/api/portraits/thumb/men/1.jpg"),
         Person(name: "Mike", email: "mike.wilson@example.com", profileImage: "https://randomuser.me/api/portraits/thumb/men/2.jpg"),
         Person(name: "Emma", email: "emma.taylor@example.com", profileImage: "https://randomuser.me/api/portraits/thumb/women/1.jpg"),
@@ -70,11 +69,17 @@ class HomeworkViewController: UIViewController {
         Person(name: "Ralph", email: "ralph.cox@example.com", profileImage: "https://randomuser.me/api/portraits/thumb/men/26.jpg"),
         Person(name: "Ann", email: "ann.howard@example.com", profileImage: "https://randomuser.me/api/portraits/thumb/women/25.jpg")
     ]
+}
+
+class HomeworkViewController: UIViewController {
     
     let tableView = UITableView()
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
     let searchBar = UISearchBar()
      
+    private let viewModel = HomeworkViewModel()
+    private let disposeBag = DisposeBag()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
@@ -86,7 +91,31 @@ class HomeworkViewController: UIViewController {
     }
      
     private func bind() {
-          
+        let input = HomeworkViewModel.Input(
+            tableViewCellTap: tableView.rx.modelSelected(Person.self),
+            searchButtonClick: searchBar.rx.searchButtonClicked
+                .withLatestFrom(searchBar.rx.text.orEmpty)
+        )
+        let output = viewModel.transform(input: input)
+        
+        output.userList
+            .bind(to: tableView.rx.items) { (tableView, row, element) in
+                let cell = tableView.dequeueReusableCell(withIdentifier: PersonTableViewCell.identifier) as! PersonTableViewCell
+                cell.configureData(with: element) { [weak self] in
+                    self?.pushDetailViewController(name: element.name)
+                }
+                return cell
+            }
+            .disposed(by: disposeBag)
+        
+        output.tappedList
+            .bind(to: collectionView.rx.items) { collectionView, item, element in
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserCollectionViewCell.identifier, for: IndexPath(item: item, section: 0)) as! UserCollectionViewCell
+                cell.setData(with: element)
+                return cell
+            }
+            .disposed(by: disposeBag)
+        
     }
     
     private func configure() {
@@ -122,5 +151,9 @@ class HomeworkViewController: UIViewController {
         return layout
     }
 
+    private func pushDetailViewController(name: String) {
+        let vc = HomeworkDetailViewController(name: name)
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
  
