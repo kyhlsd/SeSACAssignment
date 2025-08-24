@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct Tamagotchi {
-    let type: TamagotchiType
-    let meal: Int
-    let water: Int
+struct Tamagotchi: Codable {
+    var type: TamagotchiType
+    var meal: Int
+    var water: Int
     
     var level: Int {
         let score = Int(Float(meal) / 5 + Float(water) / 2)
@@ -33,7 +33,7 @@ struct Tamagotchi {
     }
 }
 
-enum TamagotchiType: String, CaseIterable {
+enum TamagotchiType: String, CaseIterable, Codable {
     case tingling = "따끔따끔 다마고치"
     case smailing = "방실방실 다마고치"
     case twinkling = "반짝반짝 다마고치"
@@ -58,5 +58,12 @@ enum TamagotchiType: String, CaseIterable {
         } else {
             return self.image + "6"
         }
+    }
+    
+    var introduce: String {
+        return """
+               저는 \(self.rawValue)입니다.
+               열심히 잘 먹고 잘 클 자신 있습니다.
+               """
     }
 }

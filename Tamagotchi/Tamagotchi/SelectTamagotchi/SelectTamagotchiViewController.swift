@@ -10,6 +10,10 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
+protocol VCTransitionDelegate: AnyObject {
+    func performTransition(isInit: Bool)
+}
+
 final class SelectTamagotchiViewController: UIViewController {
 
     private var collectionView = {
@@ -40,7 +44,7 @@ final class SelectTamagotchiViewController: UIViewController {
     }
     
     private func bind() {
-        let input = SelectTamagotchiViewModel.Input()
+        let input = SelectTamagotchiViewModel.Input(cellTap: collectionView.rx.modelSelected(TamagotchiType.self))
         let output = viewModel.transform(input: input)
         
         output.list
@@ -48,6 +52,12 @@ final class SelectTamagotchiViewController: UIViewController {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SelectTamagotchiCollectionViewCell.identifier, for: IndexPath(item: item, section: 0)) as! SelectTamagotchiCollectionViewCell
                 cell.setData(type: element)
                 return cell
+            }
+            .disposed(by: disposeBag)
+        
+        output.showAlertTrigger
+            .bind(with: self) { owner, type in
+                owner.showSelectAlert(type: type)
             }
             .disposed(by: disposeBag)
     }
@@ -62,6 +72,23 @@ final class SelectTamagotchiViewController: UIViewController {
     private func setupLayout() {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+    }
+    
+    private func showSelectAlert(type: TamagotchiType) {
+        let alert = SelectTamagotchiAlertController(title: nil, message: nil, preferredStyle: .alert)
+        alert.setData(type: type)
+        alert.delegate = self
+        present(alert, animated: true)
+    }
+}
+
+extension SelectTamagotchiViewController: VCTransitionDelegate {
+    func performTransition(isInit: Bool) {
+        if isInit {
+            navigationController?.viewControllers = [CareTamagotchiViewController()]
+        } else {
+            navigationController?.popViewController(animated: true)
         }
     }
 }

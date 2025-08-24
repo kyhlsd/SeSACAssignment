@@ -12,18 +12,29 @@ import RxCocoa
 final class SelectTamagotchiViewModel {
     
     struct Input {
-        
+        let cellTap: ControlEvent<TamagotchiType>
     }
     
     struct Output {
         let list: Observable<[TamagotchiType]>
+        let showAlertTrigger: PublishRelay<TamagotchiType>
     }
+    
+    private let disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
         let types = TamagotchiType.allCases
         let unreadys = [TamagotchiType](repeating: .unready, count: 20 - types.count)
         let list = Observable.just(types + unreadys)
         
-        return Output(list: list)
+        let showAlertTrigger: PublishRelay<TamagotchiType> = PublishRelay()
+        
+        input.cellTap
+            .debounce(.milliseconds(250), scheduler: MainScheduler.instance)
+            .filter { $0 != .unready }
+            .bind(to: showAlertTrigger)
+            .disposed(by: disposeBag)
+        
+        return Output(list: list, showAlertTrigger: showAlertTrigger)
     }
 }
