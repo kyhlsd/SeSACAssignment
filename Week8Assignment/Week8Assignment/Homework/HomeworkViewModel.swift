@@ -13,7 +13,7 @@ final class HomeworkViewModel {
     
     struct Input {
         let tableViewCellTap: ControlEvent<Person>
-        let searchButtonClick: Observable<ControlProperty<String>.Element>
+        let searchButtonClick: Observable<String>
     }
     
     struct Output {
