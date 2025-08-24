@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: scene)
         
-        let isInit = UserDefaultManager.tamagotchi.type == .unready
+        let isInit = UserDefaultManager.shared.tamagotchi.type == .unready
         let vc = isInit ? SelectTamagotchiViewController() : CareTamagotchiViewController()
         window?.rootViewController = UINavigationController(rootViewController: vc)
         window?.makeKeyAndVisible()

@@ -102,9 +102,9 @@ final class SelectTamagotchiAlertController: UIAlertController {
         addAction(UIAlertAction(title: "취소", style: .cancel))
         addAction(UIAlertAction(title: "시작하기", style: .default, handler: { [weak self] _ in
             guard let self, let type else { return }
-            let tamagotchi = UserDefaultManager.tamagotchi
-            UserDefaultManager.tamagotchi = Tamagotchi(type: type, meal: tamagotchi.meal, water: tamagotchi.water)
-            delegate?.performTransition(isInit: type == .unready)
+            let tamagotchi = UserDefaultManager.shared.tamagotchi
+            UserDefaultManager.shared.tamagotchi = Tamagotchi(type: type, meal: tamagotchi.meal, water: tamagotchi.water)
+            delegate?.performTransition(isInit: tamagotchi.type == .unready)
         }))
     }
 }

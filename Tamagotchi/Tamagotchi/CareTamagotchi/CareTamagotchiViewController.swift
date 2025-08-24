@@ -14,7 +14,7 @@ import RxCocoa
 final class CareTamagotchiViewController: UIViewController {
 
     private let profileButton = {
-        let barButtonItem = UIBarButtonItem(customView: UIImageView(image: UIImage(systemName: "person.circle")))
+        let barButtonItem = UIBarButtonItem(image: UIImage(systemName: "person.circle"), style: .done, target: nil, action: nil)
         barButtonItem.tintColor = .systemIndigo
         return barButtonItem
     }()
@@ -133,15 +133,21 @@ final class CareTamagotchiViewController: UIViewController {
     private func bind() {
         let input = CareTamagotchiViewModel.Input(
             profileButtonTap: profileButton.rx.tap,
+            updateBubble: updateBubble,
             mealButtonTap: mealButton.rx.tap
                 .withLatestFrom(mealTextField.rx.text),
             waterButtonTap: waterButton.rx.tap
-                .withLatestFrom(waterTextField.rx.text),
-            updateBubble: updateBubble)
+                .withLatestFrom(waterTextField.rx.text))
         let output = viewModel.transform(input: input)
         
         output.navigationTitle
             .bind(to: navigationItem.rx.title)
+            .disposed(by: disposeBag)
+        
+        output.pushSettingVC
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.pushViewController(SettingViewController(), animated: true)
+            }
             .disposed(by: disposeBag)
         
         output.bubbleMessage

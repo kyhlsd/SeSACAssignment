@@ -7,12 +7,21 @@
 
 import Foundation
 
-enum UserDefaultManager {
+final class UserDefaultManager {
+    static let shared = UserDefaultManager()
+    private init() {}
+    
     @UserDefaultForModel(key: "Tamagotchi", defaultValue: Tamagotchi(type: .unready, meal: 0, water: 0))
-    static var tamagotchi: Tamagotchi
+    var tamagotchi: Tamagotchi
     
     @UserDefault(key: "Username", defaultValue: "대장")
-    static var username: String
+    var username: String
+    
+    func resetData() {
+        for key in UserDefaults.standard.dictionaryRepresentation().keys {
+            UserDefaults.standard.removeObject(forKey: key.description)
+        }
+    }
 }
 
 @propertyWrapper

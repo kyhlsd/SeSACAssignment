@@ -86,7 +86,14 @@ final class SelectTamagotchiViewController: UIViewController {
 extension SelectTamagotchiViewController: VCTransitionDelegate {
     func performTransition(isInit: Bool) {
         if isInit {
-            navigationController?.viewControllers = [CareTamagotchiViewController()]
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first {
+                DispatchQueue.main.async { [weak self] in
+                    UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve) {
+                        self?.navigationController?.viewControllers = [CareTamagotchiViewController()]
+                    }
+                }
+            }
         } else {
             navigationController?.popViewController(animated: true)
         }
