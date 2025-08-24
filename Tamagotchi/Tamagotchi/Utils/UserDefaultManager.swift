@@ -6,13 +6,31 @@
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
 
 final class UserDefaultManager {
     static let shared = UserDefaultManager()
     private init() {}
     
-    @UserDefaultForModel(key: "Tamagotchi", defaultValue: Tamagotchi(type: .unready, meal: 0, water: 0))
-    var tamagotchi: Tamagotchi
+    private static let disposeBag = DisposeBag()
+    
+    let tamagotchi = {
+        let key = "Tamagotchi"
+        let data = {
+            guard let data = UserDefaults.standard.data(forKey: key),
+                  let decoded = try? PropertyListDecoder().decode(Tamagotchi.self, from: data) else { return Tamagotchi(type: .unready, meal: 0, water: 0) }
+            return decoded
+        }()
+
+        let behaviorRelay = BehaviorRelay(value: data)
+        behaviorRelay
+            .bind { value in
+                UserDefaults.standard.set(try? PropertyListEncoder().encode(value), forKey: key)
+            }
+            .disposed(by: UserDefaultManager.disposeBag)
+        return behaviorRelay
+    }()
     
     @UserDefault(key: "Username", defaultValue: "대장")
     var username: String
@@ -35,25 +53,6 @@ struct UserDefault<T> {
         }
         set {
             UserDefaults.standard.set(newValue, forKey: key)
-        }
-    }
-}
-
-@propertyWrapper
-struct UserDefaultForModel<T: Codable> {
-    let key: String
-    let defaultValue: T
-    
-    var wrappedValue: T {
-        get {
-            if let data = UserDefaults.standard.data(forKey: key),
-               let decoded = try? PropertyListDecoder().decode(T.self, from: data) {
-                return decoded
-            }
-            return defaultValue
-        }
-        set {
-            UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: key)
         }
     }
 }

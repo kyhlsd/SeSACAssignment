@@ -16,6 +16,7 @@ final class SelectTamagotchiViewModel {
     }
     
     struct Output {
+        let navigationTitle: String
         let list: Observable<[TamagotchiType]>
         let showAlertTrigger: PublishRelay<TamagotchiType>
     }
@@ -23,6 +24,8 @@ final class SelectTamagotchiViewModel {
     private let disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
+        let isInit = UserDefaultManager.shared.tamagotchi.value.type == .unready
+        let navigationTitle = isInit ? "다마고치 선택하기" : "다마고치 변경하기"
         let types = TamagotchiType.allCases
         let unreadys = [TamagotchiType](repeating: .unready, count: 20 - types.count)
         let list = Observable.just(types + unreadys)
@@ -35,6 +38,6 @@ final class SelectTamagotchiViewModel {
             .bind(to: showAlertTrigger)
             .disposed(by: disposeBag)
         
-        return Output(list: list, showAlertTrigger: showAlertTrigger)
+        return Output(navigationTitle: navigationTitle, list: list, showAlertTrigger: showAlertTrigger)
     }
 }

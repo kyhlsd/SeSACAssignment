@@ -47,6 +47,12 @@ final class SettingViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
+        output.pushSelectVC
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.pushViewController(SelectTamagotchiViewController(), animated: true)
+            }
+            .disposed(by: disposeBag)
+        
         output.transitionToRootVC
             .bind(with: self) { owner, _ in
                 owner.performTransition()
@@ -79,13 +85,11 @@ final class SettingViewController: UIViewController {
     }
     
     private func performTransition() {
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first {
-            DispatchQueue.main.async { [weak self] in
-                UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve) {
-                    self?.navigationController?.viewControllers = [SelectTamagotchiViewController()]
-                }
-            }
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first else { return }
+        
+        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve) { [weak self] in
+            self?.navigationController?.viewControllers = [SelectTamagotchiViewController()]
         }
     }
 

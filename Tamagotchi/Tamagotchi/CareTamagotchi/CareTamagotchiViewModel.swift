@@ -42,7 +42,7 @@ final class CareTamagotchiViewModel {
         let navigationTitle = BehaviorRelay(value: "\(username)님의 다마고치")
         let pushSettingVC: PublishRelay<Void> = PublishRelay()
         let bubbleMessage: PublishRelay<String> = PublishRelay()
-        let tamagotchi = BehaviorRelay(value: UserDefaultManager.shared.tamagotchi)
+        let tamagotchi = UserDefaultManager.shared.tamagotchi
         let toastMessage: PublishRelay<String> = PublishRelay()
         
         input.profileButtonTap
@@ -87,12 +87,6 @@ final class CareTamagotchiViewModel {
                 tamagotchi.accept(tempTamagotchi)
                 
                 input.updateBubble.accept(())
-            }
-            .disposed(by: disposeBag)
-        
-        tamagotchi
-            .bind {
-                UserDefaultManager.shared.tamagotchi = $0
             }
             .disposed(by: disposeBag)
         

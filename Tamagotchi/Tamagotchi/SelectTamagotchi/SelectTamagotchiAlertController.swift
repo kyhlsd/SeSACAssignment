@@ -99,12 +99,15 @@ final class SelectTamagotchiAlertController: UIAlertController {
     }
     
     private func setupActions() {
+        let tamagotchi = UserDefaultManager.shared.tamagotchi
+        let value = tamagotchi.value
+        let isInit = value.type == .unready
         addAction(UIAlertAction(title: "취소", style: .cancel))
-        addAction(UIAlertAction(title: "시작하기", style: .default, handler: { [weak self] _ in
+        addAction(UIAlertAction(title: isInit ? "시작하기" : "변경하기", style: .default, handler: { [weak self] _ in
             guard let self, let type else { return }
-            let tamagotchi = UserDefaultManager.shared.tamagotchi
-            UserDefaultManager.shared.tamagotchi = Tamagotchi(type: type, meal: tamagotchi.meal, water: tamagotchi.water)
-            delegate?.performTransition(isInit: tamagotchi.type == .unready)
+            
+            tamagotchi.accept(Tamagotchi(type: type, meal: value.meal, water: value.water))
+            delegate?.selectHandler(isInit: isInit)
         }))
     }
 }

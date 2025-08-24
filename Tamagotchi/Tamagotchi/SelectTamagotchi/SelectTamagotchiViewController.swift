@@ -7,11 +7,12 @@
 
 import UIKit
 import SnapKit
+import Toast
 import RxSwift
 import RxCocoa
 
 protocol VCTransitionDelegate: AnyObject {
-    func performTransition(isInit: Bool)
+    func selectHandler(isInit: Bool)
 }
 
 final class SelectTamagotchiViewController: UIViewController {
@@ -60,12 +61,12 @@ final class SelectTamagotchiViewController: UIViewController {
                 owner.showSelectAlert(type: type)
             }
             .disposed(by: disposeBag)
+        
+        navigationItem.title = output.navigationTitle
     }
 
     private func setupUI() {
         view.backgroundColor = .background
-        navigationItem.title = "다마고치 선택하기"
-        
         view.addSubview(collectionView)
     }
     
@@ -84,18 +85,16 @@ final class SelectTamagotchiViewController: UIViewController {
 }
 
 extension SelectTamagotchiViewController: VCTransitionDelegate {
-    func performTransition(isInit: Bool) {
+    func selectHandler(isInit: Bool) {
         if isInit {
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let window = windowScene.windows.first {
-                DispatchQueue.main.async { [weak self] in
-                    UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve) {
-                        self?.navigationController?.viewControllers = [CareTamagotchiViewController()]
-                    }
-                }
+            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let window = windowScene.windows.first else { return }
+            
+            UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve) { [weak self] in
+                self?.navigationController?.viewControllers = [CareTamagotchiViewController()]
             }
         } else {
-            navigationController?.popViewController(animated: true)
+            view.makeToast("다마고치가 변경되었습니다", duration: 1, position: .bottom)
         }
     }
 }

@@ -36,6 +36,7 @@ final class SettingViewModel {
     struct Output {
         let list: Observable<[SettingType]>
         let resetAlert: PublishRelay<Void>
+        let pushSelectVC: PublishRelay<Void>
         let transitionToRootVC: PublishRelay<Void>
     }
     
@@ -44,6 +45,7 @@ final class SettingViewModel {
     
     func transform(input: Input) -> Output {
         let resetAlert: PublishRelay<Void> = PublishRelay()
+        let pushSelectVC: PublishRelay<Void> = PublishRelay()
         let transitionToRootVC: PublishRelay<Void> = PublishRelay()
         
         input.cellTap
@@ -53,7 +55,7 @@ final class SettingViewModel {
                 case .username:
                     print("username")
                 case .tamagotchi:
-                    print("tamagotchi")
+                    pushSelectVC.accept(())
                 case .reset:
                     resetAlert.accept(())
                 }
@@ -68,7 +70,7 @@ final class SettingViewModel {
             .disposed(by: disposeBag)
         
         let list = Observable.just(SettingType.allCases)
-        return Output(list: list, resetAlert: resetAlert, transitionToRootVC: transitionToRootVC)
+        return Output(list: list, resetAlert: resetAlert, pushSelectVC: pushSelectVC, transitionToRootVC: transitionToRootVC)
     }
     
     private func resetData() {
