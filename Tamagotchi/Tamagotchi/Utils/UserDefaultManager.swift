@@ -8,16 +8,19 @@
 import Foundation
 
 enum UserDefaultManager {
-    @UserDefaultForModel(key: "Tamagotchi", defaultValue: nil)
-    static var tamagotchi: Tamagotchi?
+    @UserDefaultForModel(key: "Tamagotchi", defaultValue: Tamagotchi(type: .unready, meal: 0, water: 0))
+    static var tamagotchi: Tamagotchi
+    
+    @UserDefault(key: "Username", defaultValue: "대장")
+    static var username: String
 }
 
 @propertyWrapper
 struct UserDefault<T> {
     let key: String
-    let defaultValue: T?
+    let defaultValue: T
     
-    var wrappedValue: T? {
+    var wrappedValue: T {
         get {
             return UserDefaults.standard.object(forKey: key) as? T ?? defaultValue
         }
@@ -30,9 +33,9 @@ struct UserDefault<T> {
 @propertyWrapper
 struct UserDefaultForModel<T: Codable> {
     let key: String
-    let defaultValue: T?
+    let defaultValue: T
     
-    var wrappedValue: T? {
+    var wrappedValue: T {
         get {
             if let data = UserDefaults.standard.data(forKey: key),
                let decoded = try? PropertyListDecoder().decode(T.self, from: data) {

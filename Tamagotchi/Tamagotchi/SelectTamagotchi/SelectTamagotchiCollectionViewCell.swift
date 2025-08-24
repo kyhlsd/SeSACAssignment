@@ -22,7 +22,7 @@ final class SelectTamagotchiCollectionViewCell: UICollectionViewCell {
     private let insetLabel = {
         let label = InsetLabel()
         label.font = .systemFont(ofSize: 12)
-        label.textColor = .systemBlue
+        label.textColor = .systemIndigo
         label.textAlignment = .center
         label.layer.cornerRadius = 4
         label.layer.borderWidth = 1

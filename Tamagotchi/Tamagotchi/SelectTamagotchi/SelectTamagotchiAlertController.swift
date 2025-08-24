@@ -20,7 +20,7 @@ final class SelectTamagotchiAlertController: UIAlertController {
     private let nameLabel = {
         let label = InsetLabel()
         label.font = .systemFont(ofSize: 12)
-        label.textColor = .systemBlue
+        label.textColor = .systemIndigo
         label.textAlignment = .center
         label.layer.cornerRadius = 4
         label.layer.borderWidth = 1
@@ -37,7 +37,7 @@ final class SelectTamagotchiAlertController: UIAlertController {
     private let introduceLabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
-        label.textColor = .systemBlue
+        label.textColor = .systemIndigo
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -103,8 +103,8 @@ final class SelectTamagotchiAlertController: UIAlertController {
         addAction(UIAlertAction(title: "시작하기", style: .default, handler: { [weak self] _ in
             guard let self, let type else { return }
             let tamagotchi = UserDefaultManager.tamagotchi
-            UserDefaultManager.tamagotchi = Tamagotchi(type: type, meal: tamagotchi?.meal ?? 0, water: tamagotchi?.water ?? 0)
-            delegate?.performTransition(isInit: tamagotchi == nil)
+            UserDefaultManager.tamagotchi = Tamagotchi(type: type, meal: tamagotchi.meal, water: tamagotchi.water)
+            delegate?.performTransition(isInit: type == .unready)
         }))
     }
 }
