@@ -7,11 +7,18 @@
 
 import UIKit
 import SnapKit
+import Toast
 import RxSwift
 import RxCocoa
 
 final class CareTamagotchiViewController: UIViewController {
 
+    private let profileButton = {
+        let barButtonItem = UIBarButtonItem(customView: UIImageView(image: UIImage(systemName: "person.circle")))
+        barButtonItem.tintColor = .systemIndigo
+        return barButtonItem
+    }()
+    
     private let bubbleImageView = {
         let imageView = UIImageView()
         imageView.image = .bubble
@@ -58,6 +65,7 @@ final class CareTamagotchiViewController: UIViewController {
         let textField = UITextField()
         textField.textAlignment = .center
         textField.placeholder = "밥주세용"
+        textField.keyboardType = .numberPad
         return textField
     }()
     
@@ -65,6 +73,7 @@ final class CareTamagotchiViewController: UIViewController {
         let textField = UITextField()
         textField.textAlignment = .center
         textField.placeholder = "물주세용"
+        textField.keyboardType = .numberPad
         return textField
     }()
     
@@ -99,6 +108,7 @@ final class CareTamagotchiViewController: UIViewController {
     }()
     
     private let viewModel = CareTamagotchiViewModel()
+    private let updateBubble: PublishRelay<Void> = PublishRelay()
     private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
@@ -114,9 +124,20 @@ final class CareTamagotchiViewController: UIViewController {
         mealTextField.layer.addBorder([.bottom], color: .lightGray, width: 1)
         waterTextField.layer.addBorder([.bottom], color: .lightGray, width: 1)
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateBubble.accept(())
+    }
 
     private func bind() {
-        let input = CareTamagotchiViewModel.Input()
+        let input = CareTamagotchiViewModel.Input(
+            profileButtonTap: profileButton.rx.tap,
+            mealButtonTap: mealButton.rx.tap
+                .withLatestFrom(mealTextField.rx.text),
+            waterButtonTap: waterButton.rx.tap
+                .withLatestFrom(waterTextField.rx.text),
+            updateBubble: updateBubble)
         let output = viewModel.transform(input: input)
         
         output.navigationTitle
@@ -129,27 +150,33 @@ final class CareTamagotchiViewController: UIViewController {
         
         output.tamagotchi
             .map { UIImage(named: $0.image) }
+            .distinctUntilChanged()
             .bind(to: tamagotchiImageView.rx.image)
             .disposed(by: disposeBag)
         
         output.tamagotchi
             .map { $0.type.rawValue }
+            .distinctUntilChanged()
             .bind(to: nameLabel.rx.text)
             .disposed(by: disposeBag)
         
-        output.description
+        output.tamagotchi
+            .map { $0.description }
+            .distinctUntilChanged()
             .bind(to: descriptLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.toastMessage
+            .bind(with: self) { owner, message in
+                owner.view.makeToast(message, duration: 1, position: .bottom)
+            }
             .disposed(by: disposeBag)
     }
     
     private func setupUI() {
         view.backgroundColor = .background
-        navigationItem.title = "\(UserDefaultManager.username)님의 다마고치"
         navigationItem.backButtonTitle = " "
-        
-        let barButtonItem = UIBarButtonItem(customView: UIImageView(image: UIImage(systemName: "person.circle")))
-        barButtonItem.tintColor = .systemIndigo
-        navigationItem.rightBarButtonItem = barButtonItem
+        navigationItem.rightBarButtonItem = profileButton
         
         [bubbleImageView, bubbleLabel, tamagotchiImageView, nameLabel, descriptLabel, mealTextField, mealButton, waterTextField, waterButton].forEach {
             view.addSubview($0)

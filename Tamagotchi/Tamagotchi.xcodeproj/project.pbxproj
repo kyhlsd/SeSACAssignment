@@ -10,6 +10,7 @@
 		15FC8F712E59BB2F0045A0C5 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 15FC8F702E59BB2F0045A0C5 /* SnapKit */; };
 		15FC8FBB2E59C90E0045A0C5 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 15FC8FBA2E59C90E0045A0C5 /* RxCocoa */; };
 		15FC8FBD2E59C90E0045A0C5 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 15FC8FBC2E59C90E0045A0C5 /* RxSwift */; };
+		15FC92282E5B52FC0045A0C5 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 15FC92272E5B52FC0045A0C5 /* Toast */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15FC92282E5B52FC0045A0C5 /* Toast in Frameworks */,
 				15FC8FBD2E59C90E0045A0C5 /* RxSwift in Frameworks */,
 				15FC8FBB2E59C90E0045A0C5 /* RxCocoa in Frameworks */,
 				15FC8F712E59BB2F0045A0C5 /* SnapKit in Frameworks */,
@@ -90,6 +92,7 @@
 				15FC8F702E59BB2F0045A0C5 /* SnapKit */,
 				15FC8FBA2E59C90E0045A0C5 /* RxCocoa */,
 				15FC8FBC2E59C90E0045A0C5 /* RxSwift */,
+				15FC92272E5B52FC0045A0C5 /* Toast */,
 			);
 			productName = Tamagotchi;
 			productReference = 15FC8F522E59BA3C0045A0C5 /* Tamagotchi.app */;
@@ -122,6 +125,7 @@
 			packageReferences = (
 				15FC8F6F2E59BB2F0045A0C5 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				15FC8FB92E59C90E0045A0C5 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				15FC92262E5B52FC0045A0C5 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 15FC8F532E59BA3C0045A0C5 /* Products */;
@@ -377,6 +381,14 @@
 				minimumVersion = 6.9.0;
 			};
 		};
+		15FC92262E5B52FC0045A0C5 /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -394,6 +406,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 15FC8FB92E59C90E0045A0C5 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
+		};
+		15FC92272E5B52FC0045A0C5 /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 15FC92262E5B52FC0045A0C5 /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
