@@ -20,9 +20,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: scene)
         
+        let lottoNav = UINavigationController(rootViewController: LottoViewController())
+        lottoNav.view.backgroundColor = .white
+        lottoNav.tabBarItem = UITabBarItem(title: "Lotto", image: UIImage(systemName: "circle.fill"), tag: 0)
+        
         let isInit = UserDefaultManager.shared.tamagotchi.value.type == .unready
         let vc = isInit ? SelectTamagotchiViewController() : CareTamagotchiViewController()
-        window?.rootViewController = UINavigationController(rootViewController: vc)
+        let tamagotchiNav = UINavigationController(rootViewController: vc)
+        tamagotchiNav.view.backgroundColor = .background
+        tamagotchiNav.tabBarItem = UITabBarItem(title: "Tamagotchi", image: UIImage(systemName: "leaf.fill"), tag: 1)
+
+        let tab = UITabBarController()
+        tab.viewControllers = [lottoNav, tamagotchiNav]
+        
+        window?.rootViewController = tab
         window?.makeKeyAndVisible()
     }
 
