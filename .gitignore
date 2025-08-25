@@ -133,5 +133,6 @@ iOSInjectionProject/
 
 # Secret.xcconfig #
 **/Secret.xcconfig
+**/Secrets/
 
 # End of https://www.toptal.com/developers/gitignore/api/swift,macos,xcode

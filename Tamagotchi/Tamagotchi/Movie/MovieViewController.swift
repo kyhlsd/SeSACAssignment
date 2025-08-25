@@ -1,5 +1,5 @@
 //
-//  LottoViewController.swift
+//  MovieViewController.swift
 //  Tamagotchi
 //
 //  Created by 김영훈 on 8/25/25.
@@ -10,12 +10,12 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-final class LottoViewController: UIViewController {
+final class MovieViewController: UIViewController {
     
     private let tableView = UITableView()
     private let searchBar = UISearchBar()
      
-    private let viewModel = LottoViewModel()
+    private let viewModel = MovieViewModel()
     private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
@@ -25,15 +25,15 @@ final class LottoViewController: UIViewController {
     }
      
     private func bind() {
-        let input = LottoViewModel.Input(
+        let input = MovieViewModel.Input(
             searchButtonClick: searchBar.rx.searchButtonClicked
                 .withLatestFrom(searchBar.rx.text.orEmpty))
         let output = viewModel.transform(input: input)
         
         output.result
-            .map { $0.numbers }
+            .map { $0.boxOfficeResult.dailyBoxOfficeList }
             .bind(to: tableView.rx.items(cellIdentifier: SimpleTableViewCell.identifier, cellType: SimpleTableViewCell.self)) { row, element, cell in
-                cell.usernameLabel.text = "\(row + 1)번째 번호: \(element)"
+                cell.usernameLabel.text = "\(element.rank): \(element.name)"
             }
             .disposed(by: disposeBag)
     }
@@ -52,8 +52,6 @@ final class LottoViewController: UIViewController {
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
-        searchBar.placeholder = "로또 회차 -> ex) 1181"
+        searchBar.placeholder = "영화날짜 -> ex) 20250825"
     }
 }
- 
-
