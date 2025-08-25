@@ -26,6 +26,14 @@ final class SettingViewModel {
                 return "arrow.clockwise"
             }
         }
+        
+        var displayName: String? {
+            if self == .username {
+                return UserDefaultManager.shared.username.value
+            } else {
+                return nil
+            }
+        }
     }
     
     struct Input {
@@ -35,25 +43,29 @@ final class SettingViewModel {
     
     struct Output {
         let list: Observable<[SettingType]>
+        let username: BehaviorRelay<String>
         let resetAlert: PublishRelay<Void>
         let pushSelectVC: PublishRelay<Void>
         let transitionToRootVC: PublishRelay<Void>
+        let pushNamingVC: PublishRelay<Void>
     }
     
-    let username = UserDefaultManager.shared.username
     private let disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
+        let list = Observable.just(SettingType.allCases)
+        let username = UserDefaultManager.shared.username
         let resetAlert: PublishRelay<Void> = PublishRelay()
         let pushSelectVC: PublishRelay<Void> = PublishRelay()
         let transitionToRootVC: PublishRelay<Void> = PublishRelay()
+        let pushNamingVC: PublishRelay<Void> = PublishRelay()
         
         input.cellTap
             .debounce(.milliseconds(250), scheduler: MainScheduler.instance)
             .bind { type in
                 switch type {
                 case .username:
-                    print("username")
+                    pushNamingVC.accept(())
                 case .tamagotchi:
                     pushSelectVC.accept(())
                 case .reset:
@@ -69,8 +81,7 @@ final class SettingViewModel {
             }
             .disposed(by: disposeBag)
         
-        let list = Observable.just(SettingType.allCases)
-        return Output(list: list, resetAlert: resetAlert, pushSelectVC: pushSelectVC, transitionToRootVC: transitionToRootVC)
+        return Output(list: list, username: username, resetAlert: resetAlert, pushSelectVC: pushSelectVC, transitionToRootVC: transitionToRootVC, pushNamingVC: pushNamingVC)
     }
     
     private func resetData() {

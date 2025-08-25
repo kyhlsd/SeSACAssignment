@@ -14,12 +14,15 @@ final class UserDefaultManager {
     private init() {}
     
     private static let disposeBag = DisposeBag()
+    private static let defaultTamagotchi = Tamagotchi(type: .unready, meal: 0, water: 0)
+    private static let defaultUsername = "대장"
     
     let tamagotchi = {
         let key = "Tamagotchi"
+        let defaultValue = defaultTamagotchi
         let data = {
             guard let data = UserDefaults.standard.data(forKey: key),
-                  let decoded = try? PropertyListDecoder().decode(Tamagotchi.self, from: data) else { return Tamagotchi(type: .unready, meal: 0, water: 0) }
+                  let decoded = try? PropertyListDecoder().decode(Tamagotchi.self, from: data) else { return defaultValue }
             return decoded
         }()
 
@@ -32,27 +35,24 @@ final class UserDefaultManager {
         return behaviorRelay
     }()
     
-    @UserDefault(key: "Username", defaultValue: "대장")
-    var username: String
+    let username = {
+        let key = "Username"
+        let defaultValue = defaultUsername
+        let data = UserDefaults.standard.object(forKey: key) as? String ?? defaultValue
+        let behaviorRelay = BehaviorRelay(value: data)
+        behaviorRelay
+            .bind { value in
+                UserDefaults.standard.set(value, forKey: key)
+            }
+            .disposed(by: UserDefaultManager.disposeBag)
+        return behaviorRelay
+    }()
     
     func resetData() {
         for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key.description)
         }
-    }
-}
-
-@propertyWrapper
-struct UserDefault<T> {
-    let key: String
-    let defaultValue: T
-    
-    var wrappedValue: T {
-        get {
-            return UserDefaults.standard.object(forKey: key) as? T ?? defaultValue
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: key)
-        }
+        tamagotchi.accept(UserDefaultManager.defaultTamagotchi)
+        username.accept(UserDefaultManager.defaultUsername)
     }
 }

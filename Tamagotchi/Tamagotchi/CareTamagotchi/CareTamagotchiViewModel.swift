@@ -28,22 +28,28 @@ final class CareTamagotchiViewModel {
     
     private let username = UserDefaultManager.shared.username
     
-    private lazy var bubbleMessages = [
-        "\(username)님, 안녕하세요\n좀 쉬셔야겠어요",
-        "\(username)님,\n소고기가 먹고 싶어요",
-        "\(username)님,\n집 청소를 하셔야해요"
-    ]
+    private var bubbleMessages: [String] {[
+        "\(username.value)님, 안녕하세요\n좀 쉬셔야겠어요",
+        "\(username.value)님,\n소고기가 먹고 싶어요",
+        "\(username.value)님,\n집 청소를 하셔야해요"
+    ]}
     private let maxMealForOnce = 99
     private let maxWaterForOnce = 49
     private let disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
         
-        let navigationTitle = BehaviorRelay(value: "\(username)님의 다마고치")
+        let navigationTitle = BehaviorRelay(value: "")
         let pushSettingVC: PublishRelay<Void> = PublishRelay()
         let bubbleMessage: PublishRelay<String> = PublishRelay()
         let tamagotchi = UserDefaultManager.shared.tamagotchi
         let toastMessage: PublishRelay<String> = PublishRelay()
+        
+        username
+            .bind { value in
+                navigationTitle.accept("\(value)님의 다마고치")
+            }
+            .disposed(by: disposeBag)
         
         input.profileButtonTap
             .bind(to: pushSettingVC)

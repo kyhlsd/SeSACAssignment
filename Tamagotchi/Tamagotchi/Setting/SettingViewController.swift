@@ -16,6 +16,7 @@ final class SettingViewController: UIViewController {
         let tableView = UITableView()
         tableView.rowHeight = 60
         tableView.separatorInset = .zero
+        tableView.backgroundColor = .clear
         return tableView
     }()
     
@@ -41,6 +42,12 @@ final class SettingViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
+        output.username
+            .bind(with: self) { owner, _ in
+                owner.tableView.reloadData()
+            }
+            .disposed(by: disposeBag)
+        
         output.resetAlert
             .bind(with: self) { owner, _ in
                 owner.presentResetAlert()
@@ -58,6 +65,12 @@ final class SettingViewController: UIViewController {
                 owner.performTransition()
             }
             .disposed(by: disposeBag)
+        
+        output.pushNamingVC
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.pushViewController(NamingViewController(), animated: true)
+            }
+            .disposed(by: disposeBag)
     }
     
     private func getBasicCell(type: SettingViewModel.SettingType) -> UITableViewCell {
@@ -66,12 +79,11 @@ final class SettingViewController: UIViewController {
         var config = cell.defaultContentConfiguration()
         config.image = UIImage(systemName: type.icon)
         config.text = type.rawValue
-        if type == .username {
-            config.secondaryText = viewModel.username
-            config.prefersSideBySideTextAndSecondaryText = true
-        }
+        config.secondaryText = type.displayName
+        config.prefersSideBySideTextAndSecondaryText = true
         cell.contentConfiguration = config
         cell.selectionStyle = .none
+        cell.backgroundColor = .clear
         return cell
     }
     
