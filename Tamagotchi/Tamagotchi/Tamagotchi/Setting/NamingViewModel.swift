@@ -16,7 +16,7 @@ final class NamingViewModel {
     }
     
     struct Output {
-        let username: BehaviorRelay<String>
+        let username: Observable<String>
         let toastMessage: PublishRelay<String>
         let popVC: PublishRelay<Void>
     }
@@ -26,7 +26,7 @@ final class NamingViewModel {
     private let minCount = 2
     
     func transform(input: Input) -> Output {
-        let userName = UserDefaultManager.shared.username
+        let userName = Observable.just(UserDefaultManager.shared.username.value)
         let toastMessage: PublishRelay<String> = PublishRelay()
         let popVC: PublishRelay<Void> = PublishRelay()
         input.saveButtonTap
