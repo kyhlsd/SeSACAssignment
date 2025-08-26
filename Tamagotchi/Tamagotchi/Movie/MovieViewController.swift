@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Toast
 import RxSwift
 import RxCocoa
 
@@ -34,6 +35,18 @@ final class MovieViewController: UIViewController {
             .map { $0.boxOfficeResult.dailyBoxOfficeList }
             .bind(to: tableView.rx.items(cellIdentifier: SimpleTableViewCell.identifier, cellType: SimpleTableViewCell.self)) { row, element, cell in
                 cell.usernameLabel.text = "\(element.rank): \(element.name)"
+            }
+            .disposed(by: disposeBag)
+        
+        output.errorToastMessage
+            .bind(with: self) { owner, errorMessage in
+                owner.view.makeToast(errorMessage, duration: 1, position: .bottom)
+            }
+            .disposed(by: disposeBag)
+        
+        output.networkAlert
+            .bind(with: self) { owner, alert in
+                owner.showDefaultAlert(title: alert.0, message: alert.1)
             }
             .disposed(by: disposeBag)
     }

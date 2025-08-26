@@ -42,7 +42,7 @@ final class LottoViewModel {
                 case .failure(let error):
                     switch error {
                     case .network:
-                        networkAlert.accept(("네트워크 단절", "네트워크 상태를 확인해주세요."))
+                        networkAlert.accept(("네트워크 단절", error.localizedDescription))
                     case .unknown(_):
                         errorToastMessage.accept(error.localizedDescription)
                     }
