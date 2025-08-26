@@ -10,15 +10,14 @@ import Alamofire
 import RxSwift
 
 enum APIObservable {
-    static func callRequest<T: Decodable> (url: Router, type: T.Type = T.self) -> Observable<T> {
-        return Observable<T>.create { observer in
+    static func callRequest<T: Decodable> (url: Router, type: T.Type = T.self) -> Single<Result<T, Error>> {
+        return Single.create { observer in
             AF.request(url).responseDecodable(of: type) { response in
                 switch response.result {
                 case .success(let value):
-                    observer.onNext(value)
-                    observer.onCompleted()
+                    observer(.success(.success(value)))
                 case .failure(let error):
-                    observer.onError(error)
+                    observer(.success(.failure(error)))
                 }
             }
             return Disposables.create()

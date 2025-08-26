@@ -30,7 +30,7 @@ final class MovieViewController: UIViewController {
                 .withLatestFrom(searchBar.rx.text.orEmpty))
         let output = viewModel.transform(input: input)
         
-        output.result
+        output.movieResult
             .map { $0.boxOfficeResult.dailyBoxOfficeList }
             .bind(to: tableView.rx.items(cellIdentifier: SimpleTableViewCell.identifier, cellType: SimpleTableViewCell.self)) { row, element, cell in
                 cell.usernameLabel.text = "\(element.rank): \(element.name)"

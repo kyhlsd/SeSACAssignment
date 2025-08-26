@@ -16,26 +16,29 @@ final class MovieViewModel {
     }
     
     struct Output {
-        let result: PublishRelay<Movie>
+        let movieResult: PublishRelay<Movie>
     }
     
     private let disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
-        let result = PublishRelay<Movie>()
+        let movieResult = PublishRelay<Movie>()
         
         input.searchButtonClick
             .distinctUntilChanged()
             .flatMap { date in
                 APIObservable.callRequest(url: .getMovie(targetDate: date), type: Movie.self)
             }
-            .subscribe { value in
-                result.accept(value)
-            } onError: { error in
-                print(error)
+            .bind { result in
+                switch result {
+                case .success(let movie):
+                    movieResult.accept(movie)
+                case .failure(let error):
+                    print(error)
+                }
             }
             .disposed(by: disposeBag)
         
-        return Output(result: result)
+        return Output(movieResult: movieResult)
     }
 }

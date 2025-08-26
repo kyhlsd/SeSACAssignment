@@ -31,7 +31,7 @@ final class LottoViewController: UIViewController {
                 .withLatestFrom(searchBar.rx.text.orEmpty))
         let output = viewModel.transform(input: input)
         
-        output.result
+        output.lottoResult
             .map { $0.numbers }
             .bind(to: tableView.rx.items(cellIdentifier: SimpleTableViewCell.identifier, cellType: SimpleTableViewCell.self)) { row, element, cell in
                 cell.usernameLabel.text = "\(row + 1)번째 번호: \(element)"
@@ -39,7 +39,7 @@ final class LottoViewController: UIViewController {
             .disposed(by: disposeBag)
         
         output.lottoError
-            .map { $0.errorDescription }
+            .map { $0.localizedDescription }
             .bind(with: self) { owner, errorMessage in
                 owner.view.makeToast(errorMessage, duration: 1, position: .bottom)
             }

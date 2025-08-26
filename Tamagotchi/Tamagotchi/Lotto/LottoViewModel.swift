@@ -16,15 +16,15 @@ final class LottoViewModel {
     }
     
     struct Output {
-        let result: PublishRelay<Lotto>
-        let lottoError: PublishRelay<LottoError>
+        let lottoResult: PublishRelay<Lotto>
+        let lottoError: PublishRelay<Error>
     }
     
     private let disposeBag = DisposeBag()
-    private let lottoError = PublishRelay<LottoError>()
+    private let lottoError = PublishRelay<Error>()
     
     func transform(input: Input) -> Output {
-        let result = PublishRelay<Lotto>()
+        let lottoResult = PublishRelay<Lotto>()
         
         input.searchButtonClick
             .distinctUntilChanged()
@@ -33,14 +33,17 @@ final class LottoViewModel {
             }
             .flatMap { round in
                 APIObservable.callRequest(url: .getLotto(targetRound: round), type: Lotto.self) }
-            .subscribe { value in
-                result.accept(value)
-            } onError: { error in
-                print(error)
+            .bind(with: self) { owner, result in
+                switch result {
+                case .success(let lotto):
+                    lottoResult.accept(lotto)
+                case .failure(let error):
+                    owner.lottoError.accept(error)
+                }
             }
             .disposed(by: disposeBag)
         
-        return Output(result: result, lottoError: lottoError)
+        return Output(lottoResult: lottoResult, lottoError: lottoError)
     }
     
     private func validate(_ text: String) -> Int? {
