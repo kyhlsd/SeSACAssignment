@@ -41,17 +41,19 @@ final class NamingViewController: UIViewController {
     }
     
     private func bind() {
-//        Observable.just("test")
-//            .bind(to: textField.rx.text)
-//            .disposed(by: disposeBag)
-        
         let input = NamingViewModel.Input(
             saveButtonTap: saveButton.rx.tap
-                .withLatestFrom(textField.rx.text))
+                .withLatestFrom(textField.rx.text.orEmpty))
         let output = viewModel.transform(input: input)
         
+        // textField.rx.text 는 [.allEditingEvents, .valueChanged] 이 때만 감지하기 때문에 직접 할당 시에는 동작하지 않음
+//        internal func controlPropertyWithDefaultEvents<T>(
+//            editingEvents: UIControl.Event = [.allEditingEvents, .valueChanged],
         output.username
-            .bind(to: textField.rx.text)
+            .bind(with: self) { owner, name in
+                owner.textField.text = name
+                owner.textField.sendActions(for: .valueChanged)
+            }
             .disposed(by: disposeBag)
         
         output.toastMessage

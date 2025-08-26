@@ -12,7 +12,7 @@ import RxCocoa
 final class NamingViewModel {
     
     struct Input {
-        let saveButtonTap: Observable<String?>
+        let saveButtonTap: Observable<String>
     }
     
     struct Output {
@@ -42,8 +42,8 @@ final class NamingViewModel {
         return Output(username: userName, toastMessage: toastMessage, popVC: popVC)
     }
     
-    private func validateName(_ text: String?, toast: PublishRelay<String>) -> String? {
-        let trimmed = text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+    private func validateName(_ text: String, toast: PublishRelay<String>) -> String? {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         if trimmed.count < minCount || trimmed.count > maxCount {
             toast.accept("\(minCount)자 이상 \(maxCount)자 이하로 입력해주세요")
             return nil
