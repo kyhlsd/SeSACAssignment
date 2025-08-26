@@ -10,7 +10,7 @@ import Alamofire
 import RxSwift
 
 enum APIObservable {
-    static func callRequest<T: Decodable> (url: Router, type: T.Type = T.self) -> Single<Result<T, Error>> {
+    static func callRequest<T: Decodable> (url: Router, type: T.Type = T.self) -> Single<Result<T, APIError>> {
         return Single.create { observer in
             
             if !NetworkMonitor.shared.isConnected {
@@ -22,7 +22,7 @@ enum APIObservable {
                 switch response.result {
                 case .success(let value):
                     observer(.success(.success(value)))
-                case .failure(let error):
+                case .failure(_):
                     var description: String?
                     if let data = response.data {
                         description = String(data: data, encoding: .utf8)

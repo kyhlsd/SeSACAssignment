@@ -17,42 +17,49 @@ final class LottoViewModel {
     
     struct Output {
         let lottoResult: PublishRelay<Lotto>
-        let lottoError: PublishRelay<Error>
+        let errorToastMessage: PublishRelay<String>
+        let networkAlert: PublishRelay<(String, String)>
     }
     
     private let disposeBag = DisposeBag()
-    private let lottoError = PublishRelay<Error>()
     
     func transform(input: Input) -> Output {
         let lottoResult = PublishRelay<Lotto>()
+        let errorToastMessage = PublishRelay<String>()
+        let networkAlert = PublishRelay<(String, String)>()
         
         input.searchButtonClick
             .distinctUntilChanged()
             .compactMap { [weak self] in
-                self?.validate($0)
+                self?.validate($0, to: errorToastMessage)
             }
-            .flatMap { round in
-                APIObservable.callRequest(url: .getLotto(targetRound: round), type: Lotto.self) }
-            .bind(with: self) { owner, result in
+            .flatMap {
+                APIObservable.callRequest(url: .getLotto(targetRound: $0), type: Lotto.self) }
+            .bind { result in
                 switch result {
                 case .success(let lotto):
                     lottoResult.accept(lotto)
                 case .failure(let error):
-                    owner.lottoError.accept(error)
+                    switch error {
+                    case .network:
+                        networkAlert.accept(("네트워크 단절", "네트워크 상태를 확인해주세요."))
+                    case .unknown(_):
+                        errorToastMessage.accept(error.localizedDescription)
+                    }
                 }
             }
             .disposed(by: disposeBag)
         
-        return Output(lottoResult: lottoResult, lottoError: lottoError)
+        return Output(lottoResult: lottoResult, errorToastMessage: errorToastMessage, networkAlert: networkAlert)
     }
     
-    private func validate(_ text: String) -> Int? {
+    private func validate(_ text: String, to errorToastMessage: PublishRelay<String>) -> Int? {
         do {
             let number = try transformToInt(text)
             let round = try validateRange(number)
             return round
         } catch {
-            lottoError.accept(error)
+            errorToastMessage.accept(error.localizedDescription)
             return nil
         }
     }

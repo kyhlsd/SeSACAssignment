@@ -38,10 +38,15 @@ final class LottoViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        output.lottoError
-            .map { $0.localizedDescription }
+        output.errorToastMessage
             .bind(with: self) { owner, errorMessage in
                 owner.view.makeToast(errorMessage, duration: 1, position: .bottom)
+            }
+            .disposed(by: disposeBag)
+        
+        output.networkAlert
+            .bind(with: self) { owner, alert in
+                owner.showDefaultAlert(title: alert.0, message: alert.1)
             }
             .disposed(by: disposeBag)
     }
