@@ -34,7 +34,7 @@ final class MovieViewModel {
                 case .success(let movie):
                     movieResult.accept(movie)
                 case .failure(let error):
-                    print(error)
+                    break
                 }
             }
             .disposed(by: disposeBag)
