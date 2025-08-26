@@ -41,6 +41,10 @@ final class NamingViewController: UIViewController {
     }
     
     private func bind() {
+//        Observable.just("test")
+//            .bind(to: textField.rx.text)
+//            .disposed(by: disposeBag)
+        
         let input = NamingViewModel.Input(
             saveButtonTap: saveButton.rx.tap
                 .withLatestFrom(textField.rx.text))

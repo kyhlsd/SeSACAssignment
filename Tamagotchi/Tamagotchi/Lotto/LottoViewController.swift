@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Toast
 import RxSwift
 import RxCocoa
 
@@ -34,6 +35,13 @@ final class LottoViewController: UIViewController {
             .map { $0.numbers }
             .bind(to: tableView.rx.items(cellIdentifier: SimpleTableViewCell.identifier, cellType: SimpleTableViewCell.self)) { row, element, cell in
                 cell.usernameLabel.text = "\(row + 1)번째 번호: \(element)"
+            }
+            .disposed(by: disposeBag)
+        
+        output.lottoError
+            .map { $0.errorDescription }
+            .bind(with: self) { owner, errorMessage in
+                owner.view.makeToast(errorMessage, duration: 1, position: .bottom)
             }
             .disposed(by: disposeBag)
     }
