@@ -72,6 +72,23 @@ final class LottoViewModel {
     }
     
     private func transformToInt(_ text: String) throws(LottoError) -> Int {
+        let pattern = "^[0-9]+$"
+        if let _ = text.range(of: pattern, options: .regularExpression) {
+            print("+x")
+        }
+        
+        let pattern2 = /[0-9]+[.][0-9]+/
+        if let _ = text.wholeMatch(of: pattern2) {
+            print("+x.x")
+        }
+        
+        let pattern3 = /[$^*]/
+        if let _ = text.firstMatch(of: pattern3) {
+            print("contains $^*")
+        }
+        
+        
+        
         if let transformed = Int(text) {
             return transformed
         } else {

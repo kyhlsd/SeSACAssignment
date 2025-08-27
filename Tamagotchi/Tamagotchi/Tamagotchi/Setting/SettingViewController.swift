@@ -12,11 +12,12 @@ import RxCocoa
 
 final class SettingViewController: UIViewController {
 
-    private let tableView = {
+    private lazy var tableView = {
         let tableView = UITableView()
         tableView.rowHeight = 60
         tableView.separatorInset = .zero
         tableView.backgroundColor = .clear
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "BasicCell")
         return tableView
     }()
     
@@ -38,7 +39,10 @@ final class SettingViewController: UIViewController {
         
         output.list
             .bind(to: tableView.rx.items) { [weak self] tableView, row, element in
-                self?.getBasicCell(type: element) ?? UITableViewCell()
+                let cell = tableView.dequeueReusableCell(withIdentifier: "BasicCell")!
+                self?.configureBasicCell(cell: cell, type: element)
+                return cell
+//                self?.getBasicCell(type: element) ?? UITableViewCell()
             }
             .disposed(by: disposeBag)
         
@@ -71,6 +75,18 @@ final class SettingViewController: UIViewController {
                 owner.navigationController?.pushViewController(NamingViewController(), animated: true)
             }
             .disposed(by: disposeBag)
+    }
+    
+    private func configureBasicCell(cell: UITableViewCell, type: SettingViewModel.SettingType) {
+        cell.accessoryType = .disclosureIndicator
+        var config = cell.defaultContentConfiguration()
+        config.image = UIImage(systemName: type.icon)
+        config.text = type.rawValue
+        config.secondaryText = type.displayName
+        config.prefersSideBySideTextAndSecondaryText = true
+        cell.contentConfiguration = config
+        cell.selectionStyle = .none
+        cell.backgroundColor = .clear
     }
     
     private func getBasicCell(type: SettingViewModel.SettingType) -> UITableViewCell {

@@ -53,7 +53,8 @@ final class SettingViewModel {
     private let disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
-        let list = Observable.just(SettingType.allCases)
+//        let list = Observable.just(SettingType.allCases)
+        let list = Observable.just([SettingType](repeating: .reset, count: 100))
         let username = UserDefaultManager.shared.username
         let resetAlert: PublishRelay<Void> = PublishRelay()
         let pushSelectVC: PublishRelay<Void> = PublishRelay()
