@@ -22,6 +22,7 @@ final class MovieViewModel {
     }
     
     private let disposeBag = DisposeBag()
+    private var prevSucceed = true
     
     func transform(input: Input) -> Output {
         let movieResult = PublishRelay<Movie>()
@@ -29,17 +30,22 @@ final class MovieViewModel {
         let networkAlert = PublishRelay<(String, String)>()
         
         input.searchButtonClick
-            .distinctUntilChanged()
             .compactMap { [weak self] in
                 self?.validate($0, to: errorToastMessage)
+            }
+            .distinctUntilChanged{ [weak self] in
+                guard let self else { return true }
+                guard self.prevSucceed else { return false }
+                return $0 == $1
             }
             .flatMap { date in
                 APIObservable.callRequest(url: .getMovie(targetDate: date), type: Movie.self)
             }
-            .bind { result in
+            .bind(with: self) { owner, result in
                 switch result {
                 case .success(let movie):
                     movieResult.accept(movie)
+                    owner.prevSucceed = true
                 case .failure(let error):
                     switch error {
                     case .network:
@@ -47,6 +53,7 @@ final class MovieViewModel {
                     case .unknown(_):
                         errorToastMessage.accept(error.localizedDescription)
                     }
+                    owner.prevSucceed = false
                 }
             }
             .disposed(by: disposeBag)
