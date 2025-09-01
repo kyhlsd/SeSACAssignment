@@ -28,18 +28,32 @@ final class LottoViewModel {
         let lottoResult = PublishRelay<Lotto>()
         let errorToastMessage = PublishRelay<String>()
         let networkAlert = PublishRelay<(String, String)>()
-        
+        let callRequestTrigger = PublishRelay<Int>()
         input.searchButtonClick
-            .compactMap { [weak self] in
-                self?.validate($0, to: errorToastMessage)
+            .throttle(.milliseconds(250), scheduler: MainScheduler.instance)
+            .flatMap { [weak self] in
+                guard let self else { return Single<Result<Int, LottoError>>.just(.failure(.unknown))}
+                return self.validate($0)
             }
+            .bind { result in
+                switch result {
+                case .success(let value):
+                    callRequestTrigger.accept(value)
+                case .failure(let error):
+                    errorToastMessage.accept(error.localizedDescription)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        callRequestTrigger
             .distinctUntilChanged{ [weak self] in
                 guard let self else { return true }
                 guard self.prevSucceed else { return false }
                 return $0 == $1
             }
             .flatMap {
-                APIObservable.callRequest(url: .getLotto(targetRound: $0), type: Lotto.self) }
+                APIObservable.callRequest(url: .getLotto(targetRound: $0), type: Lotto.self)
+            }
             .bind(with: self) { owner, result in
                 switch result {
                 case .success(let lotto):
@@ -60,14 +74,22 @@ final class LottoViewModel {
         return Output(lottoResult: lottoResult, errorToastMessage: errorToastMessage, networkAlert: networkAlert)
     }
     
-    private func validate(_ text: String, to errorToastMessage: PublishRelay<String>) -> Int? {
-        do {
-            let number = try transformToInt(text)
-            let round = try validateRange(number)
-            return round
-        } catch {
-            errorToastMessage.accept(error.localizedDescription)
-            return nil
+    private func validate(_ text: String) -> Single<Result<Int, LottoError>> {
+        return Single.create { [weak self] observer in
+            guard let self else {
+                observer(.success(.failure(LottoError.unknown)))
+                return Disposables.create()
+            }
+            do {
+                let number = try transformToInt(text)
+                let round = try validateRange(number)
+                observer(.success(.success(round)))
+            } catch let error as LottoError {
+                observer(.success(.failure(error)))
+            } catch {
+                observer(.success(.failure(LottoError.unknown)))
+            }
+            return Disposables.create()
         }
     }
     
