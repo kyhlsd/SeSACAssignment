@@ -28,11 +28,27 @@ final class MovieViewModel {
         let movieResult = PublishRelay<Movie>()
         let errorToastMessage = PublishRelay<String>()
         let networkAlert = PublishRelay<(String, String)>()
+        let callRequestTrigger = PublishRelay<String>()
         
         input.searchButtonClick
-            .compactMap { [weak self] in
-                self?.validate($0, to: errorToastMessage)
+            .throttle(.milliseconds(250), scheduler: MainScheduler.instance)
+            .flatMap { [weak self] in
+                guard let self else {
+                    return Single<Result<String, MovieError>>.just(.failure(MovieError.unknown))
+                }
+                return self.validate($0)
             }
+            .bind { result in
+                switch result {
+                case .success(let value):
+                    callRequestTrigger.accept(value)
+                case .failure(let error):
+                    errorToastMessage.accept(error.localizedDescription)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        callRequestTrigger
             .distinctUntilChanged{ [weak self] in
                 guard let self else { return true }
                 guard self.prevSucceed else { return false }
@@ -61,14 +77,23 @@ final class MovieViewModel {
         return Output(movieResult: movieResult, errorToastMessage: errorToastMessage, networkAlert: networkAlert)
     }
     
-    private func validate(_ text: String, to errorToastMessage: PublishRelay<String>) -> String? {
-        do {
-            let date = try validateIsValidFormat(text)
-            let dateString = try validateRange(date)
-            return dateString
-        } catch {
-            errorToastMessage.accept(error.localizedDescription)
-            return nil
+    private func validate(_ text: String) -> Single<Result<String, MovieError>> {
+        return Single<Result<String, MovieError>>.create { [weak self] observer in
+            guard let self else {
+                observer(.success(.failure(MovieError.unknown)))
+                return Disposables.create()
+            }
+            
+            do {
+                let date = try validateIsValidFormat(text)
+                let dateString = try validateRange(date)
+                observer(.success(.success(dateString)))
+            } catch let error as MovieError {
+                observer(.success(.failure(error)))
+            } catch {
+                observer(.success(.failure(MovieError.unknown)))
+            }
+            return Disposables.create()
         }
     }
     

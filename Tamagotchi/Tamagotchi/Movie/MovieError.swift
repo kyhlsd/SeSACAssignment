@@ -10,6 +10,7 @@ import Foundation
 enum MovieError: LocalizedError {
     case invalidFormat
     case invalidRange(min: Date, max: Date)
+    case unknown
     
     var errorDescription: String? {
         switch self {
@@ -20,6 +21,8 @@ enum MovieError: LocalizedError {
             let min = formatter.string(from: min)
             let max = formatter.string(from: max)
             return "\(min) ~ \(max) 만 검색 가능합니다."
+        case .unknown:
+            return "알 수 없는 에러가 발생했습니다."
         }
     }
 }
