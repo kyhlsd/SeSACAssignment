@@ -1,6 +1,5 @@
 //
-//  ViewController.swift
-//  Location
+//  LocationViewController.swift
 //
 //  Created by 김영훈 on 9/9/25.
 //
@@ -8,7 +7,7 @@
 import UIKit
 import CoreLocation
 
-final class ViewController: UIViewController {
+final class LocationViewController: UIViewController {
 
     private let locationManager = CLLocationManager()
     
@@ -52,7 +51,7 @@ final class ViewController: UIViewController {
     }
 }
 
-extension ViewController: CLLocationManagerDelegate {
+extension LocationViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.first else { return }

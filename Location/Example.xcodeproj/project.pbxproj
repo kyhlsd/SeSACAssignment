@@ -7,26 +7,26 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		159151FF2E70691800D2B7FF /* Location.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Location.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		159151FF2E70691800D2B7FF /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		159152112E70691A00D2B7FF /* Exceptions for "Location" folder in "Location" target */ = {
+		159152112E70691A00D2B7FF /* Exceptions for "Example" folder in "Example" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 159151FE2E70691800D2B7FF /* Location */;
+			target = 159151FE2E70691800D2B7FF /* Example */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		159152012E70691800D2B7FF /* Location */ = {
+		159152012E70691800D2B7FF /* Example */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				159152112E70691A00D2B7FF /* Exceptions for "Location" folder in "Location" target */,
+				159152112E70691A00D2B7FF /* Exceptions for "Example" folder in "Example" target */,
 			);
-			path = Location;
+			path = Example;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -45,7 +45,7 @@
 		159151F62E70691800D2B7FF = {
 			isa = PBXGroup;
 			children = (
-				159152012E70691800D2B7FF /* Location */,
+				159152012E70691800D2B7FF /* Example */,
 				159152002E70691800D2B7FF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -53,7 +53,7 @@
 		159152002E70691800D2B7FF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				159151FF2E70691800D2B7FF /* Location.app */,
+				159151FF2E70691800D2B7FF /* Example.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,9 +61,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		159151FE2E70691800D2B7FF /* Location */ = {
+		159151FE2E70691800D2B7FF /* Example */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 159152122E70691A00D2B7FF /* Build configuration list for PBXNativeTarget "Location" */;
+			buildConfigurationList = 159152122E70691A00D2B7FF /* Build configuration list for PBXNativeTarget "Example" */;
 			buildPhases = (
 				159151FB2E70691800D2B7FF /* Sources */,
 				159151FC2E70691800D2B7FF /* Frameworks */,
@@ -74,13 +74,13 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				159152012E70691800D2B7FF /* Location */,
+				159152012E70691800D2B7FF /* Example */,
 			);
-			name = Location;
+			name = Example;
 			packageProductDependencies = (
 			);
 			productName = Location;
-			productReference = 159151FF2E70691800D2B7FF /* Location.app */;
+			productReference = 159151FF2E70691800D2B7FF /* Example.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -98,7 +98,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 159151FA2E70691800D2B7FF /* Build configuration list for PBXProject "Location" */;
+			buildConfigurationList = 159151FA2E70691800D2B7FF /* Build configuration list for PBXProject "Example" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -112,7 +112,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				159151FE2E70691800D2B7FF /* Location */,
+				159151FE2E70691800D2B7FF /* Example */,
 			);
 		};
 /* End PBXProject section */
@@ -146,7 +146,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Location/Info.plist;
+				INFOPLIST_FILE = Example/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
@@ -173,7 +173,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Location/Info.plist;
+				INFOPLIST_FILE = Example/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
@@ -314,7 +314,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		159151FA2E70691800D2B7FF /* Build configuration list for PBXProject "Location" */ = {
+		159151FA2E70691800D2B7FF /* Build configuration list for PBXProject "Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				159152152E70691A00D2B7FF /* Debug */,
@@ -323,7 +323,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		159152122E70691A00D2B7FF /* Build configuration list for PBXNativeTarget "Location" */ = {
+		159152122E70691A00D2B7FF /* Build configuration list for PBXNativeTarget "Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				159152132E70691A00D2B7FF /* Debug */,
